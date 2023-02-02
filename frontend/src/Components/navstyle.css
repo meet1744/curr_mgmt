@@ -6,11 +6,11 @@
     padding: 0 30px;
     background-color: #222;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    width: 95%;
+    width: 94%;
     height: 80px;
     border-radius: 13px;
     position: fixed;
-    top: 20px;
+    top: 10px;
     left: 50%;
     transform: translate(-50%);
 }
@@ -70,6 +70,7 @@
 .coolBeans:hover {
     border: 2px solid transparent;
     color: black;
+    cursor: pointer;
     transform: scale(1.05);
     will-change: transform;
 }

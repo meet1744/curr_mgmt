@@ -1,9 +1,10 @@
 import React from "react";
 import { Component } from "react";
+import { NavLink } from "react-router-dom";
 import { navdata } from "./navdata";
-import './navstyle.css'
+import './navstyle.css';
 
-class Navresponce extends Component {
+class Navbar extends Component {
     state = { clicked: false };
     handleClick = () => {
         this.setState({ clicked: !this.state.clicked })
@@ -21,7 +22,7 @@ class Navresponce extends Component {
                     {navdata.map((item, index) => {
                         return (
                             <li key={index}>
-                                <a href={item.url} className={item.cName}><i className={item.icon}></i>{item.title}</a>
+                                <NavLink to={item.url} className={item.cName}>{item.title}</NavLink>
                             </li>);
                     })}
                 </ul>
@@ -31,4 +32,4 @@ class Navresponce extends Component {
     }
 }
 
-export default Navresponce;
+export default Navbar;

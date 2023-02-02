@@ -1,7 +1,7 @@
 export const navdata = [
     {
         title: "Authorized Login",
-        url: "https://www.codechef.com/",
+        url: "/roles",
         cName: "nav-links-mobile coolBeans",
     }
 ]
