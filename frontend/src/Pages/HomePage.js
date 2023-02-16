@@ -1,25 +1,10 @@
 import React from "react";
 import Select from 'react-select';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
 import "./HomePageStyles.css";
-
-const Years = [
-    { label: 'Shark', value: 'Shark' },
-    { label: 'Dolphin', value: 'Dolphin' },
-    { label: 'Whale', value: 'Whale' },
-    { label: 'Octopus', value: 'Octopus' },
-    { label: 'Crab', value: 'Crab' },
-    { label: 'Lobster', value: 'Lobster' },
-];
-const Branch = [
-    { label: 'Information Technology', value: 'IT' },
-    { label: 'Computer Engineering', value: 'CE' },
-    { label: 'Electronic & Communication Engineering', value: 'EC' },
-    { label: 'Civil Engineering', value: 'CI' },
-    { label: 'Mechanical Engineering', value: 'MH' },
-    { label: 'Chemical Engineering', value: 'CH' },
-    { label: 'Instrumentation & Control Engineering', value: 'IC' }
-];
+import baseurl from "../Components/baseurl";
 
 const customStyles = {
     valueContainer: (base) => ({
@@ -52,20 +37,73 @@ const customStyles = {
 
 
 function HomePage() {
-
-    const [selected, setSelected] = useState({});
-
+    const [years, setYears] = useState([]);
+    const [branches, setBranches] = useState([]);
+    const [selectedYear, setSelectedYear] = useState('');
+    const [selectedBranch, setSelectedBranch] = useState('');
+    const handleYearChange = (option) => {
+        setSelectedYear(option);
+        getBranchesByYear(option.value);
+    };
+    const handleBranchChange = (option) => {
+        setSelectedBranch(option);
+        getYearsByBranch(option.value);
+    };
     const handleForm = (e) => {
-        console.log(selected);
+        console.log(selectedYear, selectedBranch);
         e.preventDefault();
     }
+    useEffect(() => {
+        axios.get(`${baseurl}/years`)
+            .then((res) => {
+                setYears(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        axios.get(`${baseurl}/branches`)
+            .then((res) => {
+                setBranches(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+    const yearOptions = years.map((year) => ({
+        label: year,
+        value: year
+    }));
+
+    const branchOptions = branches.map((branch) => ({
+        label: branch,
+        value: branch
+    }));
+    const getBranchesByYear = async (year) => {
+        try {
+            const res = await axios.get(`${baseurl}?year=${year}`);
+            setBranches(res.data.branches);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const getYearsByBranch = async (branch) => {
+        try {
+            const res = await axios.get(`${baseurl}?branch=${branch}`);
+            setYears(res.data.years);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <>
             <div className="container">
                 <form onSubmit={handleForm} >
+                    {/* <ToastContainer /> */}
                     <h3 className="label">Admission Year:</h3>
-                    <Select options={Years} placeholder='Select Year' styles={customStyles}
-                        onChange={(e) => { setSelected({ ...selected, year: e.value }) }}
+                    <Select options={yearOptions} placeholder='Select Year' styles={customStyles}
+                        value={selectedYear}
+                        onChange={(e) => { handleYearChange(e.target.value); }}
                         theme={(theme) => ({
                             ...theme,
                             colors: {
@@ -75,8 +113,9 @@ function HomePage() {
                         })}
                     />
                     <h3 className="label">Branch:</h3>
-                    <Select options={Branch} placeholder='Select Branch' styles={customStyles}
-                        onChange={(e) => { setSelected({ ...selected, branch: e.value }) }}
+                    <Select options={branchOptions} placeholder='Select Branch' styles={customStyles}
+                        value={selectedBranch}
+                        onChange={(e) => { handleBranchChange(e.target.value); }}
                         theme={(theme) => ({
                             ...theme,
                             colors: {

@@ -13,7 +13,7 @@ class Navbar extends Component {
         return (
             <nav className="NavbarItem">
                 <h2 className="logo">
-                    Curricullam Management
+                    Curriculum Management
                 </h2>
                 <div className="menu-icon" onClick={this.handleClick}>
                     <i className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}></i>
@@ -22,7 +22,7 @@ class Navbar extends Component {
                     {navdata.map((item, index) => {
                         return (
                             <li key={index}>
-                                <NavLink to={item.url} className={item.cName}>{item.title}</NavLink>
+                                <NavLink to={item.url} onClick={this.handleClick} className={item.cName}>{item.title}</NavLink>
                             </li>);
                     })}
                 </ul>
