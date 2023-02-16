@@ -22,11 +22,18 @@ public class Faculty {
     @OneToOne
     @JoinColumn(name = "deptId", nullable = false)
     private Department dept;
-
-    @ManyToMany
-    @JoinTable(name = "teaches",
-            joinColumns = @JoinColumn(name = "faculty_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id"))
+@ManyToMany(cascade = {
+        CascadeType.ALL
+    })
+    @JoinTable(
+        name = "teaches",
+        joinColumns = {
+            @JoinColumn(name = "faculty_id")
+        },
+        inverseJoinColumns = {
+            @JoinColumn(name = "subject_id")
+        }
+    )
     private List<Subjects> subjectsList;
 
     public Faculty() {

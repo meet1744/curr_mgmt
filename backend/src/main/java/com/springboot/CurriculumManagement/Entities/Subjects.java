@@ -64,7 +64,7 @@ public class Subjects {
     @JoinColumn(name = "deptId",nullable = false)
     private Department dept;
 
-    @ManyToMany
+   @ManyToMany(mappedBy = "subjectsList", cascade = { CascadeType.ALL })
     private List<Faculty> facultyList;
 
     public Subjects() {
