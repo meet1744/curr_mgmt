@@ -1,9 +1,6 @@
 package com.springboot.CurriculumManagement.Controller;
 
-import com.springboot.CurriculumManagement.Auth.AuthenticationResponse;
-import com.springboot.CurriculumManagement.Auth.JWTAuthRequest;
-import com.springboot.CurriculumManagement.Auth.JWTAuthResponse;
-import com.springboot.CurriculumManagement.Auth.JwtUtil;
+import com.springboot.CurriculumManagement.Auth.*;
 import com.springboot.CurriculumManagement.Entities.HOD;
 import com.springboot.CurriculumManagement.Repository.HODRepository;
 import com.springboot.CurriculumManagement.Services.HODService;
@@ -25,17 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin("http://localhost:3000")
 public class Controller {
-    @Autowired
-    private HODService hodService;
+//    @Autowired
+//    private HODService hodService;
     @Autowired
     private AuthenticationManager authenticationManager;
-//
+
     @Autowired
-    private JwtUtil jwtUtil;
+    private JWTTokenHelper jwtTokenHelper;
 
     @Autowired
     private UserDetailsService userDetailsService;
-//
+
     @Autowired
     private HODRepository HODRepository;
 
@@ -43,7 +40,7 @@ public class Controller {
     public ResponseEntity<JWTAuthResponse> loginHOD(@RequestBody JWTAuthRequest hod) throws Exception {
         this.authenticate(hod.getId(), hod.getPassword());
         final UserDetails userDetails = this.userDetailsService.loadUserByUsername(hod.getId());
-        final String jwt = jwtUtil.generateToken(userDetails);
+        final String jwt = jwtTokenHelper.generateToken(userDetails);
         JWTAuthResponse response = new JWTAuthResponse();
         response.setToken(jwt);
         return new ResponseEntity<JWTAuthResponse>(response,HttpStatus.OK);

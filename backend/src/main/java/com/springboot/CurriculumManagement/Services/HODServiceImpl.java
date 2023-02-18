@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
+@Service
 public class HODServiceImpl implements HODService{
 
     @Autowired
@@ -33,10 +34,5 @@ public class HODServiceImpl implements HODService{
     public HODDto HODToDto(HOD hod){
         HODDto dto=this.modelMapper.map(hod,HODDto.class);
         return dto;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
     }
 }
