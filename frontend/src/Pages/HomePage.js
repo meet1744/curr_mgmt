@@ -54,22 +54,22 @@ function HomePage() {
         console.log(selectedYear, selectedBranch);
         e.preventDefault();
     }
-    useEffect(() => {
-        axios.get(`${baseurl}/years`)
-            .then((res) => {
-                setYears(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        axios.get(`${baseurl}/branches`)
-            .then((res) => {
-                setBranches(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, []);
+    // useEffect(() => {
+    //     axios.get(`${baseurl}/years`)
+    //         .then((res) => {
+    //             setYears(res.data);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    //     axios.get(`${baseurl}/branches`)
+    //         .then((res) => {
+    //             setBranches(res.data);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // }, []);
     const yearOptions = years.map((year) => ({
         label: year,
         value: year

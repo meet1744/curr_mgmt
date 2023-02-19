@@ -9,22 +9,15 @@ import baseurl from "./../Components/baseurl";
 
 
 function LoginPage({ role }) {
-    let page = "";
-    if (role === "HOD") {
-        page += "HODPage";
-    }
-    else if (role === "Faculty") {
-        page += "FacultyPage";
-    }
-    else {
-        page += "PCPage";
-    }
+    
     const loginfun = (data) => {
-        const returndata = axios.post(`${baseurl}/api/v1/auth/login`, data).then((response)=>response.data);
-        console.log(returndata);
-        doLogin(returndata,()=>{
-            console.log("login details saved in localstorage");
+        const returndata = axios.post(`${baseurl}/api/v1/auth/login`, data).then((response)=>{
+            console.log(response);
+            doLogin(response.data,()=>{
+                console.log("login details saved in localstorage");
+            });
         });
+        
 
         toast.promise(
             returndata,

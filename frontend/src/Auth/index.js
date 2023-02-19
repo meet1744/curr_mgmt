@@ -22,7 +22,7 @@ export const doLogout = (next) => {
 
 export const getUserData = () => {
     if (isLoggedIn()) {
-        return JSON.parse(localStorage.getItem('data')).user;
+        return JSON.parse(localStorage.getItem('data'));
     }
-    return false;
+    return null;
 }
