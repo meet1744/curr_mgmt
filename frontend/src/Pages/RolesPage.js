@@ -11,9 +11,9 @@ function RolesPage(props) {
         <>
             <div className="rolescontainer">
                 <form onSubmit={selectRole}>
-                    <Link to="/login"><input type="submit" className="roleButton" value="HOD" onClick={() => props.setRole("HOD")} /></Link>
-                    <Link to="/login"><input type="submit" className="roleButton" value="Faculty" onClick={() => props.setRole("Faculty")}/></Link>
-                    <Link to="/login" ><input type="submit" className="roleButton" value="Program Coordinator" onClick={() => props.setRole("Program Coordinator")}/></Link>
+                    <Link to="/login"><input type="submit" className="roleButton" value="HOD" onClick={() => props.setRole("hod")} /></Link>
+                    <Link to="/login"><input type="submit" className="roleButton" value="Faculty" onClick={() => props.setRole("faculty")}/></Link>
+                    <Link to="/login" ><input type="submit" className="roleButton" value="Program Coordinator" onClick={() => props.setRole("pc")}/></Link>
                 </form>
             </div>
         </>

@@ -1,23 +1,28 @@
-export const doLogin=(data,next)=>{
-    localStorage.setItem('data',JSON.stringify(data));
-    next();
+export const doLogin = (data, next) => {
+    localStorage.setItem('data', JSON.stringify(data));
+    if (typeof next === 'function') {
+        next();
+    }
 }
 
-export const isLoggedIn=()=>{
-    localStorage.getItem('data');
-    if(data==null){
+export const isLoggedIn = () => {
+    let data = localStorage.getItem('data');
+    if (data == null) {
         return false;
     }
     return true;
 }
 
-export const doLogout=()=>{
+export const doLogout = (next) => {
     localStorage.removeItem('data');
+    if (typeof next === 'function') {
+        next();
+    }
 }
 
-export const getUserData=()=>{
-    if(isLoggedIn()){
-        return JSON.parse(localStorage.getItem('data'));
+export const getUserData = () => {
+    if (isLoggedIn()) {
+        return JSON.parse(localStorage.getItem('data')).user;
     }
     return false;
 }

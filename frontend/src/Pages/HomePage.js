@@ -3,6 +3,7 @@ import Select from 'react-select';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./HomePageStyles.css";
 import baseurl from "../Components/baseurl";
 
@@ -99,7 +100,7 @@ function HomePage() {
         <>
             <div className="container">
                 <form onSubmit={handleForm} >
-                    {/* <ToastContainer /> */}
+                    <ToastContainer />
                     <h3 className="label">Admission Year:</h3>
                     <Select options={yearOptions} placeholder='Select Year' styles={customStyles}
                         value={selectedYear}

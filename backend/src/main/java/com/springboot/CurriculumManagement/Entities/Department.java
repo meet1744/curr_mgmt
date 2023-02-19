@@ -1,7 +1,9 @@
 package com.springboot.CurriculumManagement.Entities;
 
-import javax.persistence.*;
+//import jakarta.persistence.*;
 
+
+import javax.persistence.*;
 import java.util.List;
 
 @Entity

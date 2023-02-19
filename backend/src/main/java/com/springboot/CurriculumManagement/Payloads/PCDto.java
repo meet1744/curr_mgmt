@@ -3,27 +3,27 @@ package com.springboot.CurriculumManagement.Payloads;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.springboot.CurriculumManagement.Entities.Department;
 
-public class HODDto {
-    private String HODId;
-    private String HODName;
+public class PCDto {
+    private String programCoordinatorId;
+    private String ProgramCoordinatorName;
     private String password;
     private String emailId;
     private Department dept;
 
-    public String getHODId() {
-        return HODId;
+    public String getProgramCoordinatorId() {
+        return programCoordinatorId;
     }
 
-    public void setHODId(String HODId) {
-        this.HODId = HODId;
+    public void setProgramCoordinatorId(String programCoordinatorId) {
+        this.programCoordinatorId = programCoordinatorId;
     }
 
-    public String getHODName() {
-        return HODName;
+    public String getProgramCoordinatorName() {
+        return ProgramCoordinatorName;
     }
 
-    public void setHODName(String HODName) {
-        this.HODName = HODName;
+    public void setProgramCoordinatorName(String programCoordinatorName) {
+        ProgramCoordinatorName = programCoordinatorName;
     }
 
     @JsonIgnore

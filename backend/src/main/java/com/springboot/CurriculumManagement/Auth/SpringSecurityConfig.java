@@ -1,59 +1,98 @@
 package com.springboot.CurriculumManagement.Auth;
 
+import com.springboot.CurriculumManagement.UserDetailService.FacultyUserDetailService;
+import com.springboot.CurriculumManagement.UserDetailService.HODUserDetailService;
+import com.springboot.CurriculumManagement.UserDetailService.PCUserDetailService;
+import com.springboot.CurriculumManagement.UserDetailService.SwitchUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Map;
 
 
 @Configuration
-@EnableWebSecurity
-public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SpringSecurityConfig{
 
     @Autowired
-    private CustomUserDetailService customUserDetailService;
+    private HODUserDetailService hodUserDetailService;
+
+    @Autowired
+    private FacultyUserDetailService facultyUserDetailService;
+
+    @Autowired
+    private PCUserDetailService pcUserDetailService;
 
     @Autowired
     private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    @Autowired
-    private JWTAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public JWTAuthenticationFilter jwtAuthenticationFilter() {
+        return new JWTAuthenticationFilter();
     }
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception{
-        http.csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .antMatchers("/api/v1/auth/login")
-                .permitAll()
-                .anyRequest().authenticated()
-                .and().exceptionHandling()
-                .authenticationEntryPoint(this.jwtAuthenticationEntryPoint)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    @Bean
+    public DaoAuthenticationProvider hodAuthenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(hodUserDetailService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.userDetailsService(this.customUserDetailService).passwordEncoder(passwordEncoder());
+    @Bean
+    public DaoAuthenticationProvider facultyAuthenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(facultyUserDetailService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
 
+    @Bean
+    public DaoAuthenticationProvider pcAuthenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(pcUserDetailService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.cors().and().csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests().antMatchers("/api/v1/auth/**").permitAll()
+                .anyRequest().authenticated();
+
+        http.authenticationProvider(hodAuthenticationProvider());
+        http.authenticationProvider(facultyAuthenticationProvider());
+        http.authenticationProvider(pcAuthenticationProvider());
+
+
+        http.addFilterBefore(this.jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
