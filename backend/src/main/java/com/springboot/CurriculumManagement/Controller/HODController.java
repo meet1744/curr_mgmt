@@ -14,17 +14,17 @@ public class HODController {
 
     @Autowired
     private HODService hodService;
-    @PostMapping("/faculty")
+    @PostMapping("/addfaculty")
     public Faculty addNewFaculty(@RequestBody Faculty faculty){
 
         return this.hodService.addNewFaculty(faculty);
     }
-    @GetMapping("/faculty")
+    @GetMapping("/getallfaculty")
     public List<Faculty> getAllFaculty(){
         return this.hodService.getAllFaculty();
     }
 
-    @DeleteMapping("/faculty/{facultyId}")
+    @DeleteMapping("/getfaculty/{facultyId}")
     public ResponseEntity<HttpStatus> deleteFaculty(@PathVariable String facultyId){
         try {
             this.hodService.deleteFaculty(facultyId);

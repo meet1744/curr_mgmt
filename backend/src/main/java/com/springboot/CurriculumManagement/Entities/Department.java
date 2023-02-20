@@ -18,7 +18,7 @@ public class Department {
     private int startYear;
 
     @Column
-    private int endYear;
+    private String endYear;
 
     @OneToOne(mappedBy = "dept")
     private ProgramCoordinator programCoordinator;
@@ -50,5 +50,21 @@ public class Department {
 
     public Department() {
         super();
+    }
+
+    public int getStartYear() {
+        return startYear;
+    }
+
+    public void setStartYear(int startYear) {
+        this.startYear = startYear;
+    }
+
+    public String getEndYear() {
+        return endYear;
+    }
+
+    public void setEndYear(String endYear) {
+        this.endYear = endYear;
     }
 }
