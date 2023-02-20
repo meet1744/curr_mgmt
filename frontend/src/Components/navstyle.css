@@ -30,7 +30,6 @@
 .nav-menu {
     display: grid;
     grid-template-columns: repeat(6, auto);
-    grid-gap: 10px;
     list-style: none;
     align-items: center;
     text-align: center;
@@ -98,6 +97,7 @@
     font-weight: 500;
     color: #222;
     font-size: 18px;
+    margin-left: 25px;
 }
 
 @media screen and (max-width: 850px) {

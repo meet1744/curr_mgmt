@@ -2,23 +2,28 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
-import {doLogin} from "./../Auth/index.js";
+import { doLogin } from "./../Auth/index.js";
 import 'react-toastify/dist/ReactToastify.css';
 import "./LoginPageStyles.css";
 import baseurl from "./../Components/baseurl";
+import { Navigate } from "react-router-dom";
 
 
 function LoginPage({ role }) {
-    
+
     const loginfun = (data) => {
-        const returndata = axios.post(`${baseurl}/api/v1/auth/login`, data).then((response)=>{
+        const returndata = axios.post(`${baseurl}/api/v1/auth/login`, data).then((response) => {
             console.log(response);
-            doLogin(response.data,()=>{
+            doLogin(response.data, function () {
                 console.log("login details saved in localstorage");
+                // if (role == "hod")
+                //     <Navigate to="/HOD/Subjects" />;
+                // else if (role == "faculty")
+                //     <Navigate to="/Faculty/Subjects" />;
+                // else
+                //     <Navigate to="/PC/Subjects" />;
             });
         });
-        
-
         toast.promise(
             returndata,
             {
@@ -64,7 +69,7 @@ function LoginPage({ role }) {
         <>
             <ToastContainer />
             <div className="container">
-                
+
                 <form onSubmit={loginForm} >
                     <h3 className="label">ID:</h3>
                     <input type="text" onChange={(e) => { setLogin({ ...login, id: e.target.value }) }} value={login.id} />

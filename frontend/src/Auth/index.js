@@ -1,4 +1,4 @@
-export const doLogin = (data, next) => {
+export const doLogin = (data,next) => {
     localStorage.setItem('data', JSON.stringify(data));
     if (typeof next === 'function') {
         next();

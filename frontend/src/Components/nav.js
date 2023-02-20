@@ -1,7 +1,6 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { navdata } from "./navdata";
 import './navstyle.css';
 import { doLogout, getUserData, isLoggedIn } from "../Auth";
 
@@ -19,8 +18,10 @@ function Navbar() {
     }, [login]);
 
     const handledashboard = () => {
-        
         handleClick();
+        if(isLoggedIn()){
+            <Navigate to={`/${userlink}/Subjects`}/>
+        }
     }
 
     const handlerole =() => {
@@ -46,7 +47,7 @@ function Navbar() {
         handleClick();
     }
 
-    let dashlink = isLoggedIn() ? `/authorized/${userlink}` : "/roles";
+    let dashlink = isLoggedIn() ? `/${userlink}/Subjects` : "/roles";
     let loglink = isLoggedIn() ? "/" : "/roles";
     let logtitle = isLoggedIn() ? "Logout" : "Authorized Login";
     let loghandler = isLoggedIn() ? handlelogout : handlelogin;
