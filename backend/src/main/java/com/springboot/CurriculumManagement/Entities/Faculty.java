@@ -109,4 +109,12 @@ public class Faculty implements UserDetails {
     public void setEmailId(String emailId) {
         this.emailId = emailId;
     }
+
+    public Department getDept() {
+        return dept;
+    }
+
+    public void setDept(Department dept) {
+        this.dept = dept;
+    }
 }
