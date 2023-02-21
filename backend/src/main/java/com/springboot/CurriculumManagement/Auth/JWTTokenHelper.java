@@ -34,7 +34,7 @@ public class JWTTokenHelper {
                 .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(key).compact();
+                .signWith(Keys.secretKeyFor(SignatureAlgorithm.HS256)).compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

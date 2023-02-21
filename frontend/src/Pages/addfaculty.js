@@ -6,12 +6,16 @@ import axios from 'axios';
 
 export default function Addfaculty() {
     let dept=getUserData().hodDto.dept;
+    let token="Bearer "+getUserData().token;
+   
     const [faculty, setFaculty] = useState({deptid:dept,id:"",name:"",email:"",password:""});
 
     const addfacultyform = (e) => {
         e.preventDefault();
+        console.log(token);
         console.log(faculty);
-        axios.post('http://localhost:8080/HOD/addfaculty')
+        
+        axios.post('http://localhost:8080/HOD/addfaculty',faculty,{headers : {Authorization:token}})
             .then(response => console.log(response))
             .catch(error => console.error(error));
     }
