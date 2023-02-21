@@ -9,7 +9,7 @@ function HODNav() {
                 <Link to="/HOD/Subjects">All Subjects</Link>
                 <Link to="/HOD/AddFaculty">Add Faculty</Link>
                 <Link to="/HOD/DeleteFaculty">Delete Faculty</Link>
-                <Link to="/HOD/AppointPC">Appoint Program Coordonator</Link>
+                <Link to="/HOD/AppointPC">Appoint Program Coordinator</Link>
                 <Link to="/HOD/Logs">Logs</Link>
             </div>
         </>
