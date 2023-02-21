@@ -104,11 +104,4 @@ public class HOD implements UserDetails {
         this.emailId = emailId;
     }
 
-    public Department getDept() {
-        return dept;
-    }
-
-    public void setDept(Department dept) {
-        this.dept = dept;
-    }
 }

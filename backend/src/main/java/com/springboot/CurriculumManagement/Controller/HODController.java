@@ -5,15 +5,20 @@ import com.springboot.CurriculumManagement.Services.HODService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("http://localhost:3000")
 @RestController
+@RequestMapping(value = "/HOD/")
 public class HODController {
 
     @Autowired
     private HODService hodService;
+
+    @PreAuthorize("hasRole('ROLE_HOD')")
     @PostMapping("/addfaculty")
     public Faculty addNewFaculty(@RequestBody Faculty faculty){
 
