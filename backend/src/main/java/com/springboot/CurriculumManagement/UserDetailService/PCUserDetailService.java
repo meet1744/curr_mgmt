@@ -14,7 +14,7 @@ public class PCUserDetailService implements UserDetailsService {
     @Autowired
     private PCRepository pcRepository;
     @Override
-    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+    public ProgramCoordinator loadUserByUsername(String id) throws UsernameNotFoundException {
         ProgramCoordinator programCoordinator=this.pcRepository.findByProgramCoordinatorId(id).orElseThrow(()->new ResourceNotFoundException("Program Coordinator","id",id));
         return programCoordinator;
     }

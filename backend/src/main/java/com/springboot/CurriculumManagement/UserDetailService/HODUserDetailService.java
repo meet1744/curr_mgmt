@@ -16,7 +16,7 @@ public class HODUserDetailService implements UserDetailsService {
     private HODRepository hodRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+    public HOD loadUserByUsername(String id) throws UsernameNotFoundException {
         HOD hod=this.hodRepository.findByHODId(id).orElseThrow(()->new ResourceNotFoundException("HOD","id",id));
         return hod;
     }

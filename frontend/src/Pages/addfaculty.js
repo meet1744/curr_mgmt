@@ -1,13 +1,15 @@
 import React from "react";
 import "./addfacultyStyles.css";
 import { useState } from "react";
+import { getUserData } from "../Auth";
 
 export default function Addfaculty() {
+    let dept=getUserData().hodDto.dept;
+    const [faculty, setFaculty] = useState({deptid:dept,id:"",name:"",email:"",password:""});
 
-    const [faculty, setFaculty] = useState([]);
-
-    const addfacultyform = () => {
-
+    const addfacultyform = (e) => {
+        e.preventDefault();
+        console.log(faculty);
     }
 
     return (

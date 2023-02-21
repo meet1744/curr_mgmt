@@ -32,6 +32,14 @@ public class HOD implements UserDetails {
         super();
     }
 
+    public Department getDept() {
+        return dept;
+    }
+
+    public void setDept(Department dept) {
+        this.dept = dept;
+    }
+
     public String getHODId() {
         return HODId;
     }

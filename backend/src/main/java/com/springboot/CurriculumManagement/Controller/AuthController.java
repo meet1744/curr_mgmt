@@ -51,34 +51,35 @@ public class AuthController {
     public ResponseEntity<JWTAuthResponse> getToken(@RequestBody JWTAuthRequest request) {
         System.out.println(request.getId()+"     "+request.getPassword());
         UserDetails userDetails;
+        String token;
+        JWTAuthResponse response;
         if("hod".equals(request.getRole())){
             HOD hod=new HOD();
             this.authenticate(request.getId(),request.getPassword(),hod.getAuthorities());
-            userDetails=this.hodUserDetailsService.loadUserByUsername(request.getId());
+            hod=this.hodUserDetailsService.loadUserByUsername(request.getId());
+            System.out.println(hod.getDept());
+            token=this.jwtTokenHelper.generateToken(hod);
+            response=new JWTAuthResponse();
+            response.setToken(token);
+            response.setHodDto(hodService.HODToDto(hod));
         }
         else if("faculty".equals(request.getRole())){
             Faculty faculty=new Faculty();
             this.authenticate(request.getId(),request.getPassword(),faculty.getAuthorities());
-            userDetails=this.facultyUserDetailService.loadUserByUsername(request.getId());
+            faculty=this.facultyUserDetailService.loadUserByUsername(request.getId());
+            token=this.jwtTokenHelper.generateToken(faculty);
+            response=new JWTAuthResponse();
+            response.setToken(token);
         }
         else{
             ProgramCoordinator programCoordinator=new ProgramCoordinator();
             this.authenticate(request.getId(),request.getPassword(),programCoordinator.getAuthorities());
-            userDetails=this.pcUserDetailService.loadUserByUsername(request.getId());
+            programCoordinator=this.pcUserDetailService.loadUserByUsername(request.getId());
+            token=this.jwtTokenHelper.generateToken(programCoordinator);
+            response=new JWTAuthResponse();
+            response.setToken(token);
         }
         System.out.println("Hello");
-        String token=this.jwtTokenHelper.generateToken(userDetails);
-        JWTAuthResponse response=new JWTAuthResponse();
-        response.setToken(token);
-        if("hod".equals(request.getRole())){
-            response.setHodDto(hodService.HODToDto((HOD)userDetails));
-        }
-        else if("faculty".equals(request.getRole())){
-            response.setFacultyDto((FacultyDto) userDetails);
-        }
-        else{
-            response.setPcDto((PCDto) userDetails);
-        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

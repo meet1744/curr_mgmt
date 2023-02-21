@@ -36,7 +36,11 @@ const customStyles = {
 
 const Deletefaculty = () => {
     const [faculty, setFaculty] = useState([]);
-    const [facultiesOption, setFaculties] = useState([]);
+    const [faculties, setFaculties] = useState([]);
+    const facultiesOption = faculties.map((f) => ({
+        label: f,
+        value: f
+    }));
     useEffect(() => {
         // axios.get(`${baseurl}/years`)
         //     .then((res) => {

@@ -3,7 +3,7 @@ package com.springboot.CurriculumManagement.Auth;
 import com.springboot.CurriculumManagement.UserDetailService.FacultyUserDetailService;
 import com.springboot.CurriculumManagement.UserDetailService.HODUserDetailService;
 import com.springboot.CurriculumManagement.UserDetailService.PCUserDetailService;
-import com.springboot.CurriculumManagement.UserDetailService.SwitchUserDetailService;
+//import com.springboot.CurriculumManagement.UserDetailService.SwitchUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

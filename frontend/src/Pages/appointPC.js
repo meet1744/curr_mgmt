@@ -38,8 +38,11 @@ const customStyles = {
 const AppointPC = () => {
 
     const [programCoordinator, setProgramCoordinator] = useState([]);
-    const [programCoodinaorOptions, setProgramCoordinators] = useState([]);
-
+    const [programCoordinators, setProgramCoordinators] = useState([]);
+    const programcoordinatorsOption = programCoordinators.map((p) => ({
+        label: p,
+        value: p
+    }));
     useEffect(() => {
         
     }, []);
@@ -56,7 +59,7 @@ const AppointPC = () => {
             <div className='container'>
                 <form onSubmit={appointPCform} >
                     <h3 className="label margint">Faculty:</h3>
-                    <Select options={programCoodinaorOptions} placeholder='Select program coordinator to appoint' styles={customStyles}
+                    <Select options={programcoordinatorsOption} placeholder='Select program coordinator to appoint' styles={customStyles}
                         value={programCoordinator}
                         onChange={(e) => { appointPChandle(e.target.value); }}
                         theme={(theme) => ({
