@@ -16,12 +16,12 @@ function LoginPage({ role }) {
             console.log(response);
             doLogin(response.data, function () {
                 console.log("login details saved in localstorage");
-                if (role == "hod")
-                    <Navigate to="HOD/Subjects" />;
-                else if (role == "faculty")
-                    <Navigate to="Faculty/Subjects" />;
-                else
-                    <Navigate to="PC/Subjects" />;
+                // if (role == "hod")
+                //     <Navigate to="HOD/Subjects" />;
+                // else if (role == "faculty")
+                //     <Navigate to="Faculty/Subjects" />;
+                // else
+                //     <Navigate to="PC/Subjects" />;
             });
         });
         toast.promise(

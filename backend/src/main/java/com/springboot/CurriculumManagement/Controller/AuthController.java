@@ -90,9 +90,7 @@ public class AuthController {
             Authentication authenticate = null;
             if (!usernamePasswordAuthenticationToken.isAuthenticated()) {
                 authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-                if (authenticate.isAuthenticated()) {
-                    SecurityContextHolder.getContext().setAuthentication(authenticate);
-                }
+                SecurityContextHolder.getContext().setAuthentication(authenticate);
             }
         } catch (BadCredentialsException e) {
             System.out.println("Invalid Details!!");

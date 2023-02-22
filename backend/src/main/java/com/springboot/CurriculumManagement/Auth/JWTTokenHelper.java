@@ -17,8 +17,11 @@ import java.util.function.Function;
 @Component
 public class JWTTokenHelper {
 
-    @Value("${jwt.secret}")
-    private String secret;
+    private final Key secret;
+
+    public JWTTokenHelper(@Value("${jwt.secret}") String secret) {
+        this.secret = Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
@@ -28,13 +31,13 @@ public class JWTTokenHelper {
     private String createToken(Map<String, Object> claims, String subject) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + 3600000);
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(key).compact();
+                .signWith(secret, SignatureAlgorithm.HS256)
+                .compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
@@ -61,12 +64,7 @@ public class JWTTokenHelper {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-    }
-
-    public String getUserTypeFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-        return (String) claims.get("userType");
+        return Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJws(token).getBody();
     }
 
 }

@@ -36,7 +36,6 @@ public class HODServiceImpl implements HODService{
 
     @Override
     public Faculty addNewFaculty(Faculty faculty) {
-        //        facultyList.add(faculty);
         facultyDao.save(faculty);
         return faculty;
     }

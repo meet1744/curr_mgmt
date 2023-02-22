@@ -25,17 +25,8 @@ import java.util.Map;
 
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfig{
 
-    @Autowired
-    private HODUserDetailService hodUserDetailService;
-
-    @Autowired
-    private FacultyUserDetailService facultyUserDetailService;
-
-    @Autowired
-    private PCUserDetailService pcUserDetailService;
 
     @Autowired
     private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -44,30 +35,6 @@ public class SpringSecurityConfig{
     @Bean
     public JWTAuthenticationFilter jwtAuthenticationFilter() {
         return new JWTAuthenticationFilter();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider hodAuthenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(hodUserDetailService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
-
-    @Bean
-    public DaoAuthenticationProvider facultyAuthenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(facultyUserDetailService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
-
-    @Bean
-    public DaoAuthenticationProvider pcAuthenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(pcUserDetailService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
     }
 
 
@@ -83,10 +50,6 @@ public class SpringSecurityConfig{
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/v1/auth/**").permitAll()
                 .anyRequest().authenticated();
-
-        http.authenticationProvider(hodAuthenticationProvider());
-        http.authenticationProvider(facultyAuthenticationProvider());
-        http.authenticationProvider(pcAuthenticationProvider());
 
 
         http.addFilterBefore(this.jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
