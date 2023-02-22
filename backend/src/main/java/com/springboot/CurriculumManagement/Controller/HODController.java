@@ -1,5 +1,6 @@
 package com.springboot.CurriculumManagement.Controller;
 
+import com.springboot.CurriculumManagement.Entities.Department;
 import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Services.HODService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ public class HODController {
 
     @Autowired
     private HODService hodService;
+
+
 
     @PostMapping("/addfaculty")
     public Faculty addNewFaculty(@RequestBody Faculty faculty){

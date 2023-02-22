@@ -25,8 +25,12 @@ public class Faculty implements UserDetails {
     @Column(unique = true, nullable = false)
     private String emailId;
 
-    @OneToOne
-    @JoinColumn(name = "deptId", nullable = false)
+//    @OneToOne
+//    @JoinColumn(name = "deptId", nullable = false)
+//    private Department dept;
+
+    @ManyToOne
+    @JoinColumn(name = "deptId",nullable = false)
     private Department dept;
 @ManyToMany(cascade = {
         CascadeType.ALL
