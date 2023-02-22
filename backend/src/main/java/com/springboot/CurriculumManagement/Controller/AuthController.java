@@ -57,7 +57,7 @@ public class AuthController {
             HOD hod=new HOD();
             this.authenticate(request.getId(),request.getPassword(),hod.getAuthorities());
             hod=this.hodUserDetailsService.loadUserByUsername(request.getId());
-            System.out.println(hod.getDept());
+//            System.out.println("This is hod dept of auth controller:"+hod.getDept());
             token=this.jwtTokenHelper.generateToken(hod);
             response=new JWTAuthResponse();
             response.setToken(token);

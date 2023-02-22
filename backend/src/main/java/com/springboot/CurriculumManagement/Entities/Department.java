@@ -26,8 +26,8 @@ public class Department {
     @OneToOne(mappedBy = "dept")
     private HOD hod;
 
-    @OneToOne(mappedBy = "dept")
-    private Faculty faculty;
+    @OneToMany(mappedBy = "dept")
+    private List<Faculty> faculty;
 
     @OneToMany(mappedBy = "dept")
     private List<Subjects> subjectsList;

@@ -43,8 +43,8 @@ public class HODDto {
         this.emailId = emailId;
     }
 
-    public String getDept() {
-        return dept.getDeptId();
+    public Department getDept() {
+        return dept;
     }
 
     public void setDept(Department dept) {

@@ -1,5 +1,6 @@
 package com.springboot.CurriculumManagement.Controller;
 
+import com.springboot.CurriculumManagement.Entities.Department;
 import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Services.HODService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,18 @@ public class HODController {
     @Autowired
     private HODService hodService;
 
+
+
     @PostMapping("/addfaculty")
     public Faculty addNewFaculty(@RequestBody Faculty faculty){
-        System.out.println(faculty.getFacultyId());
-        System.out.println(faculty.getFacultyName());
-        System.out.println(faculty.getPassword());
-        System.out.println(faculty.getEmailId());
-        System.out.println(faculty.getDept());
+//        System.out.println(faculty.getFacultyId());
+//        System.out.println(faculty.getFacultyName());
+//        System.out.println(faculty.getPassword());
+//        System.out.println(faculty.getEmailId());
+//        System.out.println("This is fac dept :"+faculty.getDept());
+
+
+
         return this.hodService.addNewFaculty(faculty);
     }
     @GetMapping("/getallfaculty")
