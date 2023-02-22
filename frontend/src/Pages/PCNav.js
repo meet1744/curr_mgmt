@@ -6,10 +6,10 @@ function PCNav() {
     return (
         <>
             <div className="sidenav cont">
-                <Link to="/PCAllSubjects">All Subject</Link>
-                <Link to="/PCAddSubjects">Add Subjects</Link>
-                <Link to="/PCUpdateSubjects">Update Subject</Link>
-                <Link to="/PCDeleteSubjects">Delete Subject</Link>
+                <Link to="/PC/Subjects">All Subject</Link>
+                <Link to="/PC/AddSubjects">Add Subjects</Link>
+                <Link to="/PC/UpdateSubjects">Update Subject</Link>
+                <Link to="/PC/DeleteSubjects">Delete Subject</Link>
             </div>
         </>
     );

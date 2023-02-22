@@ -12,7 +12,7 @@ import FacultyNav from "./Pages/FacultyNav";
 import PCNav from "./Pages/PCNav";
 import Subjects from "./Pages/Subjects";
 import Addfaculty from "./Pages/addfaculty";
-import Deletefaculty from "./Pages/deletefaculty";  
+import Deletefaculty from "./Pages/deletefaculty";
 import AppointPC from "./Pages/appointPC";
 
 function App() {
@@ -36,8 +36,22 @@ function App() {
             <Route exact path="DeleteFaculty" element={<Deletefaculty />} />
             <Route exact path="AppointPC" element={<AppointPC />} />
           </Route>
-          <Route exact path="Faculty" element={<FacultyNav />} />
-          <Route exact path="PC" element={<PCNav />} />
+          <Route exact path="Faculty" element={
+            <>
+              <FacultyNav />
+              <Outlet />
+            </>
+          } >
+
+          </Route>
+          <Route exact path="PC" element={
+            <>
+              <PCNav />
+              <Outlet />
+            </>
+          } >
+            
+          </Route>
         </Routes>
         <Background />
       </BrowserRouter>

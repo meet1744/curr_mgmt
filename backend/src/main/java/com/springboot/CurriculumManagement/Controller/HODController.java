@@ -20,11 +20,6 @@ public class HODController {
 
     @PostMapping("/addfaculty")
     public Faculty addNewFaculty(@RequestBody Faculty faculty){
-        System.out.println(faculty.getFacultyId());
-        System.out.println(faculty.getFacultyName());
-        System.out.println(faculty.getPassword());
-        System.out.println(faculty.getEmailId());
-        System.out.println(faculty.getDept());
         return this.hodService.addNewFaculty(faculty);
     }
     @GetMapping("/getallfaculty")
