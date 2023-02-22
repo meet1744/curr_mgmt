@@ -1,14 +1,15 @@
 package com.springboot.CurriculumManagement.Services;
 
-import com.springboot.CurriculumManagement.Dao.FacultyDao;
 import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Entities.HOD;
 import com.springboot.CurriculumManagement.Exceptions.ResourceNotFoundException;
 import com.springboot.CurriculumManagement.Payloads.HODDto;
+import com.springboot.CurriculumManagement.Repository.FacultyRepository;
 import com.springboot.CurriculumManagement.Repository.HODRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.List;
 public class HODServiceImpl implements HODService{
 
 	@Autowired
-    private FacultyDao facultyDao;
+    private FacultyRepository facultyDao;
 	
     @Autowired
     private HODRepository HODRepo;
@@ -34,7 +35,9 @@ public class HODServiceImpl implements HODService{
         return this.HODToDto(hod);
     }
 
+//    @PreAuthorize("hasAuthority('ROLE_ANONYMOUS')")
     @Override
+    @PreAuthorize("isAuthenticated()")
     public Faculty addNewFaculty(Faculty faculty) {
         facultyDao.save(faculty);
         return faculty;

@@ -12,8 +12,10 @@ export default function Addfaculty() {
 
     const addfacultyform = (e) => {
         e.preventDefault();
+        console.log(token);
         console.log(faculty);
-        axios.post('http://localhost:8080/HOD/addfaculty',faculty,{headers:{Authorization:token}})
+        
+        axios.post('http://localhost:8080/HOD/addfaculty',faculty,{headers : {Authorization:token}})
             .then(response => console.log(response))
             .catch(error => console.error(error));
     }
