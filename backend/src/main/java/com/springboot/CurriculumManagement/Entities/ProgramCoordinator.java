@@ -36,6 +36,14 @@ public class ProgramCoordinator implements UserDetails {
         super();
     }
 
+    public ProgramCoordinator(String programCoordinatorId, String programCoordinatorName, String password, String emailId, Department dept) {
+        this.programCoordinatorId = programCoordinatorId;
+        ProgramCoordinatorName = programCoordinatorName;
+        this.password = password;
+        this.emailId = emailId;
+        this.dept = dept;
+    }
+
     public String getProgramCoordinatorId() {
         return programCoordinatorId;
     }

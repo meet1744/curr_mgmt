@@ -46,10 +46,16 @@ public class HODController {
         }
     }
 
-    @GetMapping("/programcoordinator")
-    public void appointProgramCoordinator(){
-        hodService.appointProgramCoordinator();
+    @PostMapping("/appointpc")
+    public void appointProgramCoordinator(@RequestBody Faculty newPc){
+        hodService.appointProgramCoordinator(newPc);
+        //returns error if already exists using custom http status code
     }
+    
+    // @GetMapping("/programcoordinator")
+    // public void appointProgramCoordinator(){
+    //     hodService.appointProgramCoordinator();
+    // }
 
 
 
