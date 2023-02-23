@@ -14,6 +14,7 @@ import Subjects from "./Pages/Subjects";
 import Addfaculty from "./Pages/addfaculty";
 import Deletefaculty from "./Pages/deletefaculty";
 import AppointPC from "./Pages/appointPC";
+import Addsubject from "./Pages/addsubject";
 
 function App() {
   const [role, setRole] = useState({});
@@ -22,7 +23,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route exact path="/" element={<HomePage />} />
+          <Route exact path="/" element={<Addsubject />} />
           <Route exact path="/login" element={<LoginPage role={role} />} />
           <Route exact path="/roles" element={<RolesPage setRole={setRole} />} />
           <Route exact path="HOD" element={
@@ -50,7 +51,7 @@ function App() {
               <Outlet />
             </>
           } >
-            
+            <Route exact path="AddSubject" element={<Addsubject />} />
           </Route>
         </Routes>
         <Background />

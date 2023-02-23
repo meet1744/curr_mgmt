@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./appointPCStyles.css";
 import baseurl from "../Components/baseurl";
+import { getUserData } from "../Auth";
 
 
 const customStyles = {
@@ -36,15 +37,21 @@ const customStyles = {
 };
 
 const AppointPC = () => {
-
+    let token = "Bearer " + getUserData().token;
     const [programCoordinator, setProgramCoordinator] = useState([]);
-    const [programCoordinators, setProgramCoordinators] = useState([]);
-    const programcoordinatorsOption = programCoordinators.map((p) => ({
-        label: p,
-        value: p
+    const [faculties, setFaculties] = useState([]);
+    const programcoordinatorsOption = faculties.map((f) => ({
+        label: `${f.facultyId} - ${f.facultyName}`,
+        value: `${f.facultyId} - ${f.facultyName}`
     }));
     useEffect(() => {
-        
+        axios.get(`${baseurl}/HOD/getallfaculty`, { headers: { Authorization: token } })
+            .then((res) => {
+                setFaculties(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }, []);
 
     const appointPChandle = (option) => {
@@ -61,7 +68,7 @@ const AppointPC = () => {
                     <h3 className="label margint">Faculty:</h3>
                     <Select options={programcoordinatorsOption} placeholder='Select program coordinator to appoint' styles={customStyles}
                         value={programCoordinator}
-                        onChange={(e) => { appointPChandle(e.target.value); }}
+                        onChange={(e) => { appointPChandle(e.value); }}
                         theme={(theme) => ({
                             ...theme,
                             colors: {

@@ -1,5 +1,6 @@
 package com.springboot.CurriculumManagement.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,8 @@ public class ProgramCoordinator implements UserDetails {
 
     @Column(nullable = false)
     private String ProgramCoordinatorName;
+
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 //    @Column(nullable = false)

@@ -48,6 +48,10 @@ function LoginPage({ role }) {
                     },
                     icon: "💥",
                 }
+            },
+            {
+                className: 'dark-toast',
+                position: toast.POSITION.BOTTOM_RIGHT,
             }
         )
     }

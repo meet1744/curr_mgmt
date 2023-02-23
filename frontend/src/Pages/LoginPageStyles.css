@@ -1,0 +1,8 @@
+.dark-toast {
+    background-color: #222;
+    color: #fff;
+}
+
+.dark-toast .Toastify__close-button {
+    color: #fff;
+}
