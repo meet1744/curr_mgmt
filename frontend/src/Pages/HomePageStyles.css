@@ -1,6 +1,6 @@
 .container {
   width: 40%;
-  height: 230px;
+  max-height: 230px;
   background-color: #222;
   color: white;
   position: absolute;

@@ -65,39 +65,39 @@ const AppointPC = () => {
         e.preventDefault();
         const pc = searchFacultyById(programCoordinator.split("-")[0].trim());
         console.log(pc);
-        const addpcresponse = axios.post('http://localhost:8080/HOD/programcoordinator', pc, { headers: { Authorization: token } })
-            .then(response => console.log(response))
-            .catch(error => console.error(error));
-        toast.promise(
-            addpcresponse,
-            {
-                pending: {
-                    render() {
-                        return "Please Wait!!"
-                    },
-                    icon: "✋",
-                },
-                success: {
-                    render() {
-                        return `Program Coordinator Appointed Successfully!!`
-                    },
-                    icon: "🚀",
-                },
-                error: {
-                    render({ data }) {
-                        console.log(data);
-                        if (data.response.status === 400 || data.response.status === 404 || data.response.status === 401)
-                            return data.response.data.status;
-                        return `Something went wrong!!`
-                    },
-                    icon: "💥",
-                }
-            },
-            {
-                className: 'dark-toast',
-                position: toast.POSITION.BOTTOM_RIGHT,
-            }
-        );
+        // const addpcresponse = axios.post(`${baseurl}/HOD/programcoordinator`, pc, { headers: { Authorization: token } })
+        //     .then(response => console.log(response))
+        //     .catch(error => console.error(error));
+        // toast.promise(
+        //     addpcresponse,
+        //     {
+        //         pending: {
+        //             render() {
+        //                 return "Please Wait!!"
+        //             },
+        //             icon: "✋",
+        //         },
+        //         success: {
+        //             render() {
+        //                 return `Program Coordinator Appointed Successfully!!`
+        //             },
+        //             icon: "🚀",
+        //         },
+        //         error: {
+        //             render({ data }) {
+        //                 console.log(data);
+        //                 if (data.response.status === 400 || data.response.status === 404 || data.response.status === 401)
+        //                     return data.response.data.status;
+        //                 return `Something went wrong!!`
+        //             },
+        //             icon: "💥",
+        //         }
+        //     },
+        //     {
+        //         className: 'dark-toast',
+        //         position: toast.POSITION.BOTTOM_RIGHT,
+        //     }
+        // );
     }
 
     return (

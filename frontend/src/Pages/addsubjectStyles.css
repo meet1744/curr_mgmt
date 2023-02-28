@@ -1,6 +1,6 @@
-.cont-3{
+.cont-3 {
     width: 40%;
-    height: 45%;
+    max-height: 60%;
     background-color: #222;
     color: white;
     position: absolute;
@@ -10,4 +10,13 @@
     border-radius: 20px;
     text-align: center;
     padding: 20px;
+    overflow:auto;
+    scroll-behavior: smooth;
+    scrollbar-color: red yellow;
+    scrollbar-width: thin;
+}
+
+.block{
+    display: inline-block;
+    width: 45%;
 }

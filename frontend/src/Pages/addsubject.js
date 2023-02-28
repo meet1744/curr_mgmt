@@ -48,7 +48,7 @@ const Addsubject = () => {
   }));
   const facultyhandle = (option) => {
     setFaculties(option);
-}
+  }
   const addsubjectform = () => {
 
   }
@@ -63,8 +63,8 @@ const Addsubject = () => {
           <input type="text" onChange={(e) => { setSubject({ ...subject, facultyName: e.target.value }) }} value={subject.name} />
           <h3 className="label">Faculties:</h3>
           <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
-            value={faculties}
             onChange={(e) => { facultyhandle(e.target.value); }}
+            isMulti
             theme={(theme) => ({
               ...theme,
               colors: {
@@ -73,6 +73,34 @@ const Addsubject = () => {
               },
             })}
           />
+          <div className='block'>
+            <h3 className="label">Sem:</h3>
+            <Select options={facultyOptions} placeholder='Select sem' styles={customStyles}
+              onChange={(e) => { facultyhandle(e.target.value); }}
+              isMulti
+              theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  primary: 'grey',
+                },
+              })}
+            />
+          </div>
+          <div className='block'>
+            <h3 className="label">Sequence:</h3>
+            <Select options={facultyOptions} placeholder='Select sequence' styles={customStyles}
+              onChange={(e) => { facultyhandle(e.target.value); }}
+              isMulti
+              theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  primary: 'grey',
+                },
+              })}
+            />
+          </div>
           <input type="submit" className="SubmitButton coolBeans" value="Add Faculty" />
         </form>
       </div>

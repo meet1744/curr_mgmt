@@ -9,6 +9,7 @@ import baseurl from "./../Components/baseurl";
 import { Navigate } from "react-router-dom";
 
 
+
 function LoginPage({ role }) {
 
     const loginfun = (data) => {
@@ -16,12 +17,13 @@ function LoginPage({ role }) {
             console.log(response);
             doLogin(response.data, function () {
                 console.log("login details saved in localstorage");
-                // if (role == "hod")
-                //     <Navigate to="HOD/Subjects" />;
-                // else if (role == "faculty")
-                //     <Navigate to="Faculty/Subjects" />;
-                // else
-                //     <Navigate to="PC/Subjects" />;
+                console.log(JSON.stringify(role));
+                if (JSON.stringify(role) === "hod")
+                    <Navigate to="/HOD/Subjects" replace={true} />;
+                else if (JSON.stringify(role) === "faculty")
+                    <Navigate to="/Faculty/Subjects" replace={true} />;
+                else if (JSON.stringify(role) === "pc")
+                    <Navigate to="/PC/Subjects" replace={true} />;
             });
         });
         toast.promise(
@@ -59,7 +61,7 @@ function LoginPage({ role }) {
     const loginForm = (e) => {
         console.log(login);
         e.preventDefault();
-        doLogin()
+
         if (login.id === '' || login.password === '') {
             toast.error("Please fill all the fields");
             return;
@@ -73,7 +75,6 @@ function LoginPage({ role }) {
         <>
             <ToastContainer />
             <div className="container">
-
                 <form onSubmit={loginForm} >
                     <h3 className="label">ID:</h3>
                     <input type="text" onChange={(e) => { setLogin({ ...login, id: e.target.value }) }} value={login.id} />

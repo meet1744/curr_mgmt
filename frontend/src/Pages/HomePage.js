@@ -103,7 +103,6 @@ function HomePage() {
                     <ToastContainer />
                     <h3 className="label">Admission Year:</h3>
                     <Select options={yearOptions} placeholder='Select Year' styles={customStyles}
-                        value={selectedYear}
                         onChange={(e) => { handleYearChange(e.target.value); }}
                         theme={(theme) => ({
                             ...theme,
