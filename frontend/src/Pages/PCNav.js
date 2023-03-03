@@ -7,9 +7,9 @@ function PCNav() {
         <>
             <div className="sidenav cont">
                 <Link to="/PC/Subjects">All Subject</Link>
-                <Link to="/PC/AddSubjects">Add Subjects</Link>
-                <Link to="/PC/UpdateSubjects">Update Subject</Link>
-                <Link to="/PC/DeleteSubjects">Delete Subject</Link>
+                <Link to="/PC/AddSubject">Add Subjects</Link>
+                <Link to="/PC/UpdateSubject">Update Subject</Link>
+                <Link to="/PC/DeleteSubject">Delete Subject</Link>
             </div>
         </>
     );

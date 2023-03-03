@@ -19,11 +19,11 @@ function LoginPage({ role }) {
                 console.log("login details saved in localstorage");
                 console.log(JSON.stringify(role));
                 if (JSON.stringify(role) === "hod")
-                    <Navigate to="/HOD/Subjects" replace={true} />;
+                    <Navigate to="/HOD/Subjects" />;
                 else if (JSON.stringify(role) === "faculty")
-                    <Navigate to="/Faculty/Subjects" replace={true} />;
+                    <Navigate to="/Faculty/Subjects" />;
                 else if (JSON.stringify(role) === "pc")
-                    <Navigate to="/PC/Subjects" replace={true} />;
+                    <Navigate to="/PC/Subjects" />;
             });
         });
         toast.promise(

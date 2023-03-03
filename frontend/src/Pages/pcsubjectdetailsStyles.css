@@ -1,0 +1,46 @@
+.subjectdetailcontainer {
+    width: 70%;
+    height: 70%;
+    max-height: 550px;
+    background-color: #222;
+    color: white;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    text-align: center;
+    padding: 20px;
+    overflow: scroll;
+
+}
+
+.inline {
+    display: flex;
+}
+
+
+.gap3 {
+    max-width: 200px;
+    width: 100%;
+}
+
+.gap4 {
+    width: 25%;
+}
+
+.label {
+    text-align: left;
+    width: '80%';
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
+
+.error-msg {
+    width: 100%;
+    color: red;
+    font-size: 14px;
+    font-weight: 600;
+}

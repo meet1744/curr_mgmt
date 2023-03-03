@@ -15,6 +15,11 @@ import Addfaculty from "./Pages/addfaculty";
 import Deletefaculty from "./Pages/deletefaculty";
 import AppointPC from "./Pages/appointPC";
 import Addsubject from "./Pages/addsubject";
+import Deletesubject from "./Pages/deletesubject";
+import Updatesubject from "./Pages/updatesubject";
+import PCSubjectdetails from "./Pages/pcsubjectdetails";
+import Logs from "./Pages/logs";
+import FacultySubjectdetails from "./Pages/Facultysubjectdetails";
 
 function App() {
   const [role, setRole] = useState({});
@@ -23,7 +28,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route exact path="/" element={<HomePage />} />
+          <Route exact path="/" element={<Subjects />} />
           <Route exact path="/login" element={<LoginPage role={role} />} />
           <Route exact path="/roles" element={<RolesPage setRole={setRole} />} />
           <Route exact path="HOD" element={
@@ -32,10 +37,11 @@ function App() {
               <Outlet />
             </>
           } >
-            <Route exact path="Subjects" element={<Subjects />} />
+            <Route exact path="Subjects" element={<Subjects role={role} />} />
             <Route exact path="AddFaculty" element={<Addfaculty />} />
             <Route exact path="DeleteFaculty" element={<Deletefaculty />} />
             <Route exact path="AppointPC" element={<AppointPC />} />
+            <Route exact path="logs" element={<Logs/>} />
           </Route>
           <Route exact path="Faculty" element={
             <>
@@ -43,7 +49,9 @@ function App() {
               <Outlet />
             </>
           } >
-            
+            <Route exact path="Subjects" element={<Subjects role={role} />} />
+            <Route exact path="UpdateSubject" element={<Updatesubject />} />
+            <Route exact path="SubjectDetails" element={<FacultySubjectdetails />} />
           </Route>
           <Route exact path="PC" element={
             <>
@@ -51,7 +59,11 @@ function App() {
               <Outlet />
             </>
           } >
-            <Route exact path="AddSubjects" element={<Addsubject />} />
+            <Route exact path="Subjects" element={<Subjects role={role} />} />
+            <Route exact path="AddSubject" element={<Addsubject />} />
+            <Route exact path="DeleteSubject" element={<Deletesubject />} />
+            <Route exact path="UpdateSubject" element={<Updatesubject />} />
+            <Route exact path="SubjectDetails" element={<PCSubjectdetails />} />
           </Route>
         </Routes>
         <Background />
