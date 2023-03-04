@@ -1,13 +1,15 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import { useTable } from 'react-table'
-import { Columns } from '../Components/Columns'
+import { SubjectColumns } from '../Components/SubjectColumns'
+import MOCK_DATA from '../Components/MOCK_DATA.json'
 import './SubjectsStyles.css'
 
 const Subjects = ({ role }) => {
 
-  const columns = useMemo(() => Columns, [])
-  const data = useMemo(() => role, [role])
+  const [subjects, setSubjects] = useState([]);
 
+  const columns = useMemo(() => SubjectColumns, [])
+  const data = useMemo(() => subjects, [])
 
   const tableInstance = useTable({
     columns,
@@ -16,13 +18,21 @@ const Subjects = ({ role }) => {
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, } = tableInstance
 
+
+  useEffect(() => {
+    
+  },[]);
+
+
+
+
   return (
     <>
-      <div className=''>
+      <div className='subjectscont'>
         <table {...getTableProps()}>
           <thead>
             {
-              headerGroups.map((headerGroup) => (
+              headerGroups && headerGroups.map((headerGroup) => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {
                     headerGroup.headers.map((column) => (
@@ -30,7 +40,8 @@ const Subjects = ({ role }) => {
                     ))
                   }
                 </tr>
-              ))}
+              ))
+            }
           </thead>
           <tbody {...getTableBodyProps()}>
             {

@@ -1,4 +1,4 @@
-export const Columns = [
+export const SubjectColumns = [
     {
         Header:'DDUcode',
         accessor:'DDUcode'
