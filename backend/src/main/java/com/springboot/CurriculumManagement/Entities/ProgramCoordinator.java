@@ -18,7 +18,7 @@ public class ProgramCoordinator implements UserDetails {
     private String programCoordinatorId;
 
     @Column(nullable = false)
-    private String ProgramCoordinatorName;
+    private String programCoordinatorName;
 
     @JsonIgnore
     @Column(nullable = false)
@@ -38,7 +38,7 @@ public class ProgramCoordinator implements UserDetails {
 
     public ProgramCoordinator(String programCoordinatorId, String programCoordinatorName, String password, String emailId, Department dept) {
         this.programCoordinatorId = programCoordinatorId;
-        ProgramCoordinatorName = programCoordinatorName;
+        this.programCoordinatorName = programCoordinatorName;
         this.password = password;
         this.emailId = emailId;
         this.dept = dept;
@@ -53,11 +53,11 @@ public class ProgramCoordinator implements UserDetails {
     }
 
     public String getProgramCoordinatorName() {
-        return ProgramCoordinatorName;
+        return programCoordinatorName;
     }
 
     public void setProgramCoordinatorName(String programCoordinatorName) {
-        ProgramCoordinatorName = programCoordinatorName;
+        programCoordinatorName = programCoordinatorName;
     }
 
     @Override

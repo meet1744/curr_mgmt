@@ -2,9 +2,10 @@ package com.springboot.CurriculumManagement.Services;
 
 import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Payloads.HODDto;
-import org.springframework.stereotype.Service;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface HODService {
@@ -17,4 +18,6 @@ public interface HODService {
 
 //    void appointProgramCoordinator();
 void appointProgramCoordinator(Faculty newPc);
+
+    Faculty getFacultyById(String id);
 }

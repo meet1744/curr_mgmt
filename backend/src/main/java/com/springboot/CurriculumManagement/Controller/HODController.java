@@ -1,16 +1,15 @@
 package com.springboot.CurriculumManagement.Controller;
 
-import com.springboot.CurriculumManagement.Entities.Department;
 import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Services.HODService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -47,11 +46,25 @@ public class HODController {
         }
     }
 
-    @PostMapping("/appointpc")
-    public void appointProgramCoordinator(@RequestBody Faculty newPc){
-        hodService.appointProgramCoordinator(newPc);
-        //returns error if already exists using custom http status code
+//    @PostMapping("/appointpc")
+//    public void appointProgramCoordinator(@RequestBody Faculty newPc){
+//        System.out.println(newPc);
+//        hodService.appointProgramCoordinator(newPc);
+//        //returns error if already exists using custom http status code
+//    }
+
+    @GetMapping("/getfacultybyid/{facultyid}")
+    public Faculty getFacultyById(@PathVariable(value = "facultyid") String id) {
+        Faculty faculty = hodService.getFacultyById(id);
+        return faculty;
     }
+@GetMapping("/appointpc/{newPcId}")
+public void appointProgramCoordinator(@PathVariable String newPcId){
+    System.out.println(newPcId);
+    Faculty newPc=getFacultyById(newPcId);
+    hodService.appointProgramCoordinator(newPc);
+    //returns error if already exists using custom http status code
+}
     
     // @GetMapping("/programcoordinator")
     // public void appointProgramCoordinator(){

@@ -17,6 +17,7 @@ public class FacultyUserDetailService implements UserDetailsService {
 
     @Override
     public Faculty loadUserByUsername(String id) throws UsernameNotFoundException {
+
         Faculty faculty=this.facultyRepository.findByFacultyId(id).orElseThrow(()->new ResourceNotFoundException("Faculty","id",id));
         return faculty;
     }

@@ -10,13 +10,12 @@ import com.springboot.CurriculumManagement.Repository.HODRepository;
 import com.springboot.CurriculumManagement.Repository.PCRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -61,6 +60,8 @@ public class HODServiceImpl implements HODService{
 
     }
 
+
+
 //    @Override
 //    public void appointProgramCoordinator() {
 //        facultyDao.findAll();
@@ -68,11 +69,18 @@ public class HODServiceImpl implements HODService{
 
     @Override
     public void appointProgramCoordinator(Faculty newPc) {
+        System.out.println("password:  "+newPc.getPassword());
 //        facultyDao.findAll();
         ProgramCoordinator pcToAdd=new ProgramCoordinator(newPc.getFacultyId(), newPc.getFacultyName(), newPc.getPassword(), newPc.getEmailId(), newPc.getDept());
         pcDao.save(pcToAdd);
-
+//        pcDao.save(newPc);
     }
+
+    @Override
+    public Faculty getFacultyById(String id) {
+        return facultyDao.findByFacultyId(id);
+    }
+
 
     public HOD DtoToHOD(HODDto dto){
         HOD hod=this.modelMapper.map(dto,HOD.class);
