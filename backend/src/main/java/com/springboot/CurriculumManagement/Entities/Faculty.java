@@ -20,7 +20,7 @@ public class Faculty implements UserDetails {
     @Column(nullable = false)
     private String facultyName;
 
-    @JsonIgnore
+//    @JsonIgnore
     @Column(nullable = false)
     private String password;
 //    @Column(nullable = false)

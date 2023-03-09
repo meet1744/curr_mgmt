@@ -3,6 +3,7 @@ import { getUserData } from "../Auth";
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
+import baseurl from "../Components/baseurl";
 
 export default function Addfaculty() {
     let dept = getUserData().hodDto.dept;
@@ -15,7 +16,7 @@ export default function Addfaculty() {
         console.log(token);
         console.log(faculty);
 
-        const addfacultyresponse = axios.post('http://localhost:8080/HOD/addfaculty', faculty, { headers: { Authorization: token } })
+        const addfacultyresponse = axios.post(`${baseurl}/HOD/addfaculty`, faculty, { headers: { "Authorization": token } })
             .then(response => console.log(response))
             .catch(error => console.error(error));
 
