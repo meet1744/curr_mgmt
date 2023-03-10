@@ -9,16 +9,15 @@ import java.util.Set;
 @Entity
 @Table(name = "subjects")
 public class Subjects {
-    @Column(nullable = false)
     private String effectiveDate;
     private String removedDate;
     @Column(nullable = false)
     private int semester;
 
     //What is sub seq?
-
+    @Column(nullable = false)
     private int subSequence;
-    @Column(unique = true,nullable = false)
+    @Column(unique = true)
     private String AICTEcode;
 
     @Id
@@ -27,38 +26,27 @@ public class Subjects {
     private String subjectName;
 
     //optional
-    @Column(nullable = false)
     private String parentDept;
 
     private String extraInfo;
-    @Column(nullable = false)
+
     private String subjectType;
 
-    @Column(nullable = false)
+
     private String subjectTypeExplanation;
-    @Column(nullable = false)
+
     private int theoryMarks;
-    @Column(nullable = false)
+    
     private int sessionalMarks;
-    @Column(nullable = false)
     private int termworkMarks;
-    @Column(nullable = false)
     private int practicalMarks;
-    @Column(nullable = false)
     private int totalMarks;
-    @Column(nullable = false)
     private int LectureHours;
-    @Column(nullable = false)
     private int tutorial;
-    @Column(nullable = false)
     private int PracticalHours;
-    @Column(nullable = false)
     private int totalHours;
-    @Column(nullable = false)
     private int lectureAndTheoryCredit;
-    @Column(nullable = false)
     private int practicalCredit;
-    @Column(nullable = false)
     private int totalCredit;
 
     @ManyToOne

@@ -2,8 +2,9 @@ import React from 'react'
 import "./addsubjectStyles.css";
 import Select from 'react-select';
 import { getUserData } from "../Auth";
-import { useState } from "react";
 import axios from 'axios';
+import { useEffect, useState } from "react";
+import baseurl from "../Components/baseurl";
 
 const customStyles = {
   valueContainer: (base) => ({
@@ -36,18 +37,30 @@ const customStyles = {
 
 const Addsubject = () => {
 
-  // let dept = getUserData().PCDto.dept;
-  // let token = "Bearer " + getUserData().token;
+  let dept = getUserData().pcDto.dept;
+  let token = "Bearer " + getUserData().token;
 
-  const [subject, setSubject] = useState({ dept: "dept", DDUcode: "", subjectName: "", facultyList: "" });
+  const [subject, setSubject] = useState({ dept: dept, DDUcode: "", subjectName: "", facultyList: "", subSequence: "" });
 
   const [faculties, setFaculties] = useState([]);
+  const [selected,setSelected] = useState();
   const facultyOptions = faculties.map((f) => ({
-    label: f,
-    value: f
+    // label: f,
+    // value: f
+    label: `${f.facultyId} - ${f.facultyName}`,
+    value: `${f.facultyId} - ${f.facultyName}`
   }));
+  useEffect(() => {
+    axios.get(`${baseurl}/PC/getallfaculty`, { headers: { Authorization: token } })
+        .then((res) => {
+            setFaculties(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}, []);
   const facultyhandle = (option) => {
-    setFaculties(option);
+    setSelected(option);
   }
   const addsubjectform = () => {
 
@@ -64,14 +77,16 @@ const Addsubject = () => {
           <h3 className="label">Faculties:</h3>
           <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
             onChange={(e) => { facultyhandle(e.target.value); }}
-            isMulti
+            value={selected}
             theme={(theme) => ({
               ...theme,
               colors: {
                 ...theme.colors,
                 primary: 'grey',
               },
+              
             })}
+            
           />
           <div className='block'>
             <h3 className="label">Sem:</h3>
@@ -91,7 +106,7 @@ const Addsubject = () => {
             <h3 className="label">Sequence:</h3>
             <Select options={facultyOptions} placeholder='Select sequence' styles={customStyles}
               onChange={(e) => { facultyhandle(e.target.value); }}
-              isMulti
+              
               theme={(theme) => ({
                 ...theme,
                 colors: {
@@ -101,7 +116,7 @@ const Addsubject = () => {
               })}
             />
           </div>
-          <input type="submit" className="SubmitButton coolBeans" value="Add Faculty" />
+          <input type="submit" className="SubmitButton coolBeans" value="Add Subject" />
         </form>
       </div>
     </>

@@ -28,9 +28,9 @@ public class HODController {
 
 
     @PostMapping("/addfaculty")
-    public Faculty addNewFaculty(@RequestBody Faculty faculty){
-        faculty.setPassword(this.passwordEncoder.encode(faculty.getPassword()));
-        return this.hodService.addNewFaculty(faculty);
+    public Faculty addNewFaculty(@RequestBody Faculty newFaculty){
+        newFaculty.setPassword(this.passwordEncoder.encode(newFaculty.getPassword()));
+        return this.hodService.addNewFaculty(newFaculty);
     }
     @GetMapping("/getallfaculty")
     public List<Faculty> getAllFaculty(){
@@ -69,11 +69,7 @@ public void appointProgramCoordinator(@PathVariable String newPcId){
     hodService.appointProgramCoordinator(newPc);
     //returns error if already exists using custom http status code
 }
-    
-    // @GetMapping("/programcoordinator")
-    // public void appointProgramCoordinator(){
-    //     hodService.appointProgramCoordinator();
-    // }
+
 
 
 

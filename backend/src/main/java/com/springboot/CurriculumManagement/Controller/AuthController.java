@@ -9,6 +9,7 @@ import com.springboot.CurriculumManagement.Entities.ProgramCoordinator;
 import com.springboot.CurriculumManagement.Payloads.FacultyDto;
 import com.springboot.CurriculumManagement.Payloads.PCDto;
 import com.springboot.CurriculumManagement.Services.HODServiceImpl;
+import com.springboot.CurriculumManagement.Services.PCServiceImpl;
 import com.springboot.CurriculumManagement.UserDetailService.FacultyUserDetailService;
 import com.springboot.CurriculumManagement.UserDetailService.HODUserDetailService;
 import com.springboot.CurriculumManagement.UserDetailService.PCUserDetailService;
@@ -46,6 +47,9 @@ public class AuthController {
     private HODServiceImpl hodService;
 
     @Autowired
+    private PCServiceImpl pcService;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
@@ -70,6 +74,7 @@ public class AuthController {
             token=this.jwtTokenHelper.generateToken(faculty);
             response=new JWTAuthResponse();
             response.setToken(token);
+//            response.setFacultyDto();
         }
         else{
             ProgramCoordinator programCoordinator=new ProgramCoordinator();
@@ -78,6 +83,7 @@ public class AuthController {
             token=this.jwtTokenHelper.generateToken(programCoordinator);
             response=new JWTAuthResponse();
             response.setToken(token);
+            response.setPcDto(pcService.PcToDto(programCoordinator));
         }
         System.out.println("Hello");
         return new ResponseEntity<>(response, HttpStatus.OK);
