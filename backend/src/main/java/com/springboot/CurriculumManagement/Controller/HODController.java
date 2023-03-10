@@ -1,6 +1,8 @@
 package com.springboot.CurriculumManagement.Controller;
 
 import com.springboot.CurriculumManagement.Entities.Faculty;
+import com.springboot.CurriculumManagement.Exceptions.ResourceNotFoundException;
+import com.springboot.CurriculumManagement.Repository.FacultyRepository;
 import com.springboot.CurriculumManagement.Services.HODService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +23,8 @@ public class HODController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @Autowired
+    private FacultyRepository facultyRepository;
 
 
     @PostMapping("/addfaculty")
@@ -55,12 +58,13 @@ public class HODController {
 
     @GetMapping("/getfacultybyid/{facultyid}")
     public Faculty getFacultyById(@PathVariable(value = "facultyid") String id) {
-        Faculty faculty = hodService.getFacultyById(id);
+//        Optional<Faculty> faculty = hodService.getFacultyById(id);
+//        return faculty;
+        Faculty faculty=this.facultyRepository.findByFacultyId(id).orElseThrow(()->new ResourceNotFoundException("Faculty","id",id));
         return faculty;
     }
 @GetMapping("/appointpc/{newPcId}")
 public void appointProgramCoordinator(@PathVariable String newPcId){
-    System.out.println(newPcId);
     Faculty newPc=getFacultyById(newPcId);
     hodService.appointProgramCoordinator(newPc);
     //returns error if already exists using custom http status code

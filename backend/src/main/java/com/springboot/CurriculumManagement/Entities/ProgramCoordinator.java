@@ -29,7 +29,7 @@ public class ProgramCoordinator implements UserDetails {
     private String emailId;
 
     @OneToOne
-    @JoinColumn(name = "deptId", nullable = false)
+    @JoinColumn(name = "deptId", nullable = false, unique = true)
     private Department dept;
 
     public ProgramCoordinator() {

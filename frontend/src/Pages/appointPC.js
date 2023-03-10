@@ -64,9 +64,9 @@ const AppointPC = () => {
     const appointPCform = (e) => {
         e.preventDefault();
         // const pc = searchFacultyById(programCoordinator.split("-")[0].trim());
-        const facultyid = faculties.facultyId;
+        const facultyid = programCoordinator.split("-")[0].trim();
         // console.log(pc);
-        const addpcresponse = axios.get(`${baseurl}/HOD/appointpc/${facultyid}`,  { headers: { Authorization: token } },facultyid)
+        const addpcresponse = axios.get(`${baseurl}/HOD/appointpc/${facultyid}`,  { headers: { "Authorization": token } },facultyid)
             .then(response => console.log(response))
             .catch(error => console.error(error));
         toast.promise(

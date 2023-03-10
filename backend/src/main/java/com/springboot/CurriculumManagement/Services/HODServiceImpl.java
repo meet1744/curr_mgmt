@@ -10,7 +10,6 @@ import com.springboot.CurriculumManagement.Repository.HODRepository;
 import com.springboot.CurriculumManagement.Repository.PCRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +49,6 @@ public class HODServiceImpl implements HODService{
     public List<Faculty> getAllFaculty() {
 
         return facultyDao.findAll();
-//        return facultyList;
     }
 
     @Override
@@ -62,22 +60,16 @@ public class HODServiceImpl implements HODService{
 
 
 
-//    @Override
-//    public void appointProgramCoordinator() {
-//        facultyDao.findAll();
-//    }
 
     @Override
     public void appointProgramCoordinator(Faculty newPc) {
-        System.out.println("password:  "+newPc.getPassword());
-//        facultyDao.findAll();
+
         ProgramCoordinator pcToAdd=new ProgramCoordinator(newPc.getFacultyId(), newPc.getFacultyName(), newPc.getPassword(), newPc.getEmailId(), newPc.getDept());
         pcDao.save(pcToAdd);
-//        pcDao.save(newPc);
     }
 
     @Override
-    public Faculty getFacultyById(String id) {
+    public Optional<Faculty> getFacultyById(String id) {
         return facultyDao.findByFacultyId(id);
     }
 
