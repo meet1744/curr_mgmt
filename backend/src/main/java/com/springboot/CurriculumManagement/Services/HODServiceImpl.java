@@ -1,5 +1,6 @@
 package com.springboot.CurriculumManagement.Services;
 
+import com.springboot.CurriculumManagement.Entities.Department;
 import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Entities.HOD;
 import com.springboot.CurriculumManagement.Entities.ProgramCoordinator;
@@ -46,9 +47,10 @@ public class HODServiceImpl implements HODService{
     }
 
     @Override
-    public List<Faculty> getAllFaculty() {
+    public List<Faculty> getAllFaculty(Department dept) {
 
-        return facultyDao.findAll();
+        return facultyDao.findAllByDeptId(dept);
+//        return facultyDao.findAll();
     }
 
     @Override

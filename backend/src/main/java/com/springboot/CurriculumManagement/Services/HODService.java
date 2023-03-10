@@ -1,5 +1,6 @@
 package com.springboot.CurriculumManagement.Services;
 
+import com.springboot.CurriculumManagement.Entities.Department;
 import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Payloads.HODDto;
 
@@ -11,7 +12,7 @@ public interface HODService {
     public HODDto getHODById(String HODId);
 	Faculty addNewFaculty(Faculty faculty);
 
-    List<Faculty> getAllFaculty();
+    List<Faculty> getAllFaculty(Department dept);
 
     void deleteFaculty(String facultyId);
 

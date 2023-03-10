@@ -39,6 +39,8 @@ const customStyles = {
 
 const Deletefaculty = () => {
     let token = "Bearer " + getUserData().token;
+    let dept = getUserData().hodDto.dept;
+    console.log(dept);
     const [faculty, setFaculty] = useState([]);
     const [faculties, setFaculties] = useState([]);
     const facultiesOption = faculties.map((f) => ({
@@ -46,7 +48,7 @@ const Deletefaculty = () => {
         value: `${f.facultyId} - ${f.facultyName}`
     }));
     useEffect(() => {
-        axios.get(`${baseurl}/HOD/getallfaculty`, { headers: { Authorization: token } })
+        axios.post(`${baseurl}/HOD/getallfaculty`, dept,{ headers: { Authorization: token } })
             .then((res) => {
                 setFaculties(res.data);
             })
@@ -62,7 +64,7 @@ const Deletefaculty = () => {
         const facultyid = faculty.split("-")[0].trim();
         console.log(facultyid);
         console.log(token);
-        const deletefacultyresponse = axios.delete(`${baseurl}/HOD/getfaculty/${facultyid}`, { headers: { "Authorization": token }},facultyid );
+        const deletefacultyresponse = axios.delete(`${baseurl}/HOD/getfaculty/${facultyid}`, { headers: { "Authorization": token } }, facultyid);
         toast.promise(
             deletefacultyresponse,
             {
@@ -96,7 +98,7 @@ const Deletefaculty = () => {
     }
     return (
         <>
-            <ToastContainer/>
+            <ToastContainer />
             <div className="container">
                 <form onSubmit={deletefacultyform} >
                     <h3 className="label margint">Faculty:</h3>

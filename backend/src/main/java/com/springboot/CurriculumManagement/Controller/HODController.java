@@ -1,5 +1,6 @@
 package com.springboot.CurriculumManagement.Controller;
 
+import com.springboot.CurriculumManagement.Entities.Department;
 import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Exceptions.ResourceNotFoundException;
 import com.springboot.CurriculumManagement.Repository.FacultyRepository;
@@ -32,9 +33,9 @@ public class HODController {
         newFaculty.setPassword(this.passwordEncoder.encode(newFaculty.getPassword()));
         return this.hodService.addNewFaculty(newFaculty);
     }
-    @GetMapping("/getallfaculty")
-    public List<Faculty> getAllFaculty(){
-        return this.hodService.getAllFaculty();
+    @PostMapping("/getallfaculty")
+    public List<Faculty> getAllFaculty(@RequestBody Department dept){
+        return this.hodService.getAllFaculty(dept);
     }
 
     @DeleteMapping("/getfaculty/{facultyId}")
@@ -49,12 +50,6 @@ public class HODController {
         }
     }
 
-//    @PostMapping("/appointpc")
-//    public void appointProgramCoordinator(@RequestBody Faculty newPc){
-//        System.out.println(newPc);
-//        hodService.appointProgramCoordinator(newPc);
-//        //returns error if already exists using custom http status code
-//    }
 
     @GetMapping("/getfacultybyid/{facultyid}")
     public Faculty getFacultyById(@PathVariable(value = "facultyid") String id) {
