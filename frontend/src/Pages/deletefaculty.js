@@ -62,9 +62,7 @@ const Deletefaculty = () => {
         const facultyid = faculty.split("-")[0].trim();
         console.log(facultyid);
         console.log(token);
-        const deletefacultyresponse = axios.delete(`${baseurl}/HOD/getfaculty/${facultyid}`, { headers: { "Authorization": token }},facultyid )
-            .then(response => console.log(response))
-            .catch(error => console.error(error));
+        const deletefacultyresponse = axios.delete(`${baseurl}/HOD/getfaculty/${facultyid}`, { headers: { "Authorization": token }},facultyid );
         toast.promise(
             deletefacultyresponse,
             {
@@ -95,13 +93,6 @@ const Deletefaculty = () => {
                 position: toast.POSITION.BOTTOM_RIGHT,
             }
         );
-        // axios.delete(`${baseurl}/faculties/${facultyid}`)
-        //     .then((res) => {
-        //         console.log(res);
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     });
     }
     return (
         <>

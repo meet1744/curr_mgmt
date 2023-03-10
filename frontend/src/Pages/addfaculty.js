@@ -16,9 +16,7 @@ export default function Addfaculty() {
         console.log(token);
         console.log(faculty);
 
-        const addfacultyresponse = axios.post(`${baseurl}/HOD/addfaculty`, faculty, { headers: { "Authorization": token } })
-            .then(response => console.log(response))
-            .catch(error => console.error(error));
+        const addfacultyresponse = axios.post(`${baseurl}/HOD/addfaculty`, faculty, { headers: { "Authorization": token } });
 
         toast.promise(
             addfacultyresponse,
@@ -50,13 +48,15 @@ export default function Addfaculty() {
                 position: toast.POSITION.BOTTOM_RIGHT,
             }
         );
+
+        document.getAllElementsById('addFacultyForm').reset();
     }
 
     return (
         <>
             <ToastContainer />
             <div className="cont-1">
-                <form onSubmit={addfacultyform} >
+                <form onSubmit={addfacultyform} id="addFacultyForm">
                     <h3 className="label">ID:</h3>
                     <input type="text" onChange={(e) => { setFaculty({ ...faculty, facultyId: e.target.value }) }} value={faculty.id} />
                     <h3 className="label">Name:</h3>
