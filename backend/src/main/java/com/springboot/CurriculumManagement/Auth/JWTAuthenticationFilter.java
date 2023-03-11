@@ -60,13 +60,18 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         System.out.println(SecurityContextHolder.getContext().getAuthentication());
         if(id!=null) {
             UserDetails userDetails = null;
-            userDetails = hodUserDetailsService.loadUserByUsername(id);
-            if(userDetails == null) {
-                userDetails = facultyUserDetailService.loadUserByUsername(id);
-                if (userDetails == null)
-                    userDetails = pcUserDetailService.loadUserByUsername(id);
-                else
-                    logger.error("Invalid user");
+            try{
+                userDetails = hodUserDetailsService.loadUserByUsername(id);
+            }catch (Exception e){
+                try{
+                    userDetails = facultyUserDetailService.loadUserByUsername(id);
+                }catch(Exception e2){
+                    try{
+                        userDetails = pcUserDetailService.loadUserByUsername(id);
+                    }catch(Exception e3){
+                        logger.error("Invalid user");
+                    }
+                }
             }
             assert userDetails != null;
             if (this.jwtTokenHelper.validateToken(token, userDetails)) {
