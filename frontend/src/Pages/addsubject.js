@@ -65,8 +65,8 @@ const Addsubject = () => {
     { value: "8", label: "8" },
   ];
   const seqOption = seq.map((s) => ({
-    label: `${s}`,
-    value:`${s}`
+    label: s,
+    value:s
   }));
 
 
@@ -78,7 +78,7 @@ const Addsubject = () => {
   const handlesemchange = (selectedOptions) => {
     setSelectedsem(selectedOptions);
     if (selectedOptions !== " ") {
-      axios.get(`${baseurl}/PC/getremainingsubsequence`, parseInt(selectedsem), { headers: { "Authorization": token } })
+      axios.get(`${baseurl}/PC/getremainingsubsequence/${parseInt(selectedsem)}`, parseInt(selectedsem), { headers: { "Authorization": token } })
         .then((res) => {
           setSeq(res.data);
         })
