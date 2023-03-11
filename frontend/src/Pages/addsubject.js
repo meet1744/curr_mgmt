@@ -38,14 +38,14 @@ const customStyles = {
 
 const Addsubject = () => {
   let token = "Bearer " + getUserData().token;
-  
-  let dept = getUserData().pcDto.dept;
-  
-  
 
-  const [subject, setSubject] = useState({ dept: dept, DDUcode: "", semester: "", subjectName: "", facultyList: "", subSequence: "" });
+  let dept = getUserData().pcDto.dept;
+
+
+
+  const [subject, setSubject] = useState({ dept: dept, DDUcode: "", subjectName: "", facultyList: "", subSequence: "" });
   const [selectedFaculties, setSelectedFaculties] = useState([]);
-  const [selectedsem, setSelectedsem] = useState([]);
+  const [selectedsem, setSelectedsem] = useState({});
   const [seq, setSeq] = useState([]);
   const [faculties, setFaculties] = useState([]);
 
@@ -64,10 +64,31 @@ const Addsubject = () => {
     { value: "7", label: "7" },
     { value: "8", label: "8" },
   ];
-  const seqOption = seq.map((s) => ({
+  const seqOptions = seq.map((s) => ({
     label: s,
-    value:s
+    value: s
   }));
+
+  useEffect(() => {
+    axios.post(`${baseurl}/PC/getallfaculty`, dept, { headers: { "Authorization": token } })
+      .then((res) => {
+        setFaculties(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    const numbers = selectedFaculties.map((faculty) => faculty.label.split(" ")[0]);
+    const f = numbers.map((number) => { return searchFacultyById(number) });
+    setSubject({ ...subject, facultyList: f })
+  }, [selectedFaculties]);
+
+  useEffect(() => {
+    if (selectedsem.label) {
+      setSubject({ ...subject, semester: selectedsem.label });
+    }
+  }, [selectedsem]);
+
 
 
   const handleFacultyChange = (selectedOptions) => {
@@ -77,33 +98,17 @@ const Addsubject = () => {
 
   const handlesemchange = (selectedOptions) => {
     setSelectedsem(selectedOptions);
-    if (selectedOptions !== " ") {
-      axios.get(`${baseurl}/PC/getremainingsubsequence/${parseInt(selectedsem)}`, parseInt(selectedsem), { headers: { "Authorization": token } })
-        .then((res) => {
-          setSeq(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
-
-
-  useEffect(() => {
-    axios.post(`${baseurl}/PC/getallfaculty`,dept, { headers: { "Authorization": token } })
+    const semester = selectedOptions ? selectedOptions.label : '';
+    setSubject({ ...subject, semester: semester });
+    console.log(subject);
+    axios.get(`${baseurl}/PC/getremainingsubsequence/${parseInt(semester)}`, { headers: { "Authorization": token } }, parseInt(semester))
       .then((res) => {
-        setFaculties(res.data);
+        setSeq(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-      
-
-    const numbers = selectedFaculties.map((faculty) => faculty.label.split(" ")[0]);
-    const f = numbers.map((number) => { return searchFacultyById(number) });
-    setSubject({ ...subject, facultyList: f })
-    setSubject({ ...subject, subSequence: selectedsem })
-  }, [selectedFaculties, selectedsem]);
+  }
 
 
   const searchFacultyById = (facultyId) => {
@@ -155,7 +160,7 @@ const Addsubject = () => {
 
   return (
     <>
-      <ToastContainer/>
+      <ToastContainer />
       <div className='cont-3'>
         <form onSubmit={addsubjectform} >
           <h3 className="label">DDU ID:</h3>
@@ -178,7 +183,7 @@ const Addsubject = () => {
           <div className='block'>
             <h3 className="label">Sem:</h3>
             <Select options={semOptions} placeholder='Select sem' styles={customStyles}
-              onChange={(e) => { setSubject({ ...subject, semester: e.value }) }}
+              onChange={handlesemchange}
               menuPlacement='top'
               theme={(theme) => ({
                 ...theme,
@@ -191,8 +196,8 @@ const Addsubject = () => {
           </div>
           <div className='block'>
             <h3 className="label">Sequence:</h3>
-            <Select options={seqOption} noOptionsMessage={customNoOptionsMessage} placeholder='Select sequence' styles={customStyles}
-              onChange={handlesemchange}
+            <Select options={seqOptions} noOptionsMessage={customNoOptionsMessage} placeholder='Select sequence' styles={customStyles}
+              onChange={(e) => { setSubject({ ...subject, subSequence: e.value }) }}
               menuPlacement='top'
               theme={(theme) => ({
                 ...theme,
