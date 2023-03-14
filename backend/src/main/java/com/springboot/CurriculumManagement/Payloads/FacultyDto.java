@@ -1,6 +1,7 @@
 package com.springboot.CurriculumManagement.Payloads;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.springboot.CurriculumManagement.Entities.Department;
 import com.springboot.CurriculumManagement.Entities.Subjects;
 
 import java.util.List;
@@ -10,6 +11,8 @@ public class FacultyDto {
     private String facultyName;
     private String password;
     private String emailId;
+    private Department dept;
+
     private List<Subjects> subjectsList;
 
     public String getFacultyId() {
@@ -28,7 +31,7 @@ public class FacultyDto {
         this.facultyName = facultyName;
     }
 
-    @JsonIgnore
+//    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -43,6 +46,14 @@ public class FacultyDto {
 
     public void setEmailId(String emailId) {
         this.emailId = emailId;
+    }
+
+    public Department getDept() {
+        return dept;
+    }
+
+    public void setDept(Department dept) {
+        this.dept = dept;
     }
 
     public List<Subjects> getSubjectsList() {

@@ -8,6 +8,7 @@ import com.springboot.CurriculumManagement.Entities.HOD;
 import com.springboot.CurriculumManagement.Entities.ProgramCoordinator;
 import com.springboot.CurriculumManagement.Payloads.FacultyDto;
 import com.springboot.CurriculumManagement.Payloads.PCDto;
+import com.springboot.CurriculumManagement.Services.FacultyServiceImpl;
 import com.springboot.CurriculumManagement.Services.HODServiceImpl;
 import com.springboot.CurriculumManagement.Services.PCServiceImpl;
 import com.springboot.CurriculumManagement.UserDetailService.FacultyUserDetailService;
@@ -47,6 +48,9 @@ public class AuthController {
     private HODServiceImpl hodService;
 
     @Autowired
+    private FacultyServiceImpl facultyService;
+
+    @Autowired
     private PCServiceImpl pcService;
 
     @Autowired
@@ -74,7 +78,7 @@ public class AuthController {
             token=this.jwtTokenHelper.generateToken(faculty);
             response=new JWTAuthResponse();
             response.setToken(token);
-//            response.setFacultyDto();
+            response.setFacultyDto(facultyService.FacultyToDto(faculty));
         }
         else{
             ProgramCoordinator programCoordinator=new ProgramCoordinator();
