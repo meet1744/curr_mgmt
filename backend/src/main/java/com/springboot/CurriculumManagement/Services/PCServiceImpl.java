@@ -71,6 +71,18 @@ public class PCServiceImpl implements PCService{
         return remainingSubSequence;
     }
 
+    @Override
+    public List<Subjects> getAllSubjects(Department dept) {
+
+            return subjectsDao.findAllByDeptId(dept);
+    }
+
+    @Override
+    public void deleteSubject(String dduCode) {
+        Subjects subjectToDelete=subjectsDao.getById(dduCode);
+        subjectsDao.delete(subjectToDelete);
+    }
+
     public PCDto PcToDto(ProgramCoordinator pc){
         PCDto dto=this.modelMapper.map(pc,PCDto.class);
         return dto;

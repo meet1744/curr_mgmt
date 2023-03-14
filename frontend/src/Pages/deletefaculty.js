@@ -64,7 +64,7 @@ const Deletefaculty = () => {
         const facultyid = faculty.split("-")[0].trim();
         console.log(facultyid);
         console.log(token);
-        const deletefacultyresponse = axios.delete(`${baseurl}/HOD/getfaculty/${facultyid}`, { headers: { "Authorization": token } }, facultyid);
+        const deletefacultyresponse = axios.delete(`${baseurl}/HOD/deletefaculty/${facultyid}`, { headers: { "Authorization": token } }, facultyid);
         toast.promise(
             deletefacultyresponse,
             {

@@ -12,4 +12,8 @@ public interface PCService {
     List<Faculty> getAllFaculty(Department deptId);
 
     List<Integer> getRemainingSubSequence(String semesterSelected);
+
+    List<Subjects> getAllSubjects(Department dept);
+
+    void deleteSubject(String dduCode);
 }

@@ -43,4 +43,23 @@ public class PCController {
         System.out.println("In controller");
         return this.pcService.getRemainingSubSequence(semesterSelected);
     }
+
+
+    @PostMapping("/getallsubjects")
+    public List<Subjects> getAllSubjects(@RequestBody Department dept){
+
+        return this.pcService.getAllSubjects(dept);
+    }
+
+    @DeleteMapping("/deletesubject/{dduCode}")
+    public ResponseEntity<HttpStatus> deleteSubject(@PathVariable String dduCode){
+        try {
+            System.out.println("delete");
+            this.pcService.deleteSubject(dduCode);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

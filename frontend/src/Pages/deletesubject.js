@@ -38,28 +38,85 @@ const customStyles = {
 };
 
 const Deletesubject = () => {
-  // let token = "Bearer " + getUserData().token;
+
+
+  let token = "Bearer " + getUserData().token;
+  let dept = getUserData().pcDto.dept;
+  console.log(dept);
+
+
+
   const [subject, setSubject] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const subjectsOption = subjects.map((s) => ({
-    label: `${s.DDUcode} - ${s.subjectName} , sem - ${s.semester}`,
-    value: `${s.DDUcode} - ${s.subjectName} , sem - ${s.semester}`
+    label: `${s.dduCode} - ${s.subjectName} , sem - ${s.semester}`,
+    value: `${s.dduCode} - ${s.subjectName} , sem - ${s.semester}`
   }));
-  useEffect(() => {
 
+
+  
+
+
+
+
+
+  useEffect(() => {
+    axios.post(`${baseurl}/PC/getallsubjects`, dept,{ headers: { Authorization: token } })
+            .then((res) => {
+                setSubjects(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
   }, []);
   const deletesubjecthandle = (option) => {
     setSubject(option);
   }
   const deletefacultyform = (e) => {
     e.preventDefault();
+    const dduCode = subject.split("-")[0].trim();
+        console.log(dduCode);
+        console.log(token);
+        const deletesubjectresponse = axios.delete(`${baseurl}/PC/deletesubject/${dduCode}`, { headers: { "Authorization": token } }, dduCode);
+        toast.promise(
+            deletesubjectresponse,
+            {
+                pending: {
+                    render() {
+                        return "Please Wait!!"
+                    },
+                    icon: "✋",
+                },
+                success: {
+                    render() {
+                        return `Subject deleted Successfully!!`
+                    },
+                    icon: "🚀",
+                },
+                error: {
+                    render({ data }) {
+                        console.log(data);
+                        if (data.response.status === 400 || data.response.status === 404 || data.response.status === 401)
+                            return data.response.data.status;
+                        return `Something went wrong!!`
+                    },
+                    icon: "💥",
+                }
+            },
+            {
+                className: 'dark-toast',
+                position: toast.POSITION.BOTTOM_RIGHT,
+            }
+        );
 
   }
   return (
     <div>
       <ToastContainer />
+
       <div className="container">
         <form onSubmit={deletefacultyform} >
+          
           <h3 className="label margint">Subjects:</h3>
           <Select options={subjectsOption} placeholder='Select subject to delete' styles={customStyles}
             onChange={(e) => { deletesubjecthandle(e.value); }}

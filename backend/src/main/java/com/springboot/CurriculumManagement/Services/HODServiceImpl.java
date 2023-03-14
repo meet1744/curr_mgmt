@@ -67,7 +67,7 @@ public class HODServiceImpl implements HODService{
     public List<Faculty> getAllFaculty(Department dept) {
 
         return facultyDao.findAllByDeptId(dept);
-//        return facultyDao.findAll();
+
     }
 
     @Override

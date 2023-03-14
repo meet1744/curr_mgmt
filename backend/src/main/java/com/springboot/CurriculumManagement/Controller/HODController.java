@@ -46,7 +46,7 @@ public class HODController {
         return this.hodService.getAllFaculty(dept);
     }
 
-    @DeleteMapping("/getfaculty/{facultyId}")
+    @DeleteMapping("/deletefaculty/{facultyId}")
     public ResponseEntity<HttpStatus> deleteFaculty(@PathVariable String facultyId){
         try {
             System.out.println("delete");
