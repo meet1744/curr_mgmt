@@ -7,9 +7,9 @@ import com.springboot.CurriculumManagement.Entities.Subjects;
 import java.util.List;
 
 public interface PCService {
-    Subjects addNewSubject(Subjects newSubject);
+    void addNewSubject(Subjects newSubject);
 
     List<Faculty> getAllFaculty(Department deptId);
 
-    List<Integer> getRemainingSubSequence(int semesterSelected);
+    List<Integer> getRemainingSubSequence(String semesterSelected);
 }

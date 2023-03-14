@@ -11,6 +11,10 @@ import com.springboot.CurriculumManagement.Repository.HODRepository;
 import com.springboot.CurriculumManagement.Repository.PCRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +33,11 @@ public class HODServiceImpl implements HODService{
     @Autowired
     private HODRepository HODRepo;
 
+
+
+    @Autowired
+    private PCRepository pcRepository;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -40,10 +49,18 @@ public class HODServiceImpl implements HODService{
 
 //    @PreAuthorize("hasAuthority('ROLE_ANONYMOUS')")
     @Override
-    @PreAuthorize("isAuthenticated()")
-    public Faculty addNewFaculty(Faculty faculty) {
-        facultyDao.save(faculty);
-        return faculty;
+    public void addNewFaculty(Faculty faculty) throws DuplicateKeyException {
+        Faculty isPresent = null;
+        try {
+            String faculty_id = faculty.getFacultyId();
+             isPresent = this.facultyDao.findByFacultyId(faculty_id).orElseThrow(() -> new ResourceNotFoundException("Faculty", "id", faculty_id));
+             throw new DuplicateKeyException("Same id already exists");
+        }
+        catch (ResourceNotFoundException e){
+                facultyDao.save(faculty);
+        }
+       
+
     }
 
     @Override
@@ -64,10 +81,21 @@ public class HODServiceImpl implements HODService{
 
 
     @Override
-    public void appointProgramCoordinator(Faculty newPc) {
+    public void appointProgramCoordinator(Faculty newPc) throws DuplicateKeyException{
+        ProgramCoordinator ifExists = null;
+        try {
+            Department dept = newPc.getDept();
+            System.out.println("Dept to be added :"+dept.getDeptId());
+            ifExists = this.pcRepository.findPcByDeptId(dept).orElseThrow(() -> new ResourceNotFoundException("Program Coordinator", "dept", "dept_id"));
+            System.out.println("if exists "+ifExists);
+            throw new DuplicateKeyException("Program coordinator already exists");
+        }
+        catch (ResourceNotFoundException e){
+            System.out.println("in catch ");
+            ProgramCoordinator pcToAdd=new ProgramCoordinator(newPc.getFacultyId(), newPc.getFacultyName(), newPc.getPassword(), newPc.getEmailId(), newPc.getDept());
+            pcDao.save(pcToAdd);
+        }
 
-        ProgramCoordinator pcToAdd=new ProgramCoordinator(newPc.getFacultyId(), newPc.getFacultyName(), newPc.getPassword(), newPc.getEmailId(), newPc.getDept());
-        pcDao.save(pcToAdd);
     }
 
     @Override

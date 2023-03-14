@@ -14,4 +14,5 @@ public interface FacultyRepository extends JpaRepository<Faculty,String> {
 
     @Query(value = "select f from Faculty f where f.dept=?1")
     List<Faculty> findAllByDeptId(Department deptId);
+
 }

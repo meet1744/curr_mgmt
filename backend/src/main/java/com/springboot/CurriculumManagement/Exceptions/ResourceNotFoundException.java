@@ -1,5 +1,7 @@
 package com.springboot.CurriculumManagement.Exceptions;
 
+import com.springboot.CurriculumManagement.Entities.Department;
+
 public class ResourceNotFoundException extends RuntimeException{
     String resourceName;
     String fieldName;

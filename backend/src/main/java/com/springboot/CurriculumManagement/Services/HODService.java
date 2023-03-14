@@ -3,6 +3,9 @@ package com.springboot.CurriculumManagement.Services;
 import com.springboot.CurriculumManagement.Entities.Department;
 import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Payloads.HODDto;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +13,7 @@ import java.util.Optional;
 
 public interface HODService {
     public HODDto getHODById(String HODId);
-	Faculty addNewFaculty(Faculty faculty);
+	void addNewFaculty(Faculty faculty) throws DuplicateKeyException;
 
     List<Faculty> getAllFaculty(Department dept);
 

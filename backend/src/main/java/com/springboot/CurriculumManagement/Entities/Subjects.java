@@ -2,6 +2,8 @@ package com.springboot.CurriculumManagement.Entities;
 
 
 //import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
@@ -9,7 +11,11 @@ import java.util.Set;
 @Entity
 @Table(name = "subjects")
 public class Subjects {
+    @Id
+    private String dduCode;
+    @Column
     private String effectiveDate;
+    @Column
     private String removedDate;
     @Column(nullable = false)
     private int semester;
@@ -20,33 +26,53 @@ public class Subjects {
     @Column(unique = true)
     private String AICTEcode;
 
-    @Id
-    private String DDUcode;
+
     @Column(nullable = false)
     private String subjectName;
 
     //optional
+    @Column
     private String parentDept;
-
+    @Column
     private String extraInfo;
-
+    @Column
     private String subjectType;
 
 
+    @Column
     private String subjectTypeExplanation;
-
+    @Column
     private int theoryMarks;
-    
+    @Column
     private int sessionalMarks;
+    @Column
     private int termworkMarks;
+    @Column
     private int practicalMarks;
+    @Column
     private int totalMarks;
+    @Column
     private int LectureHours;
+    @Column
     private int tutorial;
+
+    public Department getDept() {
+        return dept;
+    }
+
+    public void setDept(Department dept) {
+        this.dept = dept;
+    }
+
+    @Column
     private int PracticalHours;
+    @Column
     private int totalHours;
+    @Column
     private int lectureAndTheoryCredit;
+    @Column
     private int practicalCredit;
+    @Column
     private int totalCredit;
 
     @ManyToOne
@@ -100,12 +126,12 @@ public class Subjects {
         this.AICTEcode = AICTEcode;
     }
 
-    public String getDDUcode() {
-        return DDUcode;
+    public String getdduCode() {
+        return dduCode;
     }
 
-    public void setDDUcode(String DDUcode) {
-        this.DDUcode = DDUcode;
+    public void setdduCode(String dduCode) {
+        this.dduCode = dduCode;
     }
 
     public String getSubjectName() {

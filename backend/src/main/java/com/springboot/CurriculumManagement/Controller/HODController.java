@@ -28,13 +28,21 @@ public class HODController {
     private FacultyRepository facultyRepository;
 
 
-    @PostMapping("/addfaculty")
-    public Faculty addNewFaculty(@RequestBody Faculty newFaculty){
-        newFaculty.setPassword(this.passwordEncoder.encode(newFaculty.getPassword()));
-        return this.hodService.addNewFaculty(newFaculty);
+    @PostMapping("/addnewfaculty")
+    public ResponseEntity<HttpStatus> addNewFaculty(@RequestBody Faculty newFaculty){
+        try {
+            newFaculty.setPassword(this.passwordEncoder.encode(newFaculty.getPassword()));
+           this.hodService.addNewFaculty(newFaculty);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
     @PostMapping("/getallfaculty")
     public List<Faculty> getAllFaculty(@RequestBody Department dept){
+
         return this.hodService.getAllFaculty(dept);
     }
 
@@ -59,9 +67,19 @@ public class HODController {
         return faculty;
     }
 @GetMapping("/appointpc/{newPcId}")
-public void appointProgramCoordinator(@PathVariable String newPcId){
-    Faculty newPc=getFacultyById(newPcId);
-    hodService.appointProgramCoordinator(newPc);
+public ResponseEntity<HttpStatus> appointProgramCoordinator(@PathVariable String newPcId){
+
+    try {
+        Faculty newPc=getFacultyById(newPcId);
+        this.hodService.appointProgramCoordinator(newPc);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    catch (Exception e){
+        System.out.println("in catch controller");
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
     //returns error if already exists using custom http status code
 }
 

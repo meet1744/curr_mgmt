@@ -5,6 +5,8 @@ import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Entities.Subjects;
 import com.springboot.CurriculumManagement.Services.PCService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +19,16 @@ public class PCController {
     @Autowired
     private PCService pcService;
     @PostMapping("/addnewsubject")
-    public Subjects addNewSubject(@RequestBody Subjects newSubject){
+    public ResponseEntity<HttpStatus> addNewSubject(@RequestBody Subjects newSubject){
+        try{
+            this.pcService.addNewSubject(newSubject);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-        return this.pcService.addNewSubject(newSubject);
+
     }
 
     @PostMapping("/getallfaculty")
@@ -29,7 +38,7 @@ public class PCController {
     }
 
     @GetMapping("/getremainingsubsequence/{semesterSelected}")
-    public List<Integer> getremainingsubsequence(@PathVariable int semesterSelected){
+    public List<Integer> getremainingsubsequence(@PathVariable String semesterSelected){
 
         System.out.println("In controller");
         return this.pcService.getRemainingSubSequence(semesterSelected);

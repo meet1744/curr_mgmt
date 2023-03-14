@@ -43,17 +43,17 @@ const Addsubject = () => {
 
 
 
-  const [subject, setSubject] = useState({ dept: dept, DDUcode: "", subjectName: "", facultyList: "", subSequence: "" });
-  const [selectedFaculties, setSelectedFaculties] = useState([]);
+  const [subject, setSubject] = useState({ dept: dept, dduCode: "", subjectName: "", facultyList: "", subSequence: "" });
+  // const [selectedFaculties, setSelectedFaculties] = useState([]);
   const [selectedsem, setSelectedsem] = useState({});
   const [seq, setSeq] = useState([]);
-  const [faculties, setFaculties] = useState([]);
+  // const [faculties, setFaculties] = useState([]);
 
 
-  const facultyOptions = faculties.map((f) => ({
-    label: `${f.facultyId} - ${f.facultyName}`,
-    value: `${f.facultyId} - ${f.facultyName}`
-  }));
+  // const facultyOptions = faculties.map((f) => ({
+  //   label: `${f.facultyId} - ${f.facultyName}`,
+  //   value: `${f.facultyId} - ${f.facultyName}`
+  // }));
   const semOptions = [
     { value: "1", label: "1" },
     { value: "2", label: "2" },
@@ -69,19 +69,19 @@ const Addsubject = () => {
     value: s
   }));
 
-  useEffect(() => {
-    axios.post(`${baseurl}/PC/getallfaculty`, dept, { headers: { "Authorization": token } })
-      .then((res) => {
-        setFaculties(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  // useEffect(() => {
+  //   axios.post(`${baseurl}/PC/getallfaculty`, dept, { headers: { "Authorization": token } })
+  //     .then((res) => {
+  //       setFaculties(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
 
-    const numbers = selectedFaculties.map((faculty) => faculty.label.split(" ")[0]);
-    const f = numbers.map((number) => { return searchFacultyById(number) });
-    setSubject({ ...subject, facultyList: f })
-  }, [selectedFaculties]);
+  //   const numbers = selectedFaculties.map((faculty) => faculty.label.split(" ")[0]);
+  //   const f = numbers.map((number) => { return searchFacultyById(number) });
+  //   setSubject({ ...subject, facultyList: f })
+  // }, [selectedFaculties]);
 
   useEffect(() => {
     if (selectedsem.label) {
@@ -91,9 +91,9 @@ const Addsubject = () => {
 
 
 
-  const handleFacultyChange = (selectedOptions) => {
-    setSelectedFaculties(selectedOptions);
-  };
+  // const handleFacultyChange = (selectedOptions) => {
+  //   setSelectedFaculties(selectedOptions);
+  // };
 
 
   const handlesemchange = (selectedOptions) => {
@@ -101,7 +101,7 @@ const Addsubject = () => {
     const semester = selectedOptions ? selectedOptions.label : '';
     setSubject({ ...subject, semester: semester });
     console.log(subject);
-    axios.get(`${baseurl}/PC/getremainingsubsequence/${parseInt(semester)}`, { headers: { "Authorization": token } }, parseInt(semester))
+    axios.get(`${baseurl}/PC/getremainingsubsequence/${semester}`, { headers: { "Authorization": token } }, semester)
       .then((res) => {
         setSeq(res.data);
       })
@@ -111,14 +111,14 @@ const Addsubject = () => {
   }
 
 
-  const searchFacultyById = (facultyId) => {
-    return faculties.find((faculty) => faculty.facultyId === facultyId);
-  };
+  // const searchFacultyById = (facultyId) => {
+  //   return faculties.find((faculty) => faculty.facultyId === facultyId);
+  // };
 
 
   const addsubjectform = (e) => {
-    console.log(subject)
-    const addsubjectresponse = axios.post(`${baseurl}/PC/addsubject`, subject, { headers: { "Authorization": token } });
+    console.log(subject);
+    const addsubjectresponse = axios.post(`${baseurl}/PC/addnewsubject`, subject, { headers: { "Authorization": token } });
     toast.promise(
       addsubjectresponse,
       {
@@ -139,7 +139,7 @@ const Addsubject = () => {
             console.log(data);
             if (data.response.status === 400 || data.response.status === 404 || data.response.status === 401)
               return data.response.data.status;
-            return `Something went wrong!!`
+            return `Subject with same DDU code already exists!!`
           },
           icon: "💥",
         }
@@ -164,11 +164,11 @@ const Addsubject = () => {
       <div className='cont-3'>
         <form onSubmit={addsubjectform} >
           <h3 className="label">DDU ID:</h3>
-          <input type="text" onChange={(e) => { setSubject({ ...subject, DDUcode: e.target.value }) }} value={subject.id} />
+          <input type="text" onChange={(e) => { setSubject({ ...subject, dduCode: e.target.value }) }} value={subject.id} />
           <h3 className="label">Subject Name:</h3>
           <input type="text" onChange={(e) => { setSubject({ ...subject, subjectName: e.target.value }) }} value={subject.name} />
-          <h3 className="label">Faculties:</h3>
-          <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
+          {/* <h3 className="label">Faculties:</h3> */}
+          {/* <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
             onChange={handleFacultyChange}
             isMulti
             maxMenuHeight={150}
@@ -179,7 +179,7 @@ const Addsubject = () => {
                 primary: 'grey',
               },
             })}
-          />
+          /> */}
           <div className='block'>
             <h3 className="label">Sem:</h3>
             <Select options={semOptions} placeholder='Select sem' styles={customStyles}

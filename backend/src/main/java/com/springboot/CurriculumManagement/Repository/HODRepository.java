@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface HODRepository extends JpaRepository<HOD, String> {
     Optional<HOD> findByHODId(String id);
 }

@@ -39,6 +39,7 @@ const customStyles = {
 
 const AppointPC = () => {
     let token = "Bearer " + getUserData().token;
+    let dept=getUserData().hodDto.dept;
     const [programCoordinator, setProgramCoordinator] = useState([]);
     const [faculties, setFaculties] = useState([]);
     let programcoordinatorsOption = faculties.map((f) => ({
@@ -46,7 +47,7 @@ const AppointPC = () => {
         value: `${f.facultyId} - ${f.facultyName}`
     }));
     useEffect(() => {
-        axios.get(`${baseurl}/HOD/getallfaculty`, { headers: { Authorization: token } })
+        axios.post(`${baseurl}/HOD/getallfaculty`,dept, { headers: { Authorization: token } })
             .then((res) => {
                 setFaculties(res.data);
             })
@@ -66,9 +67,7 @@ const AppointPC = () => {
         // const pc = searchFacultyById(programCoordinator.split("-")[0].trim());
         const facultyid = programCoordinator.split("-")[0].trim();
         // console.log(pc);
-        const addpcresponse = axios.get(`${baseurl}/HOD/appointpc/${facultyid}`,  { headers: { "Authorization": token } },facultyid)
-            .then(response => console.log(response))
-            .catch(error => console.error(error));
+        const addpcresponse = axios.get(`${baseurl}/HOD/appointpc/${facultyid}`,  { headers: { "Authorization": token } },facultyid);
         toast.promise(
             addpcresponse,
             {
@@ -89,7 +88,7 @@ const AppointPC = () => {
                         console.log(data);
                         if (data.response.status === 400 || data.response.status === 404 || data.response.status === 401)
                             return data.response.data.status;
-                        return `Something went wrong!!`
+                        return `Program coordinator already exists!!`
                     },
                     icon: "💥",
                 }

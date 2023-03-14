@@ -16,7 +16,7 @@ export default function Addfaculty() {
         console.log(token);
         console.log(faculty);
 
-        const addfacultyresponse = axios.post(`${baseurl}/HOD/addfaculty`, faculty, { headers: { "Authorization": token } });
+        const addfacultyresponse = axios.post(`${baseurl}/HOD/addnewfaculty`, faculty, { headers: { "Authorization": token } });
 
         toast.promise(
             addfacultyresponse,
@@ -38,7 +38,7 @@ export default function Addfaculty() {
                         console.log(data);
                         if (data.response.status === 400 || data.response.status === 404 || data.response.status === 401)
                             return data.response.data.status;
-                        return `Something went wrong!!`
+                        return 'Faculty with same Id already exists!!';
                     },
                     icon: "💥",
                 }
@@ -49,7 +49,7 @@ export default function Addfaculty() {
             }
         );
 
-        document.getAllElementsById('addFacultyForm').reset();
+        // document.getAllElementsById('addFacultyForm').reset();
     }
 
     return (
