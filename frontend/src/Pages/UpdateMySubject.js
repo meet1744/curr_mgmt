@@ -36,10 +36,10 @@ const customStyles = {
     })
 };
 
-const Updatesubject = () => {
+const UpdateMySubject = () => {
 
     let token = "Bearer " + getUserData().token;
-    let dept = getUserData().pcDto.dept;
+    let dept = getUserData().facultyDto.dept;
     console.log(dept);
     const [subject, setSubject] = useState([]);
     const [subjects, setSubjects] = useState([]);
@@ -49,7 +49,7 @@ const Updatesubject = () => {
     }));
 
     useEffect(() => {
-        axios.post(`${baseurl}/PC/getallsubjects`, dept,{ headers: { "Authorization": token } })
+        axios.post(`${baseurl}/Faculty/getallsubjects`, dept,{ headers: { "Authorization": token } })
             .then((res) => {
                 setSubjects(res.data);
             })
@@ -90,4 +90,4 @@ const Updatesubject = () => {
     )
 }
 
-export default Updatesubject
+export default UpdateMySubject

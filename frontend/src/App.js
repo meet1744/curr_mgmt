@@ -16,6 +16,7 @@ import Deletefaculty from "./Pages/deletefaculty";
 import AppointPC from "./Pages/appointPC";
 import Addsubject from "./Pages/addsubject";
 import Deletesubject from "./Pages/deletesubject";
+import UpdateMySubject from "./Pages/UpdateMySubject";
 import Updatesubject from "./Pages/updatesubject";
 import PCSubjectdetails from "./Pages/pcsubjectdetails";
 import Logs from "./Pages/logs";
@@ -28,7 +29,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route exact path="/" element={<Subjects />} />
+          <Route exact path="/" element={<HomePage />} />
           <Route exact path="/login" element={<LoginPage role={role} />} />
           <Route exact path="/roles" element={<RolesPage setRole={setRole} />} />
           <Route exact path="HOD" element={
@@ -50,7 +51,7 @@ function App() {
             </>
           } >
             <Route exact path="Subjects" element={<Subjects role={role} />} />
-            <Route exact path="UpdateSubject" element={<Updatesubject />} />
+            <Route exact path="UpdateMySubject" element={<UpdateMySubject />} />
             <Route exact path="SubjectDetails" element={<FacultySubjectdetails />} />
           </Route>
           <Route exact path="PC" element={

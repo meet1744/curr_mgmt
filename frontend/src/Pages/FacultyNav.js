@@ -7,7 +7,7 @@ function FacultyNav() {
         <>
             <div className="sidenav cont">
                 <Link to="/Faculty/Subjects">My Subjects</Link>
-                <Link to="/Faculty/UpdateSubject">Update Subject</Link>
+                <Link to="/Faculty/UpdateMySubject">Update My Subject</Link>
             </div>
         </>
     );
