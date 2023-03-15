@@ -31,19 +31,18 @@ public class HODServiceImpl implements HODService{
     @Autowired
     private PCRepository pcDao;
     @Autowired
-    private HODRepository HODRepo;
+    private HODRepository hodDao;
 
 
 
-    @Autowired
-    private PCRepository pcRepository;
+
 
     @Autowired
     private ModelMapper modelMapper;
 
     @Override
     public HODDto getHODById(String HODId) {
-        HOD hod=this.HODRepo.findById(HODId).orElseThrow(()->new ResourceNotFoundException("HOD","Id",HODId));
+        HOD hod=this.hodDao.findById(HODId).orElseThrow(()->new ResourceNotFoundException("HOD","Id",HODId));
         return this.HODToDto(hod);
     }
 
@@ -86,7 +85,7 @@ public class HODServiceImpl implements HODService{
         try {
             Department dept = newPc.getDept();
             System.out.println("Dept to be added :"+dept.getDeptId());
-            ifExists = this.pcRepository.findPcByDeptId(dept).orElseThrow(() -> new ResourceNotFoundException("Program Coordinator", "dept", "dept_id"));
+            ifExists = this.pcDao.findPcByDeptId(dept).orElseThrow(() -> new ResourceNotFoundException("Program Coordinator", "dept", "dept_id"));
             System.out.println("if exists "+ifExists);
             throw new DuplicateKeyException("Program coordinator already exists");
         }
@@ -102,6 +101,7 @@ public class HODServiceImpl implements HODService{
     public Optional<Faculty> getFacultyById(String id) {
         return facultyDao.findByFacultyId(id);
     }
+
 
 
     public HOD DtoToHOD(HODDto dto){
