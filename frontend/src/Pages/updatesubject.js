@@ -70,6 +70,7 @@ const Updatesubject = (props) => {
     }
 
     const updatesubjectform = (e) => {
+        
         e.preventDefault();
         navigate(`/PC/PCSubjectDetails`);
     }
