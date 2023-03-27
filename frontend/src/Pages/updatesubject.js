@@ -63,31 +63,7 @@ const Updatesubject = () => {
     }
 
     const updatesubjectform = (e) => {
-        axios.get(`${baseurl}/Pdf/createpdf`, { headers: { "Authorization": token } })
-            .then((res) => {
-
-                // var data = new Blob([res.data], { type: 'application/pdf' });
-    
-                // var tempLink = document.createElement('a');
-                // tempLink.href = window.URL.createObjectURL(data);
-                
-                // tempLink.setAttribute('download', 'filename.pdf');
-                // tempLink.click();
-                console.log(res.data);
-                const url = window.URL.createObjectURL(new Blob([res.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'filename.pdf'); //or any other extension
-                document.body.appendChild(link);
-                link.click();
-
-
-
-
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        
         e.preventDefault();
 
     }

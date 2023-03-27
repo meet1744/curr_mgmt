@@ -49,6 +49,7 @@ public class SpringSecurityConfig{
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/v1/auth/**").permitAll()
+                .antMatchers("/Pdf/createpdf").permitAll()
                 .anyRequest().authenticated();
 
 
