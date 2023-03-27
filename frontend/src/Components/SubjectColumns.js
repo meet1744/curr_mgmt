@@ -1,7 +1,7 @@
 export const SubjectColumns = [
     {
         Header:'DDUcode',
-        accessor:'DDUcode'
+        accessor:'dduCode'
     },
     {
         Header:'AICTEcode',
@@ -93,7 +93,7 @@ export const SubjectColumns = [
     },
     {
         Header:'Dept',
-        accessor:'dept'
+        accessor: row => row.dept.deptName
     },
     {
         Header:'Faculty List',

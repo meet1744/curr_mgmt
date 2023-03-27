@@ -6,6 +6,7 @@ import axios from "axios";
 import { getUserData } from "../Auth";
 import baseurl from "../Components/baseurl";
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 const customStyles = {
     valueContainer: (base) => ({
@@ -36,11 +37,12 @@ const customStyles = {
     })
 };
 
-const Updatesubject = () => {
-
+const Updatesubject = (props) => {
     let token = "Bearer " + getUserData().token;
     let dept = getUserData().pcDto.dept;
-    console.log(dept);
+
+    const navigate = useNavigate();
+
     const [subject, setSubject] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const subjectsOption = subjects.map((s) => ({
@@ -49,7 +51,7 @@ const Updatesubject = () => {
     }));
 
     useEffect(() => {
-        axios.post(`${baseurl}/PC/getallsubjects`, dept,{ headers: { "Authorization": token } })
+        axios.post(`${baseurl}/PC/getallsubjects`, dept, { headers: { "Authorization": token } })
             .then((res) => {
                 setSubjects(res.data);
             })
@@ -58,13 +60,18 @@ const Updatesubject = () => {
             });
     }, []);
 
+    const searchsubjectById = (subjectid) => {
+        return subjects.find((subject) => subject.dduCode === subjectid);
+    };
+
     const updatesubjecthandle = (option) => {
-        setSubject(option);
+        const subjectid = option.split("-")[0].trim();
+        props.setPCSubject(searchsubjectById(subjectid));
     }
 
     const updatesubjectform = (e) => {
         e.preventDefault();
-
+        navigate(`/PC/PCSubjectDetails`);
     }
 
     return (

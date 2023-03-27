@@ -24,6 +24,8 @@ import FacultySubjectdetails from "./Pages/Facultysubjectdetails";
 
 function App() {
   const [role, setRole] = useState({});
+  const [facultySubject,setFacultySubject] = useState({});
+  const [pcSubject,setPCSubject] = useState({});
   return (
     <div>
       <BrowserRouter>
@@ -51,8 +53,8 @@ function App() {
             </>
           } >
             <Route exact path="Subjects" element={<Subjects role={role} />} />
-            <Route exact path="UpdateMySubject" element={<UpdateMySubject />} />
-            <Route exact path="SubjectDetails" element={<FacultySubjectdetails />} />
+            <Route exact path="UpdateMySubject" element={<UpdateMySubject setFacultySubject={setFacultySubject} />} />
+            <Route exact path="FacultySubjectDetails" element={<FacultySubjectdetails facultySubject={facultySubject} />} />
           </Route>
           <Route exact path="PC" element={
             <>
@@ -63,8 +65,8 @@ function App() {
             <Route exact path="Subjects" element={<Subjects role={role} />} />
             <Route exact path="AddSubject" element={<Addsubject />} />
             <Route exact path="DeleteSubject" element={<Deletesubject />} />
-            <Route exact path="UpdateSubject" element={<Updatesubject />} />
-            <Route exact path="SubjectDetails" element={<PCSubjectdetails />} />
+            <Route exact path="UpdateSubject" element={<Updatesubject setPCSubject={setPCSubject} />} />
+            <Route exact path="PCSubjectDetails" element={<PCSubjectdetails pcSubject={pcSubject} />} />
           </Route>
         </Routes>
         <Background />

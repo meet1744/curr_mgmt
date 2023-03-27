@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { ToastContainer, toast } from 'react-toastify';
 import "./pcsubjectdetailsStyles.css";
@@ -33,13 +33,14 @@ const customStyles = {
 };
 
 
-const PCSubjectdetails = () => {
+const PCSubjectdetails = ({PCSubjectdetails}) => {
 
 
   const [subject, setSubject] = useState({});
   const [semester, Semester] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [faculties, setFaculties] = useState([]);
+
 
 
   const facultyOptions = faculties.map((f) => ({

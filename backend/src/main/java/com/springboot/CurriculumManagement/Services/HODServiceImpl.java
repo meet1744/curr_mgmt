@@ -1,14 +1,12 @@
 package com.springboot.CurriculumManagement.Services;
 
-import com.springboot.CurriculumManagement.Entities.Department;
-import com.springboot.CurriculumManagement.Entities.Faculty;
-import com.springboot.CurriculumManagement.Entities.HOD;
-import com.springboot.CurriculumManagement.Entities.ProgramCoordinator;
+import com.springboot.CurriculumManagement.Entities.*;
 import com.springboot.CurriculumManagement.Exceptions.ResourceNotFoundException;
 import com.springboot.CurriculumManagement.Payloads.HODDto;
 import com.springboot.CurriculumManagement.Repository.FacultyRepository;
 import com.springboot.CurriculumManagement.Repository.HODRepository;
 import com.springboot.CurriculumManagement.Repository.PCRepository;
+import com.springboot.CurriculumManagement.Repository.SubjectsRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -34,11 +32,18 @@ public class HODServiceImpl implements HODService{
     private HODRepository hodDao;
 
 
-
+    @Autowired
+    private SubjectsRepository subjectsDao;
 
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Override
+    public List<Subjects> getAllSubjects(Department dept) {
+
+        return subjectsDao.findAllByDeptId(dept);
+    }
 
     @Override
     public HODDto getHODById(String HODId) {

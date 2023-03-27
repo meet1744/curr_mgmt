@@ -2,6 +2,7 @@ package com.springboot.CurriculumManagement.Controller;
 
 import com.springboot.CurriculumManagement.Entities.Department;
 import com.springboot.CurriculumManagement.Entities.Faculty;
+import com.springboot.CurriculumManagement.Entities.Subjects;
 import com.springboot.CurriculumManagement.Exceptions.ResourceNotFoundException;
 import com.springboot.CurriculumManagement.Repository.FacultyRepository;
 import com.springboot.CurriculumManagement.Services.HODService;
@@ -27,6 +28,11 @@ public class HODController {
     @Autowired
     private FacultyRepository facultyRepository;
 
+    @PostMapping("/getallsubjects")
+    public List<Subjects> getAllSubjects(@RequestBody Department dept){
+
+        return this.hodService.getAllSubjects(dept);
+    }
 
     @PostMapping("/addnewfaculty")
     public ResponseEntity<HttpStatus> addNewFaculty(@RequestBody Faculty newFaculty){

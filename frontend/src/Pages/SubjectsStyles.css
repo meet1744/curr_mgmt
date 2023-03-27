@@ -1,6 +1,6 @@
 .subjectscont{
-    width: 70%;
-    max-height: 80%;
+    width: 65%;
+    max-height: 75%;
     background-color: #222;
     color: white;
     position: absolute;
@@ -22,18 +22,24 @@ table {
 
 table td,
 table th {
-    border: 1px solid #ddd;
+    border: 1px solid #515151;
     padding: 8px;
 }
 
 table tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: white;
+    color: black;
+}
+
+table tr:nth-child(odd) {
+    background-color: white;
+    color: black;
 }
 
 table th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: center;
-    background-color: white;
+    background-color: rgb(190, 190, 190);
     color: #222;
 }

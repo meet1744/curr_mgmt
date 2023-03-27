@@ -6,24 +6,25 @@ import { doLogin } from "./../Auth/index.js";
 import 'react-toastify/dist/ReactToastify.css';
 import "./LoginPageStyles.css";
 import baseurl from "./../Components/baseurl";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 
 function LoginPage({ role }) {
+
+    const navigate = useNavigate();
 
     const loginfun = (data) => {
         const returndata = axios.post(`${baseurl}/api/v1/auth/login`, data).then((response) => {
             console.log(response);
             doLogin(response.data, function () {
                 console.log("login details saved in localstorage");
-                console.log(JSON.stringify(role));
-                if (JSON.stringify(role) === "hod")
-                    <Navigate to="/HOD/Subjects" />;
-                else if (JSON.stringify(role) === "faculty")
-                    <Navigate to="/Faculty/Subjects" />;
-                else if (JSON.stringify(role) === "pc")
-                    <Navigate to="/PC/Subjects" />;
+                if (role === "hod"){
+                    navigate("/HOD/Subjects");}
+                else if (role === "faculty")
+                    navigate("/Faculty/Subjects");
+                else if (role === "pc")
+                    navigate("/PC/Subjects");
             });
         });
         toast.promise(

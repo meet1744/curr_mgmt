@@ -6,6 +6,7 @@ import axios from "axios";
 import { getUserData } from "../Auth";
 import baseurl from "../Components/baseurl";
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 const customStyles = {
     valueContainer: (base) => ({
@@ -36,11 +37,13 @@ const customStyles = {
     })
 };
 
-const UpdateMySubject = () => {
+const UpdateMySubject = (props) => {
 
     let token = "Bearer " + getUserData().token;
     let dept = getUserData().facultyDto.dept;
-    console.log(dept);
+
+    const navigate = useNavigate();
+
     const [subject, setSubject] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const subjectsOption = subjects.map((s) => ({
@@ -58,13 +61,18 @@ const UpdateMySubject = () => {
             });
     }, []);
 
+    const searchsubjectById = (subjectid) => {
+        return subjects.find((subject) => subject.dduCode === subjectid);
+    };
+
     const updatesubjecthandle = (option) => {
-        setSubject(option);
+        const subjectid = option.split("-")[0].trim();
+        props.setFacultySubject(searchsubjectById(subjectid)); 
     }
 
     const updatesubjectform = (e) => {
         e.preventDefault();
-
+        navigate("/Faculty/FacultySubjectDetails");
     }
 
     return (
