@@ -7,8 +7,9 @@ import axios from 'axios';
 import baseurl from "../Components/baseurl";
 import { getUserData } from "../Auth";
 
-const Subjects = ({ role }) => {
+const Subjects = () => {
   let token = "Bearer " + getUserData().token;
+  let role = localStorage.getItem('role');
   let dept;
   const userData = getUserData();
   if (userData.hodDto !== null) {

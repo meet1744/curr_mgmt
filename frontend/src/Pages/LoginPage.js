@@ -10,13 +10,13 @@ import { useNavigate } from "react-router-dom";
 
 
 
-function LoginPage({ role }) {
+function LoginPage() {
 
+    let role = localStorage.getItem('role');
     const navigate = useNavigate();
 
     const loginfun = (data) => {
         const returndata = axios.post(`${baseurl}/api/v1/auth/login`, data).then((response) => {
-            console.log(response);
             doLogin(response.data, function () {
                 console.log("login details saved in localstorage");
                 if (role === "hod"){

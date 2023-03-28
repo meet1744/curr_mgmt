@@ -21,4 +21,16 @@ public class FacultyController {
 
         return this.facultyService.getAllSubjects(dept);
     }
+
+    @GetMapping("/getremainingsubsequence/{semesterSelected}")
+    public List<Integer> getremainingsubsequence(@PathVariable String semesterSelected){
+
+        System.out.println("In controller");
+        return this.facultyService.getRemainingSubSequence(semesterSelected);
+    }
+
+    @GetMapping("/getalldept")
+    public List<Department> getAllDepartments(){
+        return this.facultyService.getAllDept();
+    }
 }

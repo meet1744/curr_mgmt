@@ -78,7 +78,6 @@ public class HODServiceImpl implements HODService{
     public void deleteFaculty(String facultyId) {
         Faculty facultyToDelete=facultyDao.getById(facultyId);
         facultyDao.delete(facultyToDelete);
-
     }
 
 

@@ -15,6 +15,7 @@ export const isLoggedIn = () => {
 
 export const doLogout = (next) => {
     localStorage.removeItem('data');
+    localStorage.removeItem('role');
     if (typeof next === 'function') {
         next();
     }

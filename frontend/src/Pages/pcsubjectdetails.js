@@ -33,7 +33,9 @@ const customStyles = {
 };
 
 
-const PCSubjectdetails = ({PCSubjectdetails}) => {
+const PCSubjectdetails = () => {
+
+  let pcSubject = JSON.parse(localStorage.getItem('pcsubject'));
 
 
   const [subject, setSubject] = useState({});

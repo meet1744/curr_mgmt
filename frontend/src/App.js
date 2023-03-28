@@ -23,24 +23,21 @@ import Logs from "./Pages/logs";
 import FacultySubjectdetails from "./Pages/Facultysubjectdetails";
 
 function App() {
-  const [role, setRole] = useState({});
-  const [facultySubject,setFacultySubject] = useState({});
-  const [pcSubject,setPCSubject] = useState({});
   return (
     <div>
       <BrowserRouter>
         <Navbar />
         <Routes>
           <Route exact path="/" element={<HomePage />} />
-          <Route exact path="/login" element={<LoginPage role={role} />} />
-          <Route exact path="/roles" element={<RolesPage setRole={setRole} />} />
+          <Route exact path="/login" element={<LoginPage/>} />
+          <Route exact path="/roles" element={<RolesPage/>} />
           <Route exact path="HOD" element={
             <>
               <HODNav />
               <Outlet />
             </>
           } >
-            <Route exact path="Subjects" element={<Subjects role={role} />} />
+            <Route exact path="Subjects" element={<Subjects/>} />
             <Route exact path="AddFaculty" element={<Addfaculty />} />
             <Route exact path="DeleteFaculty" element={<Deletefaculty />} />
             <Route exact path="AppointPC" element={<AppointPC />} />
@@ -52,9 +49,9 @@ function App() {
               <Outlet />
             </>
           } >
-            <Route exact path="Subjects" element={<Subjects role={role} />} />
-            <Route exact path="UpdateMySubject" element={<UpdateMySubject setFacultySubject={setFacultySubject} />} />
-            <Route exact path="FacultySubjectDetails" element={<FacultySubjectdetails facultySubject={facultySubject} />} />
+            <Route exact path="Subjects" element={<Subjects/>} />
+            <Route exact path="UpdateMySubject" element={<UpdateMySubject/>} />
+            <Route exact path="FacultySubjectDetails" element={<FacultySubjectdetails/>} />
           </Route>
           <Route exact path="PC" element={
             <>
@@ -62,11 +59,11 @@ function App() {
               <Outlet />
             </>
           } >
-            <Route exact path="Subjects" element={<Subjects role={role} />} />
+            <Route exact path="Subjects" element={<Subjects/>} />
             <Route exact path="AddSubject" element={<Addsubject />} />
             <Route exact path="DeleteSubject" element={<Deletesubject />} />
-            <Route exact path="UpdateSubject" element={<Updatesubject setPCSubject={setPCSubject} />} />
-            <Route exact path="PCSubjectDetails" element={<PCSubjectdetails pcSubject={pcSubject} />} />
+            <Route exact path="UpdateSubject" element={<Updatesubject/>} />
+            <Route exact path="PCSubjectDetails" element={<PCSubjectdetails/>} />
           </Route>
         </Routes>
         <Background />

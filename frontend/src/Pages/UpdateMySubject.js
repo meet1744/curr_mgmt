@@ -37,15 +37,15 @@ const customStyles = {
     })
 };
 
-const UpdateMySubject = (props) => {
+const UpdateMySubject = () => {
 
     let token = "Bearer " + getUserData().token;
     let dept = getUserData().facultyDto.dept;
 
     const navigate = useNavigate();
 
-    const [subject, setSubject] = useState([]);
     const [subjects, setSubjects] = useState([]);
+    const [facultySubject,setFacultySubject] = useState({});
     const subjectsOption = subjects.map((s) => ({
         label: `${s.dduCode} - ${s.subjectName} , sem - ${s.semester}`,
         value: `${s.dduCode} - ${s.subjectName} , sem - ${s.semester}`
@@ -67,7 +67,8 @@ const UpdateMySubject = (props) => {
 
     const updatesubjecthandle = (option) => {
         const subjectid = option.split("-")[0].trim();
-        props.setFacultySubject(searchsubjectById(subjectid)); 
+        setFacultySubject(searchsubjectById(subjectid));
+        localStorage.setItem('facultysubject', JSON.stringify(searchsubjectById(subjectid)));
     }
 
     const updatesubjectform = (e) => {

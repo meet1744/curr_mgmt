@@ -11,7 +11,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static java.lang.Integer.parseInt;
 
 @Service
 public class FacultyServiceImpl implements FacultyService{
@@ -24,10 +28,27 @@ public class FacultyServiceImpl implements FacultyService{
     @Autowired
     private SubjectsRepository subjectsDao;
 
+    final private List<Integer> subSequenceLimit= Arrays.asList(new Integer[] { 1, 2, 3, 4, 5,6 });
+
     @Override
     public List<Subjects> getAllSubjects(Department dept) {
 
         return subjectsDao.findAllByDeptId(dept);
+    }
+
+    @Override
+    public List<Integer> getRemainingSubSequence(String semesterSelected) {
+
+        List<Integer> existingSubSequence= subjectsDao.findExistingSubSequence(parseInt(semesterSelected));
+        List<Integer> remainingSubSequence= new ArrayList<>(subSequenceLimit);
+        remainingSubSequence.removeAll(existingSubSequence);
+        System.out.println("seq "+remainingSubSequence);
+        return remainingSubSequence;
+    }
+
+    @Override
+    public List<Department> getAllDept() {
+        return facultyDao.findAlldept();
     }
 
     public FacultyDto FacultyToDto(Faculty faculty) {

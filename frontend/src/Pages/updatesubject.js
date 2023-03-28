@@ -37,14 +37,14 @@ const customStyles = {
     })
 };
 
-const Updatesubject = (props) => {
+const Updatesubject = () => {
     let token = "Bearer " + getUserData().token;
     let dept = getUserData().pcDto.dept;
 
     const navigate = useNavigate();
 
-    const [subject, setSubject] = useState([]);
     const [subjects, setSubjects] = useState([]);
+    const [pcSubject,setPCSubject] = useState({});
     const subjectsOption = subjects.map((s) => ({
         label: `${s.dduCode} - ${s.subjectName} , sem - ${s.semester}`,
         value: `${s.dduCode} - ${s.subjectName} , sem - ${s.semester}`
@@ -66,7 +66,8 @@ const Updatesubject = (props) => {
 
     const updatesubjecthandle = (option) => {
         const subjectid = option.split("-")[0].trim();
-        props.setPCSubject(searchsubjectById(subjectid));
+        setPCSubject(searchsubjectById(subjectid));
+        localStorage.setItem('pcsubject', JSON.stringify(pcSubject));
     }
 
     const updatesubjectform = (e) => {
