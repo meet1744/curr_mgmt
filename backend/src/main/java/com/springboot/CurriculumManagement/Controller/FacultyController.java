@@ -31,6 +31,7 @@ public class FacultyController {
 
     @GetMapping("/getalldept")
     public List<Department> getAllDepartments(){
+
         return this.facultyService.getAllDept();
     }
 }

@@ -5,6 +5,7 @@ import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Entities.Subjects;
 import com.springboot.CurriculumManagement.Payloads.FacultyDto;
 import com.springboot.CurriculumManagement.Payloads.HODDto;
+import com.springboot.CurriculumManagement.Repository.DepartmentRepository;
 import com.springboot.CurriculumManagement.Repository.FacultyRepository;
 import com.springboot.CurriculumManagement.Repository.SubjectsRepository;
 import org.modelmapper.ModelMapper;
@@ -24,6 +25,9 @@ public class FacultyServiceImpl implements FacultyService{
     private FacultyRepository facultyDao;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private DepartmentRepository departmentDao;
 
     @Autowired
     private SubjectsRepository subjectsDao;
@@ -48,7 +52,7 @@ public class FacultyServiceImpl implements FacultyService{
 
     @Override
     public List<Department> getAllDept() {
-        return facultyDao.findAlldept();
+        return departmentDao.findAll();
     }
 
     public FacultyDto FacultyToDto(Faculty faculty) {
