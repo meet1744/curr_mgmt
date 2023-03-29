@@ -15,5 +15,7 @@ public interface PCService {
 
     List<Subjects> getAllSubjects(Department dept);
 
+    List<Department> getAllDept();
+
     void deleteSubject(String dduCode);
 }

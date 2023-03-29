@@ -33,7 +33,6 @@ public class PCController {
 
     @PostMapping("/getallfaculty")
     public List<Faculty> getAllFaculty(@RequestBody Department deptId){
-
         return this.pcService.getAllFaculty(deptId);
     }
 
@@ -61,5 +60,11 @@ public class PCController {
         catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/getalldept")
+    public List<Department> getAllDepartments(){
+
+        return this.pcService.getAllDept();
     }
 }

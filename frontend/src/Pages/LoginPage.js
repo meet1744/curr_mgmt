@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./LoginPageStyles.css";
 import baseurl from "./../Components/baseurl";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Auth/AuthContext";
 
 
 
@@ -14,11 +15,13 @@ function LoginPage() {
 
     let role = localStorage.getItem('role');
     const navigate = useNavigate();
+    const {LOGIN} = useAuth();
 
     const loginfun = (data) => {
         const returndata = axios.post(`${baseurl}/api/v1/auth/login`, data).then((response) => {
             doLogin(response.data, function () {
                 console.log("login details saved in localstorage");
+                LOGIN();
                 if (role === "hod"){
                     navigate("/HOD/Subjects");}
                 else if (role === "faculty")

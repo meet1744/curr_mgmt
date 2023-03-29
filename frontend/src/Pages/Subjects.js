@@ -6,6 +6,7 @@ import './SubjectsStyles.css'
 import axios from 'axios';
 import baseurl from "../Components/baseurl";
 import { getUserData } from "../Auth";
+import OnHoverScrollContainer from "./../Components/CustomeScroll";
 
 const Subjects = () => {
   let token = "Bearer " + getUserData().token;
@@ -52,38 +53,37 @@ const Subjects = () => {
   return (
     <>
       <div className='subjectscont'>
-        <table {...getTableProps()}>
-          <thead>
-            {
-              headerGroups && headerGroups.map((headerGroup) => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {
-                    headerGroup.headers.map((column) => (
-                      <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-                    ))
-                  }
-                </tr>
-              ))
-            }
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {
-              rows && rows.map((row) => {
-                prepareRow(row)
-                return (
-                  <tr {...row.getRowProps()}>
+          <table {...getTableProps()}>
+            <thead>
+              {
+                headerGroups && headerGroups.map((headerGroup) => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
                     {
-                      row.cells.map((cell) => {
-                        return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                      })
+                      headerGroup.headers.map((column) => (
+                        <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                      ))
                     }
                   </tr>
-                )
-              })
-            }
-          </tbody>
-        </table>
-
+                ))
+              }
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {
+                rows && rows.map((row) => {
+                  prepareRow(row)
+                  return (
+                    <tr {...row.getRowProps()}>
+                      {
+                        row.cells.map((cell) => {
+                          return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                        })
+                      }
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </table>
 
       </div>
     </>

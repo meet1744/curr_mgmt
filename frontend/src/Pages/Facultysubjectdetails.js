@@ -10,6 +10,8 @@ import { getUserData } from "../Auth";
 import "./pcsubjectdetailsStyles.css";
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import OnHoverScrollContainer from "./../Components/CustomeScroll";
+
 
 const customStyles = {
     valueContainer: (base) => ({
@@ -48,7 +50,7 @@ const FacultySubjectdetails = () => {
 
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [seq, setSeq] = useState([]);
-    const [alldept,setAllDept] = useState([]);
+    const [alldept, setAllDept] = useState([]);
     const [pdfFile, setPdfFile] = useState(null);
     const [pdfFileError, setPdfFileError] = useState('');
     const [viewPdf, setViewPdf] = useState(null);
@@ -66,7 +68,7 @@ const FacultySubjectdetails = () => {
                 console.log(err);
             });
 
-        axios.get(`${baseurl}/Faculty/getalldept`,{header: {"Authorization": token}})
+        axios.get(`${baseurl}/Faculty/getalldept`, { headers: { "Authorization": token } })
             .then((res) => {
                 setAllDept(res.data);
             })
@@ -74,6 +76,9 @@ const FacultySubjectdetails = () => {
                 console.log(err);
             })
     }, []);
+    useEffect(() => {
+        handlePdfFileView();
+    }, [pdfFile]);
 
 
     const semOptions = [
@@ -87,7 +92,7 @@ const FacultySubjectdetails = () => {
         { value: "8", label: "8" },
     ];
     const subSequenceOptions = seq.map((s) => ({
-        value: JSON.stringify(s),
+        value: s,
         label: JSON.stringify(s)
     }));
     const deptOptions = alldept.map((d) => ({
@@ -117,8 +122,6 @@ const FacultySubjectdetails = () => {
         else {
             console.log('select your file');
         }
-        handlePdfFileView();
-        console.log(pdfFile);
     }
 
 
@@ -132,15 +135,21 @@ const FacultySubjectdetails = () => {
     }
 
     const defaultsem = () => {
-        return semOptions[semOptions.findIndex(option => option.value === JSON.stringify(facultySubject.semester))]
+        return semOptions[semOptions.findIndex(option => option.label === JSON.stringify(facultySubject.semester))]
     }
 
     const defaultseq = () => {
-        return subSequenceOptions[subSequenceOptions.findIndex(option => option.value === JSON.stringify(facultySubject.subSequence))]
+        return subSequenceOptions[subSequenceOptions.findIndex(option => option.label === JSON.stringify(facultySubject.subSequence))]
     }
 
-    const updatesubjectform = () => {
+    const defaultdept = () => {
+        return deptOptions[deptOptions.findIndex(option => option.value === facultySubject.dept)];
+    }
 
+    const updatesubjectform = (e) => {
+        e.preventDefault();
+        console.log(facultySubject)
+        console.log(pdfFile)
     }
 
 
@@ -148,96 +157,91 @@ const FacultySubjectdetails = () => {
         <div>
             <ToastContainer />
             <div className="subjectdetailcontainer">
-                <form onSubmit={updatesubjectform} >
-                    <h3 className="label margint gap3">Subject Name:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, subjectName: e.target.value }) }} value={facultySubject.subjectName || undefined} />
-                    <h3 className="label margint gap3">Semester:</h3>
-                    <Select options={semOptions} placeholder='Select semester' styles={customStyles}
-                        value={defaultsem()}
-                        onChange={(e) => { setFacultySubject({ ...facultySubject, semester: e.target.value }) }}
-                        theme={(theme) => ({
-                            ...theme,
-                            colors: {
-                                ...theme.colors,
-                                primary: 'grey',
-                            },
-                        })}
-                    />
-                    <h3 className="label margint gap3">subSequence:</h3>
-                    <Select options={subSequenceOptions} placeholder='Select sequence' styles={customStyles}
-                        value={defaultseq()}
-                        onChange={(e) => { setFacultySubject({ ...facultySubject, subSequence: e.target.value }) }}
-                        theme={(theme) => ({
-                            ...theme,
-                            colors: {
-                                ...theme.colors,
-                                primary: 'grey',
-                            },
-                        })}
-                    />
-                    <h3 className="label margint">AICTEcode:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, AICTEcode: e.target.value }) }} value={facultySubject.AICTEcode || undefined} />
-                    <h3 className="label margint">effectiveDate:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, effectiveDate: e.target.value }) }} value={facultySubject.effectiveDate || undefined} />
-                    <h3 className="label margint">removedDate:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, removedDate: e.target.value }) }} value={facultySubject.removedDate || undefined} />
-                    <h3 className="label margint">subjectType:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, subjectType: e.target.value }) }} value={facultySubject.subjectType || undefined} />
-                    <h3 className="label margint">subjectTypeExplanation:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, subjectTypeExplanation: e.target.value }) }} value={facultySubject.subjectTypeExplanation || undefined} />
-                    <h3 className="label margint">theoryMarks:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, theoryMarks: e.target.value }) }} value={facultySubject.theoryMarks || undefined} />
-                    <h3 className="label margint">sessionalMarks:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, sessionalMarks: e.target.value }) }} value={facultySubject.sessionalMarks || undefined} />
-                    <h3 className="label margint">termworkMarks:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, termworkMarks: e.target.value }) }} value={facultySubject.termworkMarks || undefined} />
-                    <h3 className="label margint">practicalMarks:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, practicalMarks: e.target.value }) }} value={facultySubject.practicalMarks || undefined} />
-                    <h3 className="label margint">totalMarks:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, totalMarks: e.target.value }) }} value={facultySubject.totalMarks || undefined} />
-                    <h3 className="label margint">LectureHours:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, LectureHours: e.target.value }) }} value={facultySubject.LectureHours || undefined} />
-                    <h3 className="label margint">tutorial:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, tutorial: e.target.value }) }} value={facultySubject.tutorial || undefined} />
-                    <h3 className="label margint">PracticalHours:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, PracticalHours: e.target.value }) }} value={facultySubject.PracticalHours || undefined} />
-                    <h3 className="label margint">totalHours:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, totalHours: e.target.value }) }} value={facultySubject.totalHours || undefined} />
-                    <h3 className="label margint">lectureAndTheoryCredit:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, lectureAndTheoryCredit: e.target.value }) }} value={facultySubject.lectureAndTheoryCredit || undefined} />
-                    <h3 className="label margint">practicalCredit:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, practicalCredit: e.target.value }) }} value={facultySubject.practicalCredit || undefined} />
-                    <h3 className="label margint">totalCredit:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, totalCredit: e.target.value }) }} value={facultySubject.totalCredit || undefined} />
-                    <h3 className="label margint">dept:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, dept: e.target.value }) }} value={facultySubject.dept || undefined} />
-                    <h3 className="label margint">parentDept:</h3>
-                    <Select options={deptOptions} placeholder='select parent dept' styles={customStyles}
-                        onChange={(e) => { setFacultySubject({ ...facultySubject, parentDept: e.target.value }) }}
-                        theme={(theme) => ({
-                            ...theme,
-                            colors: {
-                                ...theme.colors,
-                                primary: 'grey',
-                            },
-                        })}
-                    />
-                    <h3 className="label margint">extraInfo:</h3>
-                    <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, extraInfo: e.target.value }) }} value={facultySubject.extraInfo || undefined} />
-                    <input type="file" accept='.pdf' className='form-control margint' onChange={handlePdfFileChange} />
-                    {pdfFileError && <div className='error-msg'>{pdfFileError}</div>}
-                    <br />
-                    <button type="submit" className="SubmitButton coolBeans margint">Update</button>
-                </form>
+                <OnHoverScrollContainer>
+                    <form onSubmit={updatesubjectform} >
+                        <h3 className="label margint gap3">Subject Name:</h3>
+                        <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, subjectName: e.target.value }) }} value={facultySubject.subjectName || ''} />
+                        <h3 className="label margint gap3">Semester:</h3>
+                        <Select options={semOptions} placeholder='Select semester' styles={customStyles}
+                            value={defaultsem()}
+                            onChange={(e) => { setFacultySubject({ ...facultySubject, semester: e.value }) }}
+                            theme={(theme) => ({
+                                ...theme,
+                                colors: {
+                                    ...theme.colors,
+                                    primary: 'grey',
+                                },
+                            })}
+                        />
+                        <h3 className="label margint gap3">subSequence:</h3>
+                        <Select options={subSequenceOptions} placeholder='Select sequence' styles={customStyles}
+                            value={defaultseq()}
+                            onChange={(e) => { setFacultySubject({ ...facultySubject, subSequence: e.value }) }}
+                            theme={(theme) => ({
+                                ...theme,
+                                colors: {
+                                    ...theme.colors,
+                                    primary: 'grey',
+                                },
+                            })}
+                        />
+                        <h3 className="label margint">subjectType:</h3>
+                        <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, subjectType: e.target.value }) }} value={facultySubject.subjectType || ''} />
+                        <h3 className="label margint">subjectTypeExplanation:</h3>
+                        <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, subjectTypeExplanation: e.target.value }) }} value={facultySubject.subjectTypeExplanation || ''} />
+                        <h3 className="label margint">theoryMarks:</h3>
+                        <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, theoryMarks: e.target.value }) }} value={facultySubject.theoryMarks || ''} />
+                        <h3 className="label margint">sessionalMarks:</h3>
+                        <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, sessionalMarks: e.target.value }) }} value={facultySubject.sessionalMarks || ''} />
+                        <h3 className="label margint">termworkMarks:</h3>
+                        <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, termworkMarks: e.target.value }) }} value={facultySubject.termworkMarks || ''} />
+                        <h3 className="label margint">practicalMarks:</h3>
+                        <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, practicalMarks: e.target.value }) }} value={facultySubject.practicalMarks || ''} />
+                        <h3 className="label margint">totalMarks:</h3>
+                        <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, totalMarks: e.target.value }) }} value={facultySubject.totalMarks || ''} />
+                        <h3 className="label margint">LectureHours:</h3>
+                        <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, lectureHours: e.target.value }) }} value={facultySubject.lectureHours || ''} />
+                        <h3 className="label margint">tutorial:</h3>
+                        <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, tutorial: e.target.value }) }} value={facultySubject.tutorial || ''} />
+                        <h3 className="label margint">PracticalHours:</h3>
+                        <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, practicalHours: e.target.value }) }} value={facultySubject.practicalHours || ''} />
+                        <h3 className="label margint">totalHours:</h3>
+                        <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, totalHours: e.target.value }) }} value={facultySubject.totalHours || ''} />
+                        <h3 className="label margint">lectureAndTheoryCredit:</h3>
+                        <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, lectureAndTheoryCredit: e.target.value }) }} value={facultySubject.lectureAndTheoryCredit || ''} />
+                        <h3 className="label margint">practicalCredit:</h3>
+                        <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, practicalCredit: e.target.value }) }} value={facultySubject.practicalCredit || ''} />
+                        <h3 className="label margint">totalCredit:</h3>
+                        <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, totalCredit: e.target.value }) }} value={facultySubject.totalCredit || ''} />
+                        <h3 className="label margint">parentDept:</h3>
+                        <Select options={deptOptions} placeholder='select parent dept' styles={customStyles}
+                            value={defaultdept()}
+                            onChange={(e) => { setFacultySubject({ ...facultySubject, parentDept: e.value }) }}
+                            theme={(theme) => ({
+                                ...theme,
+                                colors: {
+                                    ...theme.colors,
+                                    primary: 'grey',
+                                },
+                            })}
+                        />
+                        <h3 className="label margint">extraInfo:</h3>
+                        <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, extraInfo: e.target.value }) }} value={facultySubject.extraInfo || ''} />
+                        <input type="file" accept='.pdf' className='form-control margint' onChange={handlePdfFileChange} />
+                        {pdfFileError && <div className='error-msg'>{pdfFileError}</div>}
+                        <br />
+                        <button type="submit" className="SubmitButton coolBeans margint">Update</button>
+                    </form>
 
 
-                <h4>View PDF</h4>
-                <div className='pdf-container'>
-                    {viewPdf && <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
-                        <Viewer fileUrl={viewPdf} plugins={[defaultLayoutPluginInstance]} />
-                    </Worker>}
-                    {!viewPdf && <>No pdf file selected</>}
-                </div>
+                    <h4>View PDF</h4>
+                    <div className='pdf-container'>
+                        {viewPdf && <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
+                            <Viewer fileUrl={viewPdf} plugins={[defaultLayoutPluginInstance]} />
+                        </Worker>}
+                        {!viewPdf && <>No pdf file selected</>}
+                    </div>
+                </OnHoverScrollContainer>
             </div>
         </div >
     )

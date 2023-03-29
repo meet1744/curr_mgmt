@@ -16,6 +16,8 @@ export const isLoggedIn = () => {
 export const doLogout = (next) => {
     localStorage.removeItem('data');
     localStorage.removeItem('role');
+    localStorage.removeItem('pcsubject');
+    localStorage.removeItem('facultysubject');
     if (typeof next === 'function') {
         next();
     }

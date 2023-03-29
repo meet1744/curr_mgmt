@@ -67,7 +67,7 @@ const Updatesubject = () => {
     const updatesubjecthandle = (option) => {
         const subjectid = option.split("-")[0].trim();
         setPCSubject(searchsubjectById(subjectid));
-        localStorage.setItem('pcsubject', JSON.stringify(pcSubject));
+        localStorage.setItem('pcsubject', JSON.stringify(searchsubjectById(subjectid)));
     }
 
     const updatesubjectform = (e) => {

@@ -1,5 +1,5 @@
 .sidenav {
-    height: auto;
+    height: 50%;
     width: 15%;
     position: fixed;
     z-index: 1;
@@ -29,4 +29,8 @@
 
 .sidenav a:hover {
     background-color: #585858;
+}
+
+.navmargin{
+    margin-top: 20%;
 }
