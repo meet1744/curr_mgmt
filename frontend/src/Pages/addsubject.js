@@ -50,11 +50,12 @@ const Addsubject = () => {
       fetchPCAuth(navigate)
       dept = getUserData().pcDto.dept;
       token = "Bearer " + getUserData().token;
+      setSubject({...subject,dept:dept});
     } catch (err) { }
   }, [])
 
 
-  const [subject, setSubject] = useState({ dept: dept, dduCode: "", subjectName: "", facultyList: "", subSequence: "" });
+  const [subject, setSubject] = useState({ dduCode: "", subjectName: "", facultyList: "", subSequence: "" });
   const [selectedFaculties, setSelectedFaculties] = useState([]);
   const [selectedsem, setSelectedsem] = useState({});
   const [seq, setSeq] = useState([]);

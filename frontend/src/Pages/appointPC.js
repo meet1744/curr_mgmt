@@ -60,8 +60,6 @@ const AppointPC = () => {
                 .catch((err) => {
                     console.log(err);
                 });
-
-
             axios.post(`${baseurl}/HOD/checkpc`, dept, { headers: { "Authorization": token } })
                 .then((res) => {
                     setProgramCoordinator(res.data);

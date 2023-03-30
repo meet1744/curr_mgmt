@@ -18,15 +18,17 @@ export default function Addfaculty() {
             fetchHODAuth(navigate)
             dept = getUserData().hodDto.dept;
             token = "Bearer " + getUserData().token;
+            setFaculty({...faculty,dept:dept})
         } catch (err) { }
     }, [])
 
-    const [faculty, setFaculty] = useState({ dept: dept, facultyId: "", facultyName: "", emailId: "", password: "" });
+    const [faculty, setFaculty] = useState({ facultyId: "", facultyName: "", emailId: "", password: "" });
 
     const addfacultyform = (e) => {
         e.preventDefault();
         dept = getUserData().hodDto.dept;
         token = "Bearer " + getUserData().token;
+        console.log(faculty)
         const addfacultyresponse = axios.post(`${baseurl}/HOD/addnewfaculty`, faculty, { headers: { "Authorization": token } });
 
         toast.promise(

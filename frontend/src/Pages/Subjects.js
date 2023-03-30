@@ -39,9 +39,8 @@ const Subjects = () => {
 
 
   useEffect(() => {
-    if(getUserData()===undefined){
-      navigate("/roles");
-    }
+    token = "Bearer " + getUserData().token;
+    console.log(token)
     axios.post(`${baseurl}/${urlrole}/getallsubjects`, dept, { headers: { "Authorization": token } })
       .then((res) => {
         console.log("inside axios", res.data)

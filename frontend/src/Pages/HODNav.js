@@ -22,7 +22,6 @@ function HODNav() {
                     <Link to="/HOD/AddFaculty" onClick={handleClick}>Add Faculty</Link>
                     <Link to="/HOD/DeleteFaculty" onClick={handleClick}>Delete Faculty</Link>
                     <Link to="/HOD/AppointPC" onClick={handleClick}>Appoint Program Coordinator</Link>
-                    <Link to="/HOD/Logs" onClick={handleClick}>Logs</Link>
                 </div>
             </div>
         </>

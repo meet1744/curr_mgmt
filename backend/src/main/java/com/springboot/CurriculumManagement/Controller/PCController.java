@@ -25,7 +25,7 @@ public class PCController {
         return new ResponseEntity<String>("PC", HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_PC')")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/addnewsubject")
     public ResponseEntity<HttpStatus> addNewSubject(@RequestBody Subjects newSubject){
         try{
@@ -39,13 +39,13 @@ public class PCController {
 
     }
 
-    @PreAuthorize("hasRole('ROLE_PC')")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/getallfaculty")
     public List<Faculty> getAllFaculty(@RequestBody Department deptId){
         return this.pcService.getAllFaculty(deptId);
     }
 
-    @PreAuthorize("hasRole('ROLE_PC')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/getremainingsubsequence/{semesterSelected}")
     public List<Integer> getremainingsubsequence(@PathVariable String semesterSelected){
 
@@ -53,14 +53,13 @@ public class PCController {
         return this.pcService.getRemainingSubSequence(semesterSelected);
     }
 
-    @PreAuthorize("hasRole('ROLE_PC')")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/getallsubjects")
     public List<Subjects> getAllSubjects(@RequestBody Department dept){
-
         return this.pcService.getAllSubjects(dept);
     }
 
-    @PreAuthorize("hasRole('ROLE_PC')")
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/deletesubject/{dduCode}")
     public ResponseEntity<HttpStatus> deleteSubject(@PathVariable String dduCode){
         try {
@@ -73,7 +72,7 @@ public class PCController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_PC')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/getalldept")
     public List<Department> getAllDepartments(){
 

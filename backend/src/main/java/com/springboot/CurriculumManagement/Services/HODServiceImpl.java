@@ -13,7 +13,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,7 +50,6 @@ public class HODServiceImpl implements HODService{
         return this.HODToDto(hod);
     }
 
-//    @PreAuthorize("hasAuthority('ROLE_ANONYMOUS')")
     @Override
     public void addNewFaculty(Faculty faculty) throws DuplicateKeyException {
         Faculty isPresent = null;
