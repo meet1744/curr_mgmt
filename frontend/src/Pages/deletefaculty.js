@@ -69,6 +69,8 @@ const Deletefaculty = () => {
     }
     const deletefacultyform = (e) => {
         e.preventDefault();
+        dept = getUserData().hodDto.dept;
+        token = "Bearer " + getUserData().token;
         const facultyid = faculty.split("-")[0].trim();
         console.log(facultyid);
         console.log(token);

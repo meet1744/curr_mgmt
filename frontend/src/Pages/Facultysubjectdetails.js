@@ -13,7 +13,10 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import OnHoverScrollContainer from "./../Components/CustomeScroll";
 import { fetchFacultyAuth } from './../Components/Verify';
 import { useNavigate } from 'react-router-dom';
-import pdfjsLib from 'pdfjs-dist';
+// import {pdfjsLib} from 'pdfjs-dist';
+// import { pdfjs } from 'pdfjs-dist';
+// pdfjs.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js';
+
 
 
 const customStyles = {
@@ -59,7 +62,7 @@ const FacultySubjectdetails = () => {
     const [pdfFile, setPdfFile] = useState(null);
     const [pdfFileError, setPdfFileError] = useState('');
     const [viewPdf, setViewPdf] = useState(null);
-    const [pdfRequest,setPdfRequest] =useState({pdfFile:null,dduCode:null});
+    const [pdfRequest, setPdfRequest] = useState({ pdfFile: null, dduCode: null });
     const [selectedFile, setSelectedFile] = useState(null);
 
 
@@ -90,7 +93,6 @@ const FacultySubjectdetails = () => {
     }, []);
     useEffect(() => {
         handlePdfFileView();
-        // handlePdfInSubject();
     }, [pdfFile]);
 
 
@@ -116,48 +118,48 @@ const FacultySubjectdetails = () => {
 
     const fileType = ['application/pdf'];
 
-    const handlePdfFileChange = (event) => {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = async (event) => {
-          const data = new Uint8Array(event.target.result);
-          const pdfDoc = pdfjsLib.getDocument({ data });
-          const numPages = pdfDoc.numPages;
-          let base64String = '';
-          for (let i = 1; i <= numPages; i++) {
-            const page = await pdfDoc.getPage(i);
-            const content = await page.getTextContent();
-            base64String += btoa(content.items.map(item => item.str).join(''));
-          }
-          setSelectedFile(base64String);
-        };
-        reader.readAsArrayBuffer(file);
-        setPdfFile(file);
-      };
+    // const handlePdfFileChange = (event) => {
+    //     const file = event.target.files[0];
+    //     const reader = new FileReader();
+    //     reader.onload = async (event) => {
+    //       const data = new Uint8Array(event.target.result);
+    //       const pdfDoc = pdfjsLib.getDocument({ data });
+    //       const numPages = pdfDoc.numPages;
+    //       let base64String = '';
+    //       for (let i = 1; i <= numPages; i++) {
+    //         const page = await pdfDoc.getPage(i);
+    //         const content = await page.getTextContent();
+    //         base64String += btoa(content.items.map(item => item.str).join(''));
+    //       }
+    //       setSelectedFile(base64String);
+    //     };
+    //     reader.readAsArrayBuffer(file);
+    //     setPdfFile(file);
+    //   };
 
-    // const handlePdfFileChange = (e) => {
-    //     let selectedFile = e.target.files[0];
-    //     if (selectedFile) {
-    //         if (selectedFile && fileType.includes(selectedFile.type)) {
-    //             let reader = new FileReader();
-    //             reader.readAsArrayBuffer(selectedFile);
-    //             reader.onloadend = (e) => {
-    //                 const pdfBlob = new Blob([reader.result], { type: 'application/pdf' });
-    //             setPdfFile(pdfBlob);
-    //             setPdfFileError('');
-    //                 // setPdfFile(e.target.result)
-    //                 // setPdfFileError('');
-    //             }
-    //         }
-    //         else {
-    //             setPdfFile(null);
-    //             setPdfFileError('Please select valid pdf file');
-    //         }
-    //     }
-    //     else {
-    //         console.log('select your file');
-    //     }
-    // }
+    const handlePdfFileChange = (e) => {
+        let selectedFile = e.target.files[0];
+        if (selectedFile) {
+            if (selectedFile && fileType.includes(selectedFile.type)) {
+                let reader = new FileReader();
+                reader.readAsArrayBuffer(selectedFile);
+                reader.onloadend = (e) => {
+                    const pdfBlob = new Blob([reader.result], { type: 'application/pdf' });
+                    setPdfFile(pdfBlob);
+                    setPdfFileError('');
+                    // setPdfFile(e.target.result)
+                    // setPdfFileError('');
+                }
+            }
+            else {
+                setPdfFile(null);
+                setPdfFileError('Please select valid pdf file');
+            }
+        }
+        else {
+            console.log('select your file');
+        }
+    }
 
     // const handlePdfFileChange = (e) => {
     //     setPdfFile(e.target.files[0]);
@@ -189,22 +191,22 @@ const FacultySubjectdetails = () => {
         return deptOptions[deptOptions.findIndex(option => option.value === facultySubject.dept)];
     }
 
-    const formData=new FormData();
-    useEffect(()=>{
+    const formData = new FormData();
+    useEffect(() => {
         // setPdfRequest({...pdfRequest,pdfFile:pdfFile})
-        formData.append('pdfFile',pdfFile);
-    },[pdfFile])
+        formData.append('pdfFile', pdfFile);
+    }, [pdfFile])
 
-    useEffect(()=>{
+    useEffect(() => {
         // setPdfRequest({...pdfRequest,dduCode:facultySubject})
-        formData.append('dduCode',facultySubject);
-    },[facultySubject])
+        formData.append('dduCode', facultySubject);
+    }, [facultySubject])
 
     const updatesubjectform = async (e) => {
         e.preventDefault();
         // const obj={pdfFile,facultySubject};
-        
-        
+
+
         // console.log(facultySubject)
         console.log(pdfFile)
         // console.log(JSON.stringify(facultySubject));
@@ -217,12 +219,15 @@ const FacultySubjectdetails = () => {
 
 
         const formData = new FormData();
-    formData.append("file", selectedFile);
-    
-    // Append custom object as JSON data
-    formData.append('dduCode', JSON.stringify(facultySubject.dduCode));
-        
-        const uploadres = await axios.post(`${baseurl}/Faculty/uploadsubjectfile`,formData, { headers: { "Content-Type":"multipart/form-data","Authorization": token } });
+        formData.append("file", selectedFile);
+
+        // Append custom object as JSON data
+        formData.append('dduCode', JSON.stringify(facultySubject.dduCode));
+
+        dept = getUserData().hodDto.dept;
+        token = "Bearer " + getUserData().token;
+
+        const uploadres = await axios.post(`${baseurl}/Faculty/uploadsubjectfile`, formData, { headers: { "Content-Type": "multipart/form-data", "Authorization": token } });
 
         toast.promise(
             uploadres,

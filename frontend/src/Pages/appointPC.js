@@ -92,7 +92,9 @@ const AppointPC = () => {
 
     const appointPCform = (e) => {
         e.preventDefault();
-        const facultyid = (programCoordinator.facultyId!==undefined)?programCoordinator.facultyId:programCoordinator.programCoordinatorId;
+        dept = getUserData().hodDto.dept;
+        token = "Bearer " + getUserData().token;
+        const facultyid = (programCoordinator.facultyId !== undefined) ? programCoordinator.facultyId : programCoordinator.programCoordinatorId;
         const addpcresponse = axios.get(`${baseurl}/HOD/appointpc/${facultyid}`, { headers: { "Authorization": token } }, facultyid);
         toast.promise(
             addpcresponse,

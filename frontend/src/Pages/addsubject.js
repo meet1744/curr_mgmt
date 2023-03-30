@@ -81,6 +81,8 @@ const Addsubject = () => {
   }));
 
   useEffect(() => {
+    dept = getUserData().pcDto.dept;
+    token = "Bearer " + getUserData().token;
     axios.post(`${baseurl}/PC/getallfaculty`, dept, { headers: { "Authorization": token } })
       .then((res) => {
         setFaculties(res.data);
@@ -108,6 +110,8 @@ const Addsubject = () => {
 
 
   const handlesemchange = (selectedOptions) => {
+    dept = getUserData().pcDto.dept;
+    token = "Bearer " + getUserData().token;
     setSelectedsem(selectedOptions);
     const semester = selectedOptions ? selectedOptions.label : '';
     setSubject({ ...subject, semester: semester });
@@ -129,6 +133,8 @@ const Addsubject = () => {
 
   const addsubjectform = (e) => {
     console.log(subject);
+    dept = getUserData().pcDto.dept;
+    token = "Bearer " + getUserData().token;
     const addsubjectresponse = axios.post(`${baseurl}/PC/addnewsubject`, subject, { headers: { "Authorization": token } });
     toast.promise(
       addsubjectresponse,

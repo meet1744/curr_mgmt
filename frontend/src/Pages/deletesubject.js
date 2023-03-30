@@ -77,6 +77,8 @@ const Deletesubject = () => {
   }
   const deletefacultyform = (e) => {
     e.preventDefault();
+    dept = getUserData().hodDto.dept;
+    token = "Bearer " + getUserData().token;
     const dduCode = subject.split("-")[0].trim();
     console.log(dduCode);
     console.log(token);

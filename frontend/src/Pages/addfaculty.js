@@ -25,6 +25,8 @@ export default function Addfaculty() {
 
     const addfacultyform = (e) => {
         e.preventDefault();
+        dept = getUserData().hodDto.dept;
+        token = "Bearer " + getUserData().token;
         const addfacultyresponse = axios.post(`${baseurl}/HOD/addnewfaculty`, faculty, { headers: { "Authorization": token } });
 
         toast.promise(

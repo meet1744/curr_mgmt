@@ -137,6 +137,8 @@ const PCSubjectdetails = () => {
   const updatesubjectform = (e) => {
     e.preventDefault();
     console.log(pcSubject)
+    dept = getUserData().hodDto.dept;
+    token = "Bearer " + getUserData().token;
   }
 
 
