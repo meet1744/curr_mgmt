@@ -13,6 +13,7 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import OnHoverScrollContainer from "./../Components/CustomeScroll";
 import { fetchFacultyAuth } from './../Components/Verify';
 import { useNavigate } from 'react-router-dom';
+import pdfjsLib from 'pdfjs-dist';
 
 
 const customStyles = {
@@ -58,6 +59,8 @@ const FacultySubjectdetails = () => {
     const [pdfFile, setPdfFile] = useState(null);
     const [pdfFileError, setPdfFileError] = useState('');
     const [viewPdf, setViewPdf] = useState(null);
+    const [pdfRequest,setPdfRequest] =useState({pdfFile:null,dduCode:null});
+    const [selectedFile, setSelectedFile] = useState(null);
 
 
     useEffect(() => {
@@ -87,6 +90,7 @@ const FacultySubjectdetails = () => {
     }, []);
     useEffect(() => {
         handlePdfFileView();
+        // handlePdfInSubject();
     }, [pdfFile]);
 
 
@@ -112,26 +116,56 @@ const FacultySubjectdetails = () => {
 
     const fileType = ['application/pdf'];
 
-    const handlePdfFileChange = (e) => {
-        let selectedFile = e.target.files[0];
-        if (selectedFile) {
-            if (selectedFile && fileType.includes(selectedFile.type)) {
-                let reader = new FileReader();
-                reader.readAsDataURL(selectedFile);
-                reader.onloadend = (e) => {
-                    setPdfFile(e.target.result);
-                    setPdfFileError('');
-                }
-            }
-            else {
-                setPdfFile(null);
-                setPdfFileError('Please select valid pdf file');
-            }
-        }
-        else {
-            console.log('select your file');
-        }
-    }
+    const handlePdfFileChange = (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+          const data = new Uint8Array(event.target.result);
+          const pdfDoc = pdfjsLib.getDocument({ data });
+          const numPages = pdfDoc.numPages;
+          let base64String = '';
+          for (let i = 1; i <= numPages; i++) {
+            const page = await pdfDoc.getPage(i);
+            const content = await page.getTextContent();
+            base64String += btoa(content.items.map(item => item.str).join(''));
+          }
+          setSelectedFile(base64String);
+        };
+        reader.readAsArrayBuffer(file);
+        setPdfFile(file);
+      };
+
+    // const handlePdfFileChange = (e) => {
+    //     let selectedFile = e.target.files[0];
+    //     if (selectedFile) {
+    //         if (selectedFile && fileType.includes(selectedFile.type)) {
+    //             let reader = new FileReader();
+    //             reader.readAsArrayBuffer(selectedFile);
+    //             reader.onloadend = (e) => {
+    //                 const pdfBlob = new Blob([reader.result], { type: 'application/pdf' });
+    //             setPdfFile(pdfBlob);
+    //             setPdfFileError('');
+    //                 // setPdfFile(e.target.result)
+    //                 // setPdfFileError('');
+    //             }
+    //         }
+    //         else {
+    //             setPdfFile(null);
+    //             setPdfFileError('Please select valid pdf file');
+    //         }
+    //     }
+    //     else {
+    //         console.log('select your file');
+    //     }
+    // }
+
+    // const handlePdfFileChange = (e) => {
+    //     setPdfFile(e.target.files[0]);
+    //   };
+
+    // const handlePdfInSubject=()=>{
+    //     setFacultySubject({ ...facultySubject, subjectFile: pdfFile });
+    // }
 
 
     const handlePdfFileView = () => {
@@ -155,10 +189,71 @@ const FacultySubjectdetails = () => {
         return deptOptions[deptOptions.findIndex(option => option.value === facultySubject.dept)];
     }
 
-    const updatesubjectform = (e) => {
+    const formData=new FormData();
+    useEffect(()=>{
+        // setPdfRequest({...pdfRequest,pdfFile:pdfFile})
+        formData.append('pdfFile',pdfFile);
+    },[pdfFile])
+
+    useEffect(()=>{
+        // setPdfRequest({...pdfRequest,dduCode:facultySubject})
+        formData.append('dduCode',facultySubject);
+    },[facultySubject])
+
+    const updatesubjectform = async (e) => {
         e.preventDefault();
-        console.log(facultySubject)
+        // const obj={pdfFile,facultySubject};
+        
+        
+        // console.log(facultySubject)
         console.log(pdfFile)
+        // console.log(JSON.stringify(facultySubject));
+        // console.log("DDu code is")
+        // console.log(facultySubject.dduCode)
+        // const formData=new FormData();
+        // formData.append('pdfFile',pdfFile);
+        // formData.append('dduCode',facultySubject);
+        // console.log("",formData.get('pdfFile'));
+
+
+        const formData = new FormData();
+    formData.append("file", selectedFile);
+    
+    // Append custom object as JSON data
+    formData.append('dduCode', JSON.stringify(facultySubject.dduCode));
+        
+        const uploadres = await axios.post(`${baseurl}/Faculty/uploadsubjectfile`,formData, { headers: { "Content-Type":"multipart/form-data","Authorization": token } });
+
+        toast.promise(
+            uploadres,
+            {
+                pending: {
+                    render() {
+                        return "Please Wait!!"
+                    },
+                    icon: "✋",
+                },
+                success: {
+                    render() {
+                        return `Subject Details stored Successfully!!`
+                    },
+                    icon: "🚀",
+                },
+                error: {
+                    render({ data }) {
+                        console.log(data);
+                        if (data.response.status === 400 || data.response.status === 404 || data.response.status === 401)
+                            return data.response.data.status;
+                        return 'Internal server error!!';
+                    },
+                    icon: "💥",
+                }
+            },
+            {
+                className: 'dark-toast',
+                position: toast.POSITION.BOTTOM_RIGHT,
+            }
+        );
     }
 
 
@@ -288,19 +383,20 @@ const FacultySubjectdetails = () => {
                             </div>
                         </div>
                         <input type="file" accept='.pdf' className='form-control margint' onChange={handlePdfFileChange} />
+
                         {pdfFileError && <div className='error-msg'>{pdfFileError}</div>}
                         <br />
                         <button type="submit" className="SubmitButton coolBeans margint">Update</button>
                     </form>
 
 
-                    <h4>View PDF</h4>
+                    {/* <h4>View PDF</h4>
                     <div className='pdf-container'>
                         {viewPdf && <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
                             <Viewer fileUrl={viewPdf} plugins={[defaultLayoutPluginInstance]} />
                         </Worker>}
                         {!viewPdf && <>No pdf file selected</>}
-                    </div>
+                    </div> */}
                 </OnHoverScrollContainer>
             </div>
         </div >

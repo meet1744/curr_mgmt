@@ -84,14 +84,17 @@ public class HODServiceImpl implements HODService{
 
 
     @Override
-    public void appointProgramCoordinator(Faculty newPc) throws DuplicateKeyException{
+    public void appointProgramCoordinator(Faculty newPc){
         ProgramCoordinator ifExists = null;
         try {
             Department dept = newPc.getDept();
             System.out.println("Dept to be added :"+dept.getDeptId());
             ifExists = this.pcDao.findPcByDeptId(dept).orElseThrow(() -> new ResourceNotFoundException("Program Coordinator", "dept", "dept_id"));
-            System.out.println("if exists "+ifExists);
-            throw new DuplicateKeyException("Program coordinator already exists");
+//            System.out.println("if exists "+ifExists);
+            deleteProgramCoordinator(ifExists.getProgramCoordinatorId());
+            ProgramCoordinator pcToAdd=new ProgramCoordinator(newPc.getFacultyId(), newPc.getFacultyName(), newPc.getPassword(), newPc.getEmailId(), newPc.getDept());
+            pcDao.save(pcToAdd);
+//            throw new DuplicateKeyException("Program coordinator already exists");
         }
         catch (ResourceNotFoundException e){
             System.out.println("in catch ");
@@ -106,6 +109,11 @@ public class HODServiceImpl implements HODService{
         return facultyDao.findByFacultyId(id);
     }
 
+    @Override
+    public void deleteProgramCoordinator(String pcId) {
+        ProgramCoordinator pcToDelete=pcDao.getById(pcId);
+        pcDao.delete(pcToDelete);
+    }
 
 
     public HOD DtoToHOD(HODDto dto){
