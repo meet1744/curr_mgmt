@@ -41,6 +41,7 @@ const customStyles = {
 const AppointPC = () => {
     let token;
     let dept;
+    const [title,setTitle]=useState();
     const navigate = useNavigate();
     const [programCoordinator, setProgramCoordinator] = useState([]);
     const [faculties, setFaculties] = useState([]);
@@ -63,9 +64,11 @@ const AppointPC = () => {
             axios.post(`${baseurl}/HOD/checkpc`, dept, { headers: { "Authorization": token } })
                 .then((res) => {
                     setProgramCoordinator(res.data);
+                    setTitle("Delete")
                 })
                 .catch((err) => {
                     console.log(err);
+                    setTitle("Appoint")
                 })
         } catch (err) { }
     }, []);
@@ -89,7 +92,6 @@ const AppointPC = () => {
     }
 
     const appointPCform = (e) => {
-        e.preventDefault();
         dept = getUserData().hodDto.dept;
         token = "Bearer " + getUserData().token;
         const facultyid = (programCoordinator.facultyId !== undefined) ? programCoordinator.facultyId : programCoordinator.programCoordinatorId;
@@ -144,7 +146,7 @@ const AppointPC = () => {
                             },
                         })}
                     />
-                    <button type="submit" className="SubmitButton coolBeans margint">Appoint new PC?</button>
+                    <button type="submit" className="SubmitButton coolBeans margint">{title}</button>
                 </form>
             </div>
         </>

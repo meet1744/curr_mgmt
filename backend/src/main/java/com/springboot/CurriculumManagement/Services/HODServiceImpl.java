@@ -88,16 +88,22 @@ public class HODServiceImpl implements HODService{
             Department dept = newPc.getDept();
             System.out.println("Dept to be added :"+dept.getDeptId());
             ifExists = this.pcDao.findPcByDeptId(dept).orElseThrow(() -> new ResourceNotFoundException("Program Coordinator", "dept", "dept_id"));
-//            System.out.println("if exists "+ifExists);
             deleteProgramCoordinator(ifExists.getProgramCoordinatorId());
-            ProgramCoordinator pcToAdd=new ProgramCoordinator(newPc.getFacultyId(), newPc.getFacultyName(), newPc.getPassword(), newPc.getEmailId(), newPc.getDept());
+            ProgramCoordinator pcToAdd=new ProgramCoordinator();
+            pcToAdd.setDept(newPc.getDept());
+            pcToAdd.setProgramCoordinatorId(newPc.getFacultyId());
+            pcToAdd.setEmailId(newPc.getEmailId());
+            pcToAdd.setProgramCoordinatorName(newPc.getFacultyName());
+            pcToAdd.setPassword(newPc.getPassword());
             pcDao.save(pcToAdd);
-//            throw new DuplicateKeyException("Program coordinator already exists");
         }
         catch (ResourceNotFoundException e){
             System.out.println("in catch ");
             ProgramCoordinator pcToAdd=new ProgramCoordinator(newPc.getFacultyId(), newPc.getFacultyName(), newPc.getPassword(), newPc.getEmailId(), newPc.getDept());
             pcDao.save(pcToAdd);
+        }
+        catch (Exception e){
+            System.out.println(e);
         }
 
     }
