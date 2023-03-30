@@ -52,7 +52,7 @@ function HomePage() {
     };
     const handleForm = (e) => {
         console.log(selectedYear, selectedBranch);
-        axios.get(`${baseurl}/Pdf/createpdf`)
+        axios.get(`${baseurl}/Pdf/createpdf`,{ responseType: 'arraybuffer' })
             .then((res) => {
 
                 // var data = new Blob([res.data], { type: 'application/pdf' });
@@ -63,7 +63,7 @@ function HomePage() {
                 // tempLink.setAttribute('download', 'filename.pdf');
                 // tempLink.click();
                 console.log(res.data);
-                const url = window.URL.createObjectURL(new Blob([res.data]));
+                const url = window.URL.createObjectURL(new Blob([res.data]), { type: 'application/pdf' });
                 const link = document.createElement('a');
                 link.href = url;
                 link.setAttribute('download', 'filename.pdf'); //or any other extension
@@ -123,10 +123,9 @@ function HomePage() {
 
     return (
         <>
-            <div className="title">Student's Page</div>
-            <ToastContainer />
             <div className="container">
                 <form onSubmit={handleForm} >
+                    <ToastContainer />
                     <h3 className="label">Admission Year:</h3>
                     <Select options={yearOptions} placeholder='Select Year' styles={customStyles}
                         onChange={(e) => { handleYearChange(e.target.value); }}

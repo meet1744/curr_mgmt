@@ -25,13 +25,13 @@ public class PdfController {
 
     @GetMapping("/createpdf")
     public ResponseEntity<InputStreamResource> createPdf() {
-
+        //get entered branch name left for printing in pdf and pass in the createpdf method
         ByteArrayInputStream pdf = pdfService.createPdf();
-//
+
         HttpHeaders headers = new HttpHeaders();
 
 
-        
+
 
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline;file=filename.pdf");
         System.out.println("Just before return");
