@@ -9,9 +9,11 @@ import com.springboot.CurriculumManagement.Services.HODService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,12 +30,19 @@ public class HODController {
     @Autowired
     private FacultyRepository facultyRepository;
 
+    @GetMapping("/isHOD")
+    public ResponseEntity<String> checkHOD() {
+        return new ResponseEntity<String>("HOD", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_HOD')")
     @PostMapping("/getallsubjects")
     public List<Subjects> getAllSubjects(@RequestBody Department dept){
 
         return this.hodService.getAllSubjects(dept);
     }
 
+    @PreAuthorize("hasRole('ROLE_HOD')")
     @PostMapping("/addnewfaculty")
     public ResponseEntity<HttpStatus> addNewFaculty(@RequestBody Faculty newFaculty){
         try {
@@ -46,12 +55,15 @@ public class HODController {
         }
 
     }
+
+    @PreAuthorize("hasRole('ROLE_HOD')")
     @PostMapping("/getallfaculty")
     public List<Faculty> getAllFaculty(@RequestBody Department dept){
 
         return this.hodService.getAllFaculty(dept);
     }
 
+    @PreAuthorize("hasRole('ROLE_HOD')")
     @DeleteMapping("/deletefaculty/{facultyId}")
     public ResponseEntity<HttpStatus> deleteFaculty(@PathVariable String facultyId){
         try {
@@ -65,6 +77,7 @@ public class HODController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_HOD')")
     @GetMapping("/getfacultybyid/{facultyid}")
     public Faculty getFacultyById(@PathVariable(value = "facultyid") String id) {
 //        Optional<Faculty> faculty = hodService.getFacultyById(id);
@@ -72,27 +85,20 @@ public class HODController {
         Faculty faculty=this.facultyRepository.findByFacultyId(id).orElseThrow(()->new ResourceNotFoundException("Faculty","id",id));
         return faculty;
     }
-@GetMapping("/appointpc/{newPcId}")
-public ResponseEntity<HttpStatus> appointProgramCoordinator(@PathVariable String newPcId){
 
-    try {
-        Faculty newPc=getFacultyById(newPcId);
-        this.hodService.appointProgramCoordinator(newPc);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PreAuthorize("hasRole('ROLE_HOD')")
+    @GetMapping("/appointpc/{newPcId}")
+    public ResponseEntity<HttpStatus> appointProgramCoordinator(@PathVariable String newPcId){
+
+        try {
+            Faculty newPc=getFacultyById(newPcId);
+            this.hodService.appointProgramCoordinator(newPc);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            System.out.println("in catch controller");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
-    catch (Exception e){
-        System.out.println("in catch controller");
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-
-    //returns error if already exists using custom http status code
-}
-
-
-
-
-
-
-
 }

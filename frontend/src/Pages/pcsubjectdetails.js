@@ -7,8 +7,10 @@ import { Worker } from '@react-pdf-viewer/core';
 import axios from 'axios';
 import baseurl from "../Components/baseurl";
 import { getUserData } from "../Auth";
-import "./pcsubjectdetailsStyles.css";
+import "./subjectdetailsStyles.css";
 import OnHoverScrollContainer from "./../Components/CustomeScroll";
+import { fetchPCAuth } from './../Components/Verify';
+import { useNavigate } from 'react-router-dom';
 
 const customStyles = {
   valueContainer: (base) => ({
@@ -41,8 +43,10 @@ const customStyles = {
 
 
 const PCSubjectdetails = () => {
-  let token = "Bearer " + getUserData().token;
-  let dept = getUserData().pcDto.dept;
+  const navigate = useNavigate();
+
+  let dept;
+  let token;
 
   const [pcSubject, setPCSubject] = useState(JSON.parse(localStorage.getItem('pcsubject')) || []);
 
@@ -55,32 +59,37 @@ const PCSubjectdetails = () => {
 
 
   useEffect(() => {
-    axios.post(`${baseurl}/PC/getallfaculty`, dept, { headers: { "Authorization": token } })
-      .then((res) => {
-        setFaculties(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      fetchPCAuth(navigate)
+      dept = getUserData().pcDto.dept;
+      token = "Bearer " + getUserData().token;
+      axios.post(`${baseurl}/PC/getallfaculty`, dept, { headers: { "Authorization": token } })
+        .then((res) => {
+          setFaculties(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-    axios.get(`${baseurl}/PC/getremainingsubsequence/${pcSubject.semester}`, { headers: { "Authorization": token } }, pcSubject.semester)
-      .then((res) => {
-        const arr = res.data;
-        arr.push(pcSubject.subSequence);
-        arr.sort((a, b) => a - b);
-        setSeq(arr);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      axios.get(`${baseurl}/PC/getremainingsubsequence/${pcSubject.semester}`, { headers: { "Authorization": token } }, pcSubject.semester)
+        .then((res) => {
+          const arr = res.data;
+          arr.push(pcSubject.subSequence);
+          arr.sort((a, b) => a - b);
+          setSeq(arr);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-    axios.get(`${baseurl}/PC/getalldept`, { headers: { "Authorization": token } })
-      .then((res) => {
-        setAllDept(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+      axios.get(`${baseurl}/PC/getalldept`, { headers: { "Authorization": token } })
+        .then((res) => {
+          setAllDept(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    } catch (err) { }
   }, []);
 
 
@@ -133,105 +142,168 @@ const PCSubjectdetails = () => {
 
   return (
     <div>
+      <div className="title">Subject Details</div>
       <ToastContainer />
       <div className="subjectdetailcontainer">
-        <form onSubmit={updatesubjectform} >
-          <h3 className="label margint gap3">Subject Name:</h3>
-          <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, subjectName: e.target.value }) }} value={pcSubject.subjectName || ''} />
-          <h3 className="label margint gap3">Semester:</h3>
-          <Select options={semOptions} placeholder='Select semester' styles={customStyles}
-            value={defaultsem()}
-            onChange={(e) => { setPCSubject({ ...pcSubject, semester: e.value }) }}
-            theme={(theme) => ({
-              ...theme,
-              colors: {
-                ...theme.colors,
-                primary: 'grey',
-              },
-            })}
-          />
-          <h3 className="label margint gap3">subSequence:</h3>
-          <Select options={subSequenceOptions} placeholder='Select sequence' styles={customStyles}
-            value={defaultseq()}
-            onChange={(e) => { setPCSubject({ ...pcSubject, subSequence: e.value }) }}
-            theme={(theme) => ({
-              ...theme,
-              colors: {
-                ...theme.colors,
-                primary: 'grey',
-              },
-            })}
-          />
-          <h3 className="label margint">AICTEcode:</h3>
-          <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, aictecode: e.target.value }) }} value={pcSubject.aictecode || ''} />
-          <h3 className="label margint">effectiveDate:</h3>
-          <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, effectiveDate: e.target.value }) }} value={pcSubject.effectiveDate || ''} />
-          <h3 className="label margint">removedDate:</h3>
-          <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, removedDate: e.target.value }) }} value={pcSubject.removedDate || ''} />
-          <h3 className="label margint">subjectType:</h3>
-          <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, subjectType: e.target.value }) }} value={pcSubject.subjectType || ''} />
-          <h3 className="label margint">subjectTypeExplanation:</h3>
-          <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, subjectTypeExplanation: e.target.value }) }} value={pcSubject.subjectTypeExplanation || ''} />
-          <h3 className="label margint">theoryMarks:</h3>
-          <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, theoryMarks: e.target.value }) }} value={pcSubject.theoryMarks || ''} />
-          <h3 className="label margint">sessionalMarks:</h3>
-          <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, sessionalMarks: e.target.value }) }} value={pcSubject.sessionalMarks || ''} />
-          <h3 className="label margint">termworkMarks:</h3>
-          <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, termworkMarks: e.target.value }) }} value={pcSubject.termworkMarks || ''} />
-          <h3 className="label margint">practicalMarks:</h3>
-          <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, practicalMarks: e.target.value }) }} value={pcSubject.practicalMarks || ''} />
-          <h3 className="label margint">totalMarks:</h3>
-          <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, totalMarks: e.target.value }) }} value={pcSubject.totalMarks || ''} />
-          <h3 className="label margint">LectureHours:</h3>
-          <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, lectureHours: e.target.value }) }} value={pcSubject.lectureHours || ''} />
-          <h3 className="label margint">tutorial:</h3>
-          <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, tutorial: e.target.value }) }} value={pcSubject.tutorial || ''} />
-          <h3 className="label margint">PracticalHours:</h3>
-          <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, practicalHours: e.target.value }) }} value={pcSubject.practicalHours || ''} />
-          <h3 className="label margint">totalHours:</h3>
-          <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, totalHours: e.target.value }) }} value={pcSubject.totalHours || ''} />
-          <h3 className="label margint">lectureAndTheoryCredit:</h3>
-          <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, lectureAndTheoryCredit: e.target.value }) }} value={pcSubject.lectureAndTheoryCredit || ''} />
-          <h3 className="label margint">practicalCredit:</h3>
-          <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, practicalCredit: e.target.value }) }} value={pcSubject.practicalCredit || ''} />
-          <h3 className="label margint">totalCredit:</h3>
-          <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, totalCredit: e.target.value }) }} value={pcSubject.totalCredit || ''} />
-          <h3 className="label margint">parentDept:</h3>
-          <Select options={deptOptions} placeholder='select parent dept' styles={customStyles}
-            value={defaultdept()}
-            onChange={(e) => { setPCSubject({ ...pcSubject, parentDept: e.value }) }}
-            theme={(theme) => ({
-              ...theme,
-              colors: {
-                ...theme.colors,
-                primary: 'grey',
-              },
-            })}
-          />
-          <h3 className="label margint">extraInfo:</h3>
-          <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, extraInfo: e.target.value }) }} value={pcSubject.extraInfo || ''} />
-          <h3 className="label margint">Faculties:</h3>
-          <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
-            onChange={handleFacultyChange}
-            isMulti
-            theme={(theme) => ({
-              ...theme,
-              colors: {
-                ...theme.colors,
-                primary: 'grey',
-              },
-            })}
-          />
-          <button type="submit" className="SubmitButton coolBeans margint">Update</button>
-        </form>
+        <OnHoverScrollContainer>
+          <form onSubmit={updatesubjectform} >
+            <div className='inline'>
+              <div className='block1'>
+                <h3 className="label margint gap3">Subject Name:</h3>
+                <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, subjectName: e.target.value }) }} value={pcSubject.subjectName || ''} />
+              </div>
+              <div className='block1'>
+                <h3 className="label margint gap3">Semester:</h3>
+                <Select options={semOptions} placeholder='Select semester' styles={customStyles}
+                  value={defaultsem()}
+                  onChange={(e) => { setPCSubject({ ...pcSubject, semester: e.value }) }}
+                  theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      primary: 'grey',
+                    },
+                  })}
+                />
+              </div>
+              <div className='block1'>
+                <h3 className="label margint gap3">subSequence:</h3>
+                <Select options={subSequenceOptions} placeholder='Select sequence' styles={customStyles}
+                  value={defaultseq()}
+                  onChange={(e) => { setPCSubject({ ...pcSubject, subSequence: e.value }) }}
+                  theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      primary: 'grey',
+                    },
+                  })}
+                />
+              </div>
+            </div>
+            <div className='inline'>
+              <div className='block1'>
+                <h3 className="label margint">AICTEcode:</h3>
+                <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, aictecode: e.target.value }) }} value={pcSubject.aictecode || ''} />
+              </div>
+              <div className='block1'>
+                <h3 className="label margint">effectiveDate:</h3>
+                <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, effectiveDate: e.target.value }) }} value={pcSubject.effectiveDate || ''} />
+              </div>
+              <div className='block1'>
+                <h3 className="label margint">removedDate:</h3>
+                <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, removedDate: e.target.value }) }} value={pcSubject.removedDate || ''} />
+              </div>
+            </div>
+            <div className='inline'>
+              <div className='block2'>
+                <h3 className="label margint">subjectType:</h3>
+                <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, subjectType: e.target.value }) }} value={pcSubject.subjectType || ''} />
+              </div>
+              <div className='block2'>
+                <h3 className="label margint">subjectTypeExplanation:</h3>
+                <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, subjectTypeExplanation: e.target.value }) }} value={pcSubject.subjectTypeExplanation || ''} />
+              </div>
+            </div>
+            <div className='inline'>
+              <div className='block3'>
+                <h3 className="label margint">theoryMarks:</h3>
+                <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, theoryMarks: e.target.value }) }} value={pcSubject.theoryMarks || ''} />
+              </div>
+              <div className='block3'>
+                <h3 className="label margint">sessionalMarks:</h3>
+                <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, sessionalMarks: e.target.value }) }} value={pcSubject.sessionalMarks || ''} />
+              </div>
+              <div className='block3'>
+                <h3 className="label margint">termworkMarks:</h3>
+                <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, termworkMarks: e.target.value }) }} value={pcSubject.termworkMarks || ''} />
+              </div>
+              <div className='block3'>
+                <h3 className="label margint">practicalMarks:</h3>
+                <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, practicalMarks: e.target.value }) }} value={pcSubject.practicalMarks || ''} />
+              </div>
+              <div className='block3'>
+                <h3 className="label margint">totalMarks:</h3>
+                <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, totalMarks: e.target.value }) }} value={pcSubject.totalMarks || ''} />
+              </div>
+            </div>
+            <div className='inline'>
+              <div className='block4'>
+                <h3 className="label margint">LectureHours:</h3>
+                <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, lectureHours: e.target.value }) }} value={pcSubject.lectureHours || ''} />
+              </div>
+              <div className='block4'>
+                <h3 className="label margint">tutorial:</h3>
+                <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, tutorial: e.target.value }) }} value={pcSubject.tutorial || ''} />
+              </div>
+              <div className='block4'>
+                <h3 className="label margint">PracticalHours:</h3>
+                <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, practicalHours: e.target.value }) }} value={pcSubject.practicalHours || ''} />
+              </div>
+              <div className='block4'>
+                <h3 className="label margint">totalHours:</h3>
+                <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, totalHours: e.target.value }) }} value={pcSubject.totalHours || ''} />
+              </div>
+            </div>
+            <div className='inline'>
+              <div className='block1'>
+                <h3 className="label margint">lectureAndTheoryCredit:</h3>
+                <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, lectureAndTheoryCredit: e.target.value }) }} value={pcSubject.lectureAndTheoryCredit || ''} />
+              </div>
+              <div className='block1'>
+                <h3 className="label margint">practicalCredit:</h3>
+                <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, practicalCredit: e.target.value }) }} value={pcSubject.practicalCredit || ''} />
+              </div>
+              <div className='block1'>
+                <h3 className="label margint">totalCredit:</h3>
+                <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, totalCredit: e.target.value }) }} value={pcSubject.totalCredit || ''} />
+              </div>
+            </div>
+            <div className='inline'>
+              <div className='block2'>
+                <h3 className="label margint">parentDept:</h3>
+                <Select options={deptOptions} placeholder='select parent dept' styles={customStyles}
+                  value={defaultdept()}
+                  onChange={(e) => { setPCSubject({ ...pcSubject, parentDept: e.value }) }}
+                  theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      primary: 'grey',
+                    },
+                  })}
+                />
+              </div>
+              <div className='block2'>
+                <h3 className="label margint">extraInfo:</h3>
+                <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, extraInfo: e.target.value }) }} value={pcSubject.extraInfo || ''} />
+              </div>
+            </div>
+            <div>
+              <h3 className="label margint">Faculties:</h3>
+              <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
+                onChange={handleFacultyChange}
+                isMulti
+                theme={(theme) => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    primary: 'grey',
+                  },
+                })}
+              />
+            </div>
+            <button type="submit" className="SubmitButton coolBeans margint">Update</button>
+          </form>
 
-        <h4>View PDF</h4>
-        <div className='pdf-container'>
-          {viewPdf && <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
-            <Viewer fileUrl={viewPdf} plugins={[defaultLayoutPluginInstance]} />
-          </Worker>}
-          {!viewPdf && <>No pdf file uploaded</>}
-        </div>
+          <h4>View PDF</h4>
+          <div className='pdf-container'>
+            {viewPdf && <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
+              <Viewer fileUrl={viewPdf} plugins={[defaultLayoutPluginInstance]} />
+            </Worker>}
+            {!viewPdf && <>No pdf file uploaded</>}
+          </div>
+        </OnHoverScrollContainer>
       </div>
     </div >
   )

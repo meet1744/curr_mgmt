@@ -6,6 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import { useEffect, useState } from "react";
 import baseurl from "../Components/baseurl";
+import { fetchPCAuth } from './../Components/Verify';
+import { useNavigate } from 'react-router-dom';
 
 const customStyles = {
   valueContainer: (base) => ({
@@ -37,10 +39,19 @@ const customStyles = {
 };
 
 const Addsubject = () => {
-  let token = "Bearer " + getUserData().token;
+  let token;
 
-  let dept = getUserData().pcDto.dept;
+  let dept;
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    try {
+      fetchPCAuth(navigate)
+      dept = getUserData().pcDto.dept;
+      token = "Bearer " + getUserData().token;
+    } catch (err) { }
+  }, [])
 
 
   const [subject, setSubject] = useState({ dept: dept, dduCode: "", subjectName: "", facultyList: "", subSequence: "" });
@@ -160,6 +171,7 @@ const Addsubject = () => {
 
   return (
     <>
+      <div className="title">Add Subject</div>
       <ToastContainer />
       <div className='cont-3'>
         <form onSubmit={addsubjectform} >

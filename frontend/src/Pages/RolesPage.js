@@ -13,6 +13,7 @@ function RolesPage() {
     
     return (
         <>
+            <div className="title">Select Role</div>
             <div className="rolescontainer">
                 <form onSubmit={selectRole}>
                     <Link to="/login"><input type="submit" className="roleButton" value="HOD" onClick={() => selectRole("hod")} /></Link>

@@ -6,6 +6,8 @@ import axios from "axios";
 import { getUserData } from "../Auth";
 import baseurl from "../Components/baseurl";
 import { ToastContainer, toast } from 'react-toastify';
+import { fetchPCAuth } from './../Components/Verify';
+import { useNavigate } from 'react-router-dom';
 
 
 const customStyles = {
@@ -38,14 +40,10 @@ const customStyles = {
 };
 
 const Deletesubject = () => {
+  const navigate = useNavigate();
 
-
-  let token = "Bearer " + getUserData().token;
-  let dept = getUserData().pcDto.dept;
-  console.log(dept);
-
-
-
+  let dept;
+  let token;
   const [subject, setSubject] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const subjectsOption = subjects.map((s) => ({
@@ -61,13 +59,18 @@ const Deletesubject = () => {
 
 
   useEffect(() => {
-    axios.post(`${baseurl}/PC/getallsubjects`, dept, { headers: { Authorization: token } })
-      .then((res) => {
-        setSubjects(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      fetchPCAuth(navigate)
+      dept = getUserData().pcDto.dept;
+      token = "Bearer " + getUserData().token;
+      axios.post(`${baseurl}/PC/getallsubjects`, dept, { headers: { Authorization: token } })
+        .then((res) => {
+          setSubjects(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) { }
   }, []);
   const deletesubjecthandle = (option) => {
     setSubject(option);
@@ -112,6 +115,7 @@ const Deletesubject = () => {
   }
   return (
     <div>
+      <div className="title">Delete Subject</div>
       <ToastContainer />
 
       <div className="container">

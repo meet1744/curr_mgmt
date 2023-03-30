@@ -6,6 +6,8 @@ import "./deletefacultyStyles.css";
 import { getUserData } from "../Auth";
 import baseurl from "../Components/baseurl";
 import { ToastContainer, toast } from 'react-toastify';
+import { fetchHODAuth } from './../Components/Verify';
+import { useNavigate } from 'react-router-dom';
 
 
 const customStyles = {
@@ -38,9 +40,10 @@ const customStyles = {
 };
 
 const Deletefaculty = () => {
-    let token = "Bearer " + getUserData().token;
-    let dept = getUserData().hodDto.dept;
-    console.log(dept);
+    const navigate = useNavigate();
+
+    let dept;
+    let token;
     const [faculty, setFaculty] = useState([]);
     const [faculties, setFaculties] = useState([]);
     const facultiesOption = faculties.map((f) => ({
@@ -48,13 +51,18 @@ const Deletefaculty = () => {
         value: `${f.facultyId} - ${f.facultyName}`
     }));
     useEffect(() => {
-        axios.post(`${baseurl}/HOD/getallfaculty`, dept,{ headers: { Authorization: token } })
-            .then((res) => {
-                setFaculties(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        try {
+            fetchHODAuth(navigate)
+            dept = getUserData().hodDto.dept;
+            token = "Bearer " + getUserData().token;
+            axios.post(`${baseurl}/HOD/getallfaculty`, dept, { headers: { Authorization: token } })
+                .then((res) => {
+                    setFaculties(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } catch (err) { }
     }, []);
     const deletefacultyhandle = (option) => {
         setFaculty(option);
@@ -98,6 +106,7 @@ const Deletefaculty = () => {
     }
     return (
         <>
+            <div className="title">Delete Faculty</div>
             <ToastContainer />
             <div className="container">
                 <form onSubmit={deletefacultyform} >

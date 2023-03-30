@@ -1,12 +1,13 @@
 import React, { useMemo, useEffect, useState } from 'react'
 import { useTable } from 'react-table'
 import { SubjectColumns } from '../Components/SubjectColumns'
-import MOCK_DATA from '../Components/MOCK_DATA.json'
 import './SubjectsStyles.css'
 import axios from 'axios';
 import baseurl from "../Components/baseurl";
 import { getUserData } from "../Auth";
 import OnHoverScrollContainer from "./../Components/CustomeScroll";
+import { useNavigate } from "react-router-dom";
+import { fetchFacultyAuth,fetchHODAuth,fetchPCAuth } from './../Components/Verify';
 
 const Subjects = () => {
   let token = "Bearer " + getUserData().token;
@@ -27,6 +28,7 @@ const Subjects = () => {
 
   const columns = useMemo(() => SubjectColumns, [subjects])
   const data = useMemo(() => subjects, [subjects])
+  const navigate = useNavigate();
 
   const tableInstance = useTable({
     columns,
@@ -37,6 +39,9 @@ const Subjects = () => {
 
 
   useEffect(() => {
+    if(getUserData()===undefined){
+      navigate("/roles");
+    }
     axios.post(`${baseurl}/${urlrole}/getallsubjects`, dept, { headers: { "Authorization": token } })
       .then((res) => {
         console.log("inside axios", res.data)
@@ -52,6 +57,7 @@ const Subjects = () => {
 
   return (
     <>
+      <div className="title">View Subjects</div>
       <div className='subjectscont'>
           <table {...getTableProps()}>
             <thead>

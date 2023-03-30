@@ -123,9 +123,10 @@ function HomePage() {
 
     return (
         <>
+            <div className="title">Student's Page</div>
+            <ToastContainer />
             <div className="container">
                 <form onSubmit={handleForm} >
-                    <ToastContainer />
                     <h3 className="label">Admission Year:</h3>
                     <Select options={yearOptions} placeholder='Select Year' styles={customStyles}
                         onChange={(e) => { handleYearChange(e.target.value); }}

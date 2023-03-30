@@ -7,6 +7,7 @@ import com.springboot.CurriculumManagement.Services.PCService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,13 @@ public class PCController {
 
     @Autowired
     private PCService pcService;
+
+    @GetMapping("/isPC")
+    public ResponseEntity<String> checkPC() {
+        return new ResponseEntity<String>("PC", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PC')")
     @PostMapping("/addnewsubject")
     public ResponseEntity<HttpStatus> addNewSubject(@RequestBody Subjects newSubject){
         try{
@@ -31,11 +39,13 @@ public class PCController {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_PC')")
     @PostMapping("/getallfaculty")
     public List<Faculty> getAllFaculty(@RequestBody Department deptId){
         return this.pcService.getAllFaculty(deptId);
     }
 
+    @PreAuthorize("hasRole('ROLE_PC')")
     @GetMapping("/getremainingsubsequence/{semesterSelected}")
     public List<Integer> getremainingsubsequence(@PathVariable String semesterSelected){
 
@@ -43,13 +53,14 @@ public class PCController {
         return this.pcService.getRemainingSubSequence(semesterSelected);
     }
 
-
+    @PreAuthorize("hasRole('ROLE_PC')")
     @PostMapping("/getallsubjects")
     public List<Subjects> getAllSubjects(@RequestBody Department dept){
 
         return this.pcService.getAllSubjects(dept);
     }
 
+    @PreAuthorize("hasRole('ROLE_PC')")
     @DeleteMapping("/deletesubject/{dduCode}")
     public ResponseEntity<HttpStatus> deleteSubject(@PathVariable String dduCode){
         try {
@@ -62,6 +73,7 @@ public class PCController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_PC')")
     @GetMapping("/getalldept")
     public List<Department> getAllDepartments(){
 

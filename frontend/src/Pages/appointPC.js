@@ -2,10 +2,11 @@ import React from 'react'
 import Select from 'react-select';
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./appointPCStyles.css";
 import baseurl from "../Components/baseurl";
 import { getUserData } from "../Auth";
 import { ToastContainer, toast } from 'react-toastify';
+import { fetchHODAuth } from './../Components/Verify';
+import { useNavigate } from 'react-router-dom';
 
 
 const customStyles = {
@@ -38,8 +39,9 @@ const customStyles = {
 };
 
 const AppointPC = () => {
-    let token = "Bearer " + getUserData().token;
-    let dept=getUserData().hodDto.dept;
+    let token;
+    let dept;
+    const navigate = useNavigate();
     const [programCoordinator, setProgramCoordinator] = useState([]);
     const [faculties, setFaculties] = useState([]);
     let programcoordinatorsOption = faculties.map((f) => ({
@@ -47,13 +49,18 @@ const AppointPC = () => {
         value: `${f.facultyId} - ${f.facultyName}`
     }));
     useEffect(() => {
-        axios.post(`${baseurl}/HOD/getallfaculty`,dept, { headers: { Authorization: token } })
-            .then((res) => {
-                setFaculties(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        try {
+            fetchHODAuth(navigate)
+            dept = getUserData().hodDto.dept;
+            token = "Bearer " + getUserData().token;
+            axios.post(`${baseurl}/HOD/getallfaculty`, dept, { headers: { Authorization: token } })
+                .then((res) => {
+                    setFaculties(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } catch (err) { }
     }, []);
 
     const appointPChandle = (option) => {
@@ -67,7 +74,7 @@ const AppointPC = () => {
         // const pc = searchFacultyById(programCoordinator.split("-")[0].trim());
         const facultyid = programCoordinator.split("-")[0].trim();
         // console.log(pc);
-        const addpcresponse = axios.get(`${baseurl}/HOD/appointpc/${facultyid}`,  { headers: { "Authorization": token } },facultyid);
+        const addpcresponse = axios.get(`${baseurl}/HOD/appointpc/${facultyid}`, { headers: { "Authorization": token } }, facultyid);
         toast.promise(
             addpcresponse,
             {
@@ -102,6 +109,7 @@ const AppointPC = () => {
 
     return (
         <>
+            <div className="title">Appoint Program Coordinator</div>
             <ToastContainer />
             <div className='container'>
                 <form onSubmit={appointPCform} >

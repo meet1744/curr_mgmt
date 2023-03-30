@@ -1,5 +1,5 @@
 .cont-3 {
-    width: 40%;
+    width: 50%;
     max-height: 60%;
     background-color: #222;
     color: white;
@@ -19,4 +19,19 @@
 .block{
     display: inline-block;
     width: 45%;
+}
+
+.title{
+    position: absolute;
+    align-self: center;
+    font-size: 2rem;
+    top: 110px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+@media screen and (max-width: 850px){
+    .cont-3{
+        width: 80%;
+    }
 }

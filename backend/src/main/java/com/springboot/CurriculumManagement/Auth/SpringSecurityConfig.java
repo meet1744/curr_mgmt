@@ -25,6 +25,7 @@ import java.util.Map;
 
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true)
 public class SpringSecurityConfig{
 
 

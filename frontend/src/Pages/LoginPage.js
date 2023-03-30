@@ -77,13 +77,14 @@ function LoginPage() {
 
     return (
         <>
+            <div className="title">Login</div>
             <ToastContainer />
             <div className="container">
                 <form onSubmit={loginForm} >
                     <h3 className="label">ID:</h3>
                     <input type="text" onChange={(e) => { setLogin({ ...login, id: e.target.value }) }} value={login.id} />
                     <h3 className="label">Password:</h3>
-                    <input type="password" onChange={(e) => { setLogin({ ...login, password: e.target.value }) }} value={login.password} />
+                    <input type="password" onChange={(e) => { setLogin({ ...login, password: e.target.value }) }} value={login.password} /><br/>
                     <input type="submit" className="SubmitButton coolBeans login" value="Login"></input>
                 </form>
             </div>

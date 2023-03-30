@@ -7,6 +7,7 @@ import { getUserData } from "../Auth";
 import baseurl from "../Components/baseurl";
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import { fetchFacultyAuth } from './../Components/Verify';
 
 const customStyles = {
     valueContainer: (base) => ({
@@ -39,26 +40,31 @@ const customStyles = {
 
 const UpdateMySubject = () => {
 
-    let token = "Bearer " + getUserData().token;
-    let dept = getUserData().facultyDto.dept;
-
     const navigate = useNavigate();
 
+    let dept;
+    let token;
+
     const [subjects, setSubjects] = useState([]);
-    const [facultySubject,setFacultySubject] = useState({});
+    const [facultySubject, setFacultySubject] = useState({});
     const subjectsOption = subjects.map((s) => ({
         label: `${s.dduCode} - ${s.subjectName} , sem - ${s.semester}`,
         value: `${s.dduCode} - ${s.subjectName} , sem - ${s.semester}`
     }));
 
     useEffect(() => {
-        axios.post(`${baseurl}/Faculty/getallsubjects`, dept,{ headers: { "Authorization": token } })
-            .then((res) => {
-                setSubjects(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        try {
+            fetchFacultyAuth(navigate)
+            dept = getUserData().facultyDto.dept;
+            token = "Bearer " + getUserData().token;
+            axios.post(`${baseurl}/Faculty/getallsubjects`, dept, { headers: { "Authorization": token } })
+                .then((res) => {
+                    setSubjects(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } catch (err) { }
     }, []);
 
     const searchsubjectById = (subjectid) => {
@@ -78,6 +84,7 @@ const UpdateMySubject = () => {
 
     return (
         <div>
+            <div className="title">Update Subject</div>
             <ToastContainer />
             <div className="container">
                 <form onSubmit={updatesubjectform} >

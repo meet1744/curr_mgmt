@@ -13,6 +13,15 @@
     overflow: auto;
 }
 
+.title{
+    position: absolute;
+    align-self: center;
+    font-size: 2rem;
+    top: 110px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
 
 table {
     font-family: Arial, Helvetica, sans-serif;
@@ -42,4 +51,10 @@ table th {
     text-align: center;
     background-color: rgb(190, 190, 190);
     color: #222;
+}
+
+@media screen and (max-width: 850px){
+    .subjectscont{
+        width: 80%;
+    }
 }

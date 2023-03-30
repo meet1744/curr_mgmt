@@ -7,6 +7,7 @@ import { getUserData } from "../Auth";
 import baseurl from "../Components/baseurl";
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import { fetchPCAuth } from './../Components/Verify';
 
 const customStyles = {
     valueContainer: (base) => ({
@@ -38,26 +39,31 @@ const customStyles = {
 };
 
 const Updatesubject = () => {
-    let token = "Bearer " + getUserData().token;
-    let dept = getUserData().pcDto.dept;
-
     const navigate = useNavigate();
 
+    let dept;
+    let token;
+
     const [subjects, setSubjects] = useState([]);
-    const [pcSubject,setPCSubject] = useState({});
+    const [pcSubject, setPCSubject] = useState({});
     const subjectsOption = subjects.map((s) => ({
         label: `${s.dduCode} - ${s.subjectName} , sem - ${s.semester}`,
         value: `${s.dduCode} - ${s.subjectName} , sem - ${s.semester}`
     }));
 
     useEffect(() => {
-        axios.post(`${baseurl}/PC/getallsubjects`, dept, { headers: { "Authorization": token } })
-            .then((res) => {
-                setSubjects(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        try {
+            fetchPCAuth(navigate)
+            dept = getUserData().pcDto.dept;
+            token = "Bearer " + getUserData().token;
+            axios.post(`${baseurl}/PC/getallsubjects`, dept, { headers: { "Authorization": token } })
+                .then((res) => {
+                    setSubjects(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } catch (err) { }
     }, []);
 
     const searchsubjectById = (subjectid) => {
@@ -71,13 +77,14 @@ const Updatesubject = () => {
     }
 
     const updatesubjectform = (e) => {
-        
+
         e.preventDefault();
         navigate(`/PC/PCSubjectDetails`);
     }
 
     return (
         <div>
+            <div className="title">Update Subject</div>
             <ToastContainer />
             <div className="container">
                 <form onSubmit={updatesubjectform} >

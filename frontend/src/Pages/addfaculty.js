@@ -1,21 +1,30 @@
 import "./addfacultyStyles.css";
 import { getUserData } from "../Auth";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import baseurl from "../Components/baseurl";
+import { fetchHODAuth } from './../Components/Verify';
+import { useNavigate } from 'react-router-dom';
 
 export default function Addfaculty() {
-    let dept = getUserData().hodDto.dept;
-    let token = "Bearer " + getUserData().token;
+    const navigate = useNavigate();
+
+    let dept;
+    let token;
+
+    useEffect(() => {
+        try {
+            fetchHODAuth(navigate)
+            dept = getUserData().hodDto.dept;
+            token = "Bearer " + getUserData().token;
+        } catch (err) { }
+    }, [])
 
     const [faculty, setFaculty] = useState({ dept: dept, facultyId: "", facultyName: "", emailId: "", password: "" });
 
     const addfacultyform = (e) => {
         e.preventDefault();
-        console.log(token);
-        console.log(faculty);
-
         const addfacultyresponse = axios.post(`${baseurl}/HOD/addnewfaculty`, faculty, { headers: { "Authorization": token } });
 
         toast.promise(
@@ -54,6 +63,7 @@ export default function Addfaculty() {
 
     return (
         <>
+            <div className="title">Add Faculty</div>
             <ToastContainer />
             <div className="cont-1">
                 <form onSubmit={addfacultyform} id="addFacultyForm">
