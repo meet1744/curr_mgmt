@@ -2,9 +2,11 @@ package com.springboot.CurriculumManagement.Controller;
 
 import com.springboot.CurriculumManagement.Entities.Department;
 import com.springboot.CurriculumManagement.Entities.Faculty;
+import com.springboot.CurriculumManagement.Entities.ProgramCoordinator;
 import com.springboot.CurriculumManagement.Entities.Subjects;
 import com.springboot.CurriculumManagement.Exceptions.ResourceNotFoundException;
 import com.springboot.CurriculumManagement.Repository.FacultyRepository;
+import com.springboot.CurriculumManagement.Repository.PCRepository;
 import com.springboot.CurriculumManagement.Services.HODService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,10 @@ public class HODController {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private FacultyRepository facultyRepository;
+    private FacultyRepository facultyDao;
+
+    @Autowired
+    private PCRepository pcDao;
 
     @PostMapping("/getallsubjects")
     public List<Subjects> getAllSubjects(@RequestBody Department dept){
@@ -65,11 +70,24 @@ public class HODController {
     }
 
 
+    @DeleteMapping("/deletepc/{pcId}")
+    public ResponseEntity<HttpStatus> deleteProgramCoordinator(@PathVariable String pcId){
+        try {
+            System.out.println("delete");
+            this.hodService.deleteProgramCoordinator(pcId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @GetMapping("/getfacultybyid/{facultyid}")
     public Faculty getFacultyById(@PathVariable(value = "facultyid") String id) {
 //        Optional<Faculty> faculty = hodService.getFacultyById(id);
 //        return faculty;
-        Faculty faculty=this.facultyRepository.findByFacultyId(id).orElseThrow(()->new ResourceNotFoundException("Faculty","id",id));
+        Faculty faculty=this.facultyDao.findByFacultyId(id).orElseThrow(()->new ResourceNotFoundException("Faculty","id",id));
         return faculty;
     }
 @GetMapping("/appointpc/{newPcId}")
@@ -87,6 +105,12 @@ public ResponseEntity<HttpStatus> appointProgramCoordinator(@PathVariable String
 
 
     //returns error if already exists using custom http status code
+}
+
+@PostMapping("/checkpc")
+    public ProgramCoordinator checkPc(@RequestBody Department dept){
+        ProgramCoordinator programCoordinator=this.pcDao.findPcByDeptId(dept).orElseThrow(()->new ResourceNotFoundException("Pc of ","dept-id",dept.getDeptId()));
+        return programCoordinator;
 }
 
 

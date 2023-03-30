@@ -10,6 +10,8 @@ import com.springboot.CurriculumManagement.Repository.FacultyRepository;
 import com.springboot.CurriculumManagement.Repository.SubjectsRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,6 +55,20 @@ public class FacultyServiceImpl implements FacultyService{
     @Override
     public List<Department> getAllDept() {
         return departmentDao.findAll();
+    }
+
+    @Override
+    public ResponseEntity<HttpStatus> saveSubjectDetails(Subjects subjectDetails) {
+        try {
+            subjectsDao.save(subjectDetails);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     public FacultyDto FacultyToDto(Faculty faculty) {

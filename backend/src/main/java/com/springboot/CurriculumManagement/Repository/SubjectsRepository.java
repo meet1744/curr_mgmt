@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 
+@Repository
 public interface SubjectsRepository extends JpaRepository<Subjects,String> {
 
 //    Optional<Subjects> findBySubjectsId(String id);

@@ -31,8 +31,9 @@ public class Subjects {
     private String subjectName;
 
     //optional
-    @Column
-    private String parentDept;
+    @ManyToOne
+    @JoinColumn(name = "parentdept")
+    private Department parentDept;
     @Column
     private String extraInfo;
     @Column
@@ -56,14 +57,6 @@ public class Subjects {
     @Column
     private int tutorial;
 
-    public Department getDept() {
-        return dept;
-    }
-
-    public void setDept(Department dept) {
-        this.dept = dept;
-    }
-
     @Column
     private int PracticalHours;
     @Column
@@ -81,6 +74,16 @@ public class Subjects {
 
    @ManyToMany(mappedBy = "subjectsList", cascade = { CascadeType.ALL })
     private List<Faculty> facultyList;
+
+
+
+    public Department getDept() {
+        return dept;
+    }
+
+    public void setDept(Department dept) {
+        this.dept = dept;
+    }
 
     public Subjects() {
         super();
@@ -142,11 +145,11 @@ public class Subjects {
         this.subjectName = subjectName;
     }
 
-    public String getParentDept() {
+    public Department getParentDept() {
         return parentDept;
     }
 
-    public void setParentDept(String parentDept) {
+    public void setParentDept(Department parentDept) {
         this.parentDept = parentDept;
     }
 

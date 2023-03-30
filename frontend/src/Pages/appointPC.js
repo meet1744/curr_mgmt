@@ -39,35 +39,53 @@ const customStyles = {
 
 const AppointPC = () => {
     let token = "Bearer " + getUserData().token;
-    let dept=getUserData().hodDto.dept;
+    let dept = getUserData().hodDto.dept;
     const [programCoordinator, setProgramCoordinator] = useState([]);
     const [faculties, setFaculties] = useState([]);
     let programcoordinatorsOption = faculties.map((f) => ({
         label: `${f.facultyId} - ${f.facultyName}`,
-        value: `${f.facultyId} - ${f.facultyName}`
+        value: f
     }));
     useEffect(() => {
-        axios.post(`${baseurl}/HOD/getallfaculty`,dept, { headers: { Authorization: token } })
+        axios.post(`${baseurl}/HOD/getallfaculty`, dept, { headers: { "Authorization": token } })
             .then((res) => {
                 setFaculties(res.data);
             })
             .catch((err) => {
                 console.log(err);
             });
+
+        axios.post(`${baseurl}/HOD/checkpc`, dept, { headers: { "Authorization": token } })
+            .then((res) => {
+                setProgramCoordinator(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }, []);
+
+    useEffect(() => {
+        programcoordinatorsOption = faculties.map((f) => ({
+            label: `${f.facultyId} - ${f.facultyName}`,
+            value: f
+        }));
+    }, [faculties])
+
+    const defaultpc = () => {
+        // console.log(programCoordinator.programCoordinatorId)
+        // console.log(programcoordinatorsOption[0].value)
+        // console.log(programcoordinatorsOption.findIndex(option=>option.value.facultyId===(programCoordinator.programCoordinatorId)))
+        return programcoordinatorsOption[programcoordinatorsOption.findIndex(option=>option.value.facultyId===(programCoordinator.programCoordinatorId))]
+    }
 
     const appointPChandle = (option) => {
         setProgramCoordinator(option);
     }
-    // const searchFacultyById = (facultyId) => {
-    //     return faculties.find((faculty) => faculty.facultyId === facultyId);
-    // };
+
     const appointPCform = (e) => {
         e.preventDefault();
-        // const pc = searchFacultyById(programCoordinator.split("-")[0].trim());
-        const facultyid = programCoordinator.split("-")[0].trim();
-        // console.log(pc);
-        const addpcresponse = axios.get(`${baseurl}/HOD/appointpc/${facultyid}`,  { headers: { "Authorization": token } },facultyid);
+        const facultyid = (programCoordinator.facultyId!==undefined)?programCoordinator.facultyId:programCoordinator.programCoordinatorId;
+        const addpcresponse = axios.get(`${baseurl}/HOD/appointpc/${facultyid}`, { headers: { "Authorization": token } }, facultyid);
         toast.promise(
             addpcresponse,
             {
@@ -107,6 +125,7 @@ const AppointPC = () => {
                 <form onSubmit={appointPCform} >
                     <h3 className="label margint">Faculty:</h3>
                     <Select options={programcoordinatorsOption} placeholder='Select program coordinator to appoint' styles={customStyles}
+                        value={defaultpc()}
                         onChange={(e) => { appointPChandle(e.value); }}
                         theme={(theme) => ({
                             ...theme,
@@ -116,7 +135,7 @@ const AppointPC = () => {
                             },
                         })}
                     />
-                    <button type="submit" className="SubmitButton coolBeans margint">Appoint</button>
+                    <button type="submit" className="SubmitButton coolBeans margint">Appoint new PC?</button>
                 </form>
             </div>
         </>

@@ -32,6 +32,9 @@ public class Department {
     @OneToMany(mappedBy = "dept")
     private List<Subjects> subjectsList;
 
+    @OneToMany(mappedBy = "parentDept")
+    private List<Subjects> subjectsListForParentDept;
+
     public String getDeptId() {
         return deptId;
     }
