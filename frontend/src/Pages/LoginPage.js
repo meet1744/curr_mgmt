@@ -50,7 +50,7 @@ function LoginPage() {
                         console.log(data);
                         if (data.response.status === 400 || data.response.status === 404)
                             return data.response.data.status;
-                        return `Something went wrong!!`
+                        return data.response.data.message
                     },
                     icon: "💥",
                 }

@@ -27,6 +27,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -57,40 +58,65 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
-    public ResponseEntity<JWTAuthResponse> getToken(@RequestBody JWTAuthRequest request) {
-        System.out.println(request.getId()+"     "+request.getPassword());
-        String token;
-        JWTAuthResponse response;
-        if("hod".equals(request.getRole())){
-            HOD hod=new HOD();
-            this.authenticate(request.getId(),request.getPassword(),hod.getAuthorities());
-            hod=this.hodUserDetailsService.loadUserByUsername(request.getId());
+    public ResponseEntity<JWTAuthResponse> getToken(@RequestBody JWTAuthRequest request) throws BadCredentialsException{
+        try {
+
+
+            System.out.println(request.getId() + "     " + request.getPassword());
+            String token;
+            JWTAuthResponse response;
+            if ("hod".equals(request.getRole())) {
+                HOD hod = new HOD();
+                this.authenticate(request.getId(), request.getPassword(), hod.getAuthorities());
+                hod = this.hodUserDetailsService.loadUserByUsername(request.getId());
+                System.out.println("Req pass: " + request.getPassword());
+                System.out.println("Db pass:" + hod.getPassword());
+
+                if (!request.getPassword().equals(hod.getPassword())) {
+                    throw new BadCredentialsException("Incorrect Password");
+                }
 //            System.out.println("This is hod dept of auth controller:"+hod.getDept());
-            token=this.jwtTokenHelper.generateToken(hod);
-            response=new JWTAuthResponse();
-            response.setToken(token);
-            response.setHodDto(hodService.HODToDto(hod));
+                token = this.jwtTokenHelper.generateToken(hod);
+                response = new JWTAuthResponse();
+                response.setToken(token);
+                response.setHodDto(hodService.HODToDto(hod));
+            } else if ("faculty".equals(request.getRole())) {
+                Faculty faculty = new Faculty();
+                this.authenticate(request.getId(), request.getPassword(), faculty.getAuthorities());
+                faculty = this.facultyUserDetailService.loadUserByUsername(request.getId());
+                System.out.println("Req pass: " + request.getPassword());
+                System.out.println("Db pass:" + faculty.getPassword());
+                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+                if (!encoder.matches(request.getPassword(), faculty.getPassword())) {
+                    throw new BadCredentialsException("Incorrect Password");
+                }
+                token = this.jwtTokenHelper.generateToken(faculty);
+                response = new JWTAuthResponse();
+                response.setToken(token);
+                response.setFacultyDto(facultyService.FacultyToDto(faculty));
+            } else {
+                ProgramCoordinator programCoordinator = new ProgramCoordinator();
+                this.authenticate(request.getId(), request.getPassword(), programCoordinator.getAuthorities());
+                programCoordinator = this.pcUserDetailService.loadUserByUsername(request.getId());
+                System.out.println("Req pass: " + request.getPassword());
+                System.out.println("Db pass:" + programCoordinator.getPassword());
+                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+                if (!encoder.matches(request.getPassword(), programCoordinator.getPassword())) {
+                    throw new BadCredentialsException("Incorrect Password");
+                }
+                token = this.jwtTokenHelper.generateToken(programCoordinator);
+                response = new JWTAuthResponse();
+                response.setToken(token);
+                response.setPcDto(pcService.PcToDto(programCoordinator));
+            }
+            System.out.println("Hello");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (BadCredentialsException e){
+            System.out.println("Invalid password in catch");
+            throw new RuntimeException("Incorrect Password");
         }
-        else if("faculty".equals(request.getRole())){
-            Faculty faculty=new Faculty();
-            this.authenticate(request.getId(),request.getPassword(),faculty.getAuthorities());
-            faculty=this.facultyUserDetailService.loadUserByUsername(request.getId());
-            token=this.jwtTokenHelper.generateToken(faculty);
-            response=new JWTAuthResponse();
-            response.setToken(token);
-            response.setFacultyDto(facultyService.FacultyToDto(faculty));
-        }
-        else{
-            ProgramCoordinator programCoordinator=new ProgramCoordinator();
-            this.authenticate(request.getId(),request.getPassword(),programCoordinator.getAuthorities());
-            programCoordinator=this.pcUserDetailService.loadUserByUsername(request.getId());
-            token=this.jwtTokenHelper.generateToken(programCoordinator);
-            response=new JWTAuthResponse();
-            response.setToken(token);
-            response.setPcDto(pcService.PcToDto(programCoordinator));
-        }
-        System.out.println("Hello");
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     private void authenticate(String id, String pass, Collection<? extends GrantedAuthority> authorities) {
