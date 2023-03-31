@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import baseurl from "../Components/baseurl";
 import { fetchPCAuth } from './../Components/Verify';
 import { useNavigate } from 'react-router-dom';
+import OnHoverScrollContainer from "./../Components/CustomeScroll";
 
 const customStyles = {
   valueContainer: (base) => ({
@@ -50,7 +51,7 @@ const Addsubject = () => {
       fetchPCAuth(navigate)
       dept = getUserData().pcDto.dept;
       token = "Bearer " + getUserData().token;
-      setSubject({...subject,dept:dept});
+      setSubject({ ...subject, dept: dept });
     } catch (err) { }
   }, [])
 
@@ -180,58 +181,60 @@ const Addsubject = () => {
     <>
       <div className="title">Add Subject</div>
       <ToastContainer />
-      <div className='cont-3'>
-        <form onSubmit={addsubjectform} >
-          <h3 className="label">DDU ID:</h3>
-          <input type="text" onChange={(e) => { setSubject({ ...subject, dduCode: e.target.value }) }} value={subject.id} />
-          <h3 className="label">Subject Name:</h3>
-          <input type="text" onChange={(e) => { setSubject({ ...subject, subjectName: e.target.value }) }} value={subject.name} />
-          <h3 className="label">Faculties:</h3>
-          <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
-            onChange={handleFacultyChange}
-            isMulti
-            maxMenuHeight={150}
-            theme={(theme) => ({
-              ...theme,
-              colors: {
-                ...theme.colors,
-                primary: 'grey',
-              },
-            })}
-          />
-          <div className='block'>
-            <h3 className="label">Sem:</h3>
-            <Select options={semOptions} placeholder='Select sem' styles={customStyles}
-              onChange={handlesemchange}
-              menuPlacement='top'
-              theme={(theme) => ({
-                ...theme,
-                colors: {
-                  ...theme.colors,
-                  primary: 'grey',
-                },
-              })}
-            />
-          </div>
-          <div className='block'>
-            <h3 className="label">Sequence:</h3>
-            <Select options={seqOptions} noOptionsMessage={customNoOptionsMessage} placeholder='Select sequence' styles={customStyles}
-              onChange={(e) => { setSubject({ ...subject, subSequence: e.value }) }}
-              menuPlacement='top'
-              theme={(theme) => ({
-                ...theme,
-                colors: {
-                  ...theme.colors,
-                  primary: 'grey',
-                },
-              })}
-            />
-          </div>
-          <input type="submit" className="SubmitButton coolBeans" value="Add Subject" />
-        </form>
-      </div>
-    </>
-  );
+        <div className='cont-3'>
+          <OnHoverScrollContainer>
+            <form onSubmit={addsubjectform} >
+              <h3 className="label">DDU ID:</h3>
+              <input type="text" onChange={(e) => { setSubject({ ...subject, dduCode: e.target.value }) }} value={subject.id} />
+              <h3 className="label">Subject Name:</h3>
+              <input type="text" onChange={(e) => { setSubject({ ...subject, subjectName: e.target.value }) }} value={subject.name} />
+              <h3 className="label">Faculties:</h3>
+              <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
+                onChange={handleFacultyChange}
+                isMulti
+                maxMenuHeight={150}
+                theme={(theme) => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    primary: 'grey',
+                  },
+                })}
+              />
+              <div className='block'>
+                <h3 className="label">Sem:</h3>
+                <Select options={semOptions} placeholder='Select sem' styles={customStyles}
+                  onChange={handlesemchange}
+                  menuPlacement='top'
+                  theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      primary: 'grey',
+                    },
+                  })}
+                />
+              </div>
+              <div className='block'>
+                <h3 className="label">Sequence:</h3>
+                <Select options={seqOptions} noOptionsMessage={customNoOptionsMessage} placeholder='Select sequence' styles={customStyles}
+                  onChange={(e) => { setSubject({ ...subject, subSequence: e.value }) }}
+                  menuPlacement='top'
+                  theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      primary: 'grey',
+                    },
+                  })}
+                />
+              </div>
+              <input type="submit" className="SubmitButton coolBeans" value="Add Subject" />
+            </form>
+          </OnHoverScrollContainer>
+        </div>
+      </>
+      );
 }
 
-export default Addsubject;
+      export default Addsubject;

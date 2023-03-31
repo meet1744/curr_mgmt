@@ -7,7 +7,7 @@ import baseurl from "../Components/baseurl";
 import { getUserData } from "../Auth";
 import OnHoverScrollContainer from "./../Components/CustomeScroll";
 import { useNavigate } from "react-router-dom";
-import { fetchFacultyAuth,fetchHODAuth,fetchPCAuth } from './../Components/Verify';
+import { fetchFacultyAuth, fetchHODAuth, fetchPCAuth } from './../Components/Verify';
 
 const Subjects = () => {
   let token = "Bearer " + getUserData().token;
@@ -57,7 +57,9 @@ const Subjects = () => {
   return (
     <>
       <div className="title">View Subjects</div>
+
       <div className='subjectscont'>
+        <OnHoverScrollContainer>
           <table {...getTableProps()}>
             <thead>
               {
@@ -89,7 +91,7 @@ const Subjects = () => {
               }
             </tbody>
           </table>
-
+        </OnHoverScrollContainer>
       </div>
     </>
   )
