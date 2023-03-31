@@ -63,7 +63,7 @@ const FacultySubjectdetails = () => {
     const [pdfFileError, setPdfFileError] = useState('');
     const [viewPdf, setViewPdf] = useState(null);
     const [pdfRequest, setPdfRequest] = useState({ pdfFile: null, dduCode: null });
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedPDFFile, setSelectedPDFFile] = useState(null);
 
 
     useEffect(() => {
@@ -116,59 +116,9 @@ const FacultySubjectdetails = () => {
     }));
 
 
-    const fileType = ['application/pdf'];
-
-    // const handlePdfFileChange = (event) => {
-    //     const file = event.target.files[0];
-    //     const reader = new FileReader();
-    //     reader.onload = async (event) => {
-    //       const data = new Uint8Array(event.target.result);
-    //       const pdfDoc = pdfjsLib.getDocument({ data });
-    //       const numPages = pdfDoc.numPages;
-    //       let base64String = '';
-    //       for (let i = 1; i <= numPages; i++) {
-    //         const page = await pdfDoc.getPage(i);
-    //         const content = await page.getTextContent();
-    //         base64String += btoa(content.items.map(item => item.str).join(''));
-    //       }
-    //       setSelectedFile(base64String);
-    //     };
-    //     reader.readAsArrayBuffer(file);
-    //     setPdfFile(file);
-    //   };
-
     const handlePdfFileChange = (e) => {
-        let selectedFile = e.target.files[0];
-        if (selectedFile) {
-            if (selectedFile && fileType.includes(selectedFile.type)) {
-                let reader = new FileReader();
-                reader.readAsArrayBuffer(selectedFile);
-                reader.onloadend = (e) => {
-                    const pdfBlob = new Blob([reader.result], { type: 'application/pdf' });
-                    setPdfFile(pdfBlob);
-                    setPdfFileError('');
-                    // setPdfFile(e.target.result)
-                    // setPdfFileError('');
-                }
-            }
-            else {
-                setPdfFile(null);
-                setPdfFileError('Please select valid pdf file');
-            }
-        }
-        else {
-            console.log('select your file');
-        }
+        setPdfFile(e.target.files[0]);
     }
-
-    // const handlePdfFileChange = (e) => {
-    //     setPdfFile(e.target.files[0]);
-    //   };
-
-    // const handlePdfInSubject=()=>{
-    //     setFacultySubject({ ...facultySubject, subjectFile: pdfFile });
-    // }
-
 
     const handlePdfFileView = () => {
         if (pdfFile !== null) {
@@ -191,43 +141,18 @@ const FacultySubjectdetails = () => {
         return deptOptions[deptOptions.findIndex(option => option.value === facultySubject.dept)];
     }
 
-    const formData = new FormData();
-    useEffect(() => {
-        // setPdfRequest({...pdfRequest,pdfFile:pdfFile})
-        formData.append('pdfFile', pdfFile);
-    }, [pdfFile])
-
-    useEffect(() => {
-        // setPdfRequest({...pdfRequest,dduCode:facultySubject})
-        formData.append('dduCode', facultySubject);
-    }, [facultySubject])
-
     const updatesubjectform = async (e) => {
         e.preventDefault();
-        // const obj={pdfFile,facultySubject};
-
-
-        // console.log(facultySubject)
         console.log(pdfFile)
-        // console.log(JSON.stringify(facultySubject));
-        // console.log("DDu code is")
-        // console.log(facultySubject.dduCode)
-        // const formData=new FormData();
-        // formData.append('pdfFile',pdfFile);
-        // formData.append('dduCode',facultySubject);
-        // console.log("",formData.get('pdfFile'));
-
 
         const formData = new FormData();
-        formData.append("file", selectedFile);
-
-        // Append custom object as JSON data
+        formData.append("file", pdfFile);
         formData.append('dduCode', JSON.stringify(facultySubject.dduCode));
 
-        dept = getUserData().hodDto.dept;
+        dept = getUserData().facultyDto.dept;
         token = "Bearer " + getUserData().token;
 
-        const uploadres = await axios.post(`${baseurl}/Faculty/uploadsubjectfile`, formData, { headers: { "Content-Type": "multipart/form-data", "Authorization": token } });
+        const uploadres = axios.post(`${baseurl}/Faculty/uploadsubjectfile`, formData, { headers: { "Content-Type": "multipart/form-data", "Authorization": token } });
 
         toast.promise(
             uploadres,
@@ -268,7 +193,7 @@ const FacultySubjectdetails = () => {
             <ToastContainer />
             <div className="subjectdetailcontainer">
                 <OnHoverScrollContainer>
-                    <form onSubmit={updatesubjectform} >
+                    <form onSubmit={updatesubjectform} encType='multipart/form-data'>
                         <div className='inline'>
                             <div className='block1'>
                                 <h3 className="label margint gap3">Subject Name:</h3>

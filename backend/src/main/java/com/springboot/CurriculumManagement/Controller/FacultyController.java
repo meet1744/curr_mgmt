@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -83,48 +84,15 @@ public class FacultyController {
         return null;
     }
 
-
-
-//    public Response uploadFile(@RequestParam("file") MultipartFile file) {
-//@PostMapping("/uploadsubjectfile")
-//        public ResponseEntity<?> uploadFile(@RequestPart("pdfFile") MultipartFile pdfFile, @RequestPart("dduCode")Subjects subjectCode) throws JsonProcessingException {
-//        try {
-//            System.out.println("hello");
-//            ObjectMapper objectMapper = new ObjectMapper();
-////            Subjects dduCode = objectMapper.readValue(subjectCode, Subjects.class);
-////            SubjectFile fileSaved =
-//            subjectFileService.storeFile(pdfFile, subjectCode);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//
-////        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-////                .path("/downloadFile/")
-////                .path(fileName.getSubjectFileName())
-////                .toUriString();
-//
-////        return new Response(fileName.getSubjectFileName(), fileDownloadUri,
-////                file.getContentType(), file.getSize());
-//    }
-
     @PostMapping("uploadsubjectfile")
-    public ResponseEntity<String> uploadPdf(@RequestParam("file")MultipartFile file,@RequestParam("dduCode") String dduCode){
-    try {
-
-
-
-        byte[] content= file.getBytes();
-        System.out.println("hello");
-        SubjectFile subjectFile=new SubjectFile();
-        subjectFile.setSubjectFileData(content);
-        subjectFile.setSubjectDduCode(dduCode);
-        subjectFileDao.save(subjectFile);
-        return new ResponseEntity<>("PDF uploaded successfully", HttpStatus.OK);
-    } catch (IOException e) {
-        return new ResponseEntity<>("Error uploading PDF: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file,@RequestParam("dduCode") String dduCode){
+        try {
+            SubjectFile subjectFile = new SubjectFile(file.getBytes(),dduCode);
+            subjectFileDao.save(subjectFile);
+            return new ResponseEntity<>("PDF uploaded successfully", HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Error uploading PDF: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

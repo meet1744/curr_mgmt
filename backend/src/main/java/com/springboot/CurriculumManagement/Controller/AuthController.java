@@ -71,8 +71,9 @@ public class AuthController {
                 hod = this.hodUserDetailsService.loadUserByUsername(request.getId());
                 System.out.println("Req pass: " + request.getPassword());
                 System.out.println("Db pass:" + hod.getPassword());
+                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-                if (!request.getPassword().equals(hod.getPassword())) {
+                if (!encoder.matches(request.getPassword(), hod.getPassword())) {
                     throw new BadCredentialsException("Incorrect Password");
                 }
 //            System.out.println("This is hod dept of auth controller:"+hod.getDept());
