@@ -42,7 +42,7 @@ const customStyles = {
 const Deletesubject = () => {
   const navigate = useNavigate();
 
-  let dept;
+  let dept=getUserData().pcDto.dept;
   let token;
   const [subject, setSubject] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -77,11 +77,12 @@ const Deletesubject = () => {
   }
   const deletefacultyform = (e) => {
     e.preventDefault();
-    dept = getUserData().hodDto.dept;
+    dept = getUserData().pcDto.dept;
     token = "Bearer " + getUserData().token;
     const dduCode = subject.split("-")[0].trim();
-    console.log(dduCode);
-    console.log(token);
+    console.log("hello")
+    console.log(dduCode)
+    // console.log(token);
     const deletesubjectresponse = axios.delete(`${baseurl}/PC/deletesubject/${dduCode}`, { headers: { "Authorization": token } }, dduCode);
     toast.promise(
       deletesubjectresponse,

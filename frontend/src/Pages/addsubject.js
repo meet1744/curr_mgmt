@@ -41,7 +41,7 @@ const customStyles = {
 const Addsubject = () => {
   let token;
 
-  let dept;
+  let dept=getUserData().pcDto.dept;
 
   const navigate = useNavigate();
 
@@ -95,12 +95,14 @@ const Addsubject = () => {
     const numbers = selectedFaculties.map((faculty) => faculty.label.split(" ")[0]);
     const f = numbers.map((number) => { return searchFacultyById(number) });
     setSubject({ ...subject, facultyList: f })
+    // setSubject({...subject,dept:dept});
   }, [selectedFaculties]);
 
   useEffect(() => {
     if (selectedsem.label) {
       setSubject({ ...subject, semester: selectedsem.label });
     }
+    // setSubject({...subject,dept:dept});
   }, [selectedsem]);
 
 
@@ -116,6 +118,7 @@ const Addsubject = () => {
     setSelectedsem(selectedOptions);
     const semester = selectedOptions ? selectedOptions.label : '';
     setSubject({ ...subject, semester: semester });
+    setSubject({...subject,dept:dept});
     console.log(subject);
     axios.get(`${baseurl}/PC/getremainingsubsequence/${semester}`, { headers: { "Authorization": token } }, semester)
       .then((res) => {
@@ -136,6 +139,7 @@ const Addsubject = () => {
     console.log(subject);
     dept = getUserData().pcDto.dept;
     token = "Bearer " + getUserData().token;
+    setSubject({...subject,dept:dept});
     const addsubjectresponse = axios.post(`${baseurl}/PC/addnewsubject`, subject, { headers: { "Authorization": token } });
     toast.promise(
       addsubjectresponse,
