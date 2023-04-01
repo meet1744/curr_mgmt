@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.relational.core.sql.In;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -98,6 +100,20 @@ public class PCServiceImpl implements PCService{
     public void deleteSubject(String dduCode) {
         Subjects subjectToDelete=subjectsDao.getById(dduCode);
         subjectsDao.delete(subjectToDelete);
+    }
+
+    @Override
+    public ResponseEntity<HttpStatus> saveSubjectDetails(Subjects subjectDetails) {
+        try {
+            subjectsDao.save(subjectDetails);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     public PCDto PcToDto(ProgramCoordinator pc){

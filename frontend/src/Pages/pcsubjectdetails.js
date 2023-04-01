@@ -8,6 +8,8 @@ import axios from 'axios';
 import baseurl from "../Components/baseurl";
 import { getUserData } from "../Auth";
 import "./subjectdetailsStyles.css";
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import OnHoverScrollContainer from "./../Components/CustomeScroll";
 import { fetchPCAuth } from './../Components/Verify';
 import { useNavigate } from 'react-router-dom';
@@ -54,8 +56,9 @@ const PCSubjectdetails = () => {
   const [seq, setSeq] = useState([]);
   const [alldept, setAllDept] = useState([]);
   const [faculties, setFaculties] = useState([]);
-  const [selectedFaculties, setSelectedFaculties] = useState([]);
   const [viewPdf, setViewPdf] = useState(null);
+  const [selectedPDFFile, setSelectedPDFFile] = useState(null);
+  const [pdfFileError, setPdfFileError] = useState('');
 
 
   useEffect(() => {
@@ -92,8 +95,6 @@ const PCSubjectdetails = () => {
     } catch (err) { }
   }, []);
 
-
-
   const semOptions = [
     { value: "1", label: "1" },
     { value: "2", label: "2" },
@@ -114,7 +115,7 @@ const PCSubjectdetails = () => {
   }));
   const facultyOptions = faculties.map((f) => ({
     label: `${f.facultyId} - ${f.facultyName}`,
-    value: `${f.facultyId} - ${f.facultyName}`
+    value: f
   }));
 
   const defaultsem = () => {
@@ -125,12 +126,16 @@ const PCSubjectdetails = () => {
     return subSequenceOptions[subSequenceOptions.findIndex(option => option.value === JSON.stringify(pcSubject.subSequence))]
   }
 
+  const defaultfaculty = () => {
+    return facultyOptions[facultyOptions.findIndex(option => option.value.facultyId === pcSubject.facultyId)]
+  }
+
   const defaultdept = () => {
     return deptOptions[deptOptions.findIndex(option => option.value === pcSubject.dept)];
   }
 
-  const handleFacultyChange = (selectedOptions) => {
-    setSelectedFaculties(selectedOptions);
+  const handleFacultyChange = (selectedOption) => {
+    setPCSubject({ ...pcSubject, facultyId: selectedOption.value.facultyId });
   };
 
 
@@ -139,6 +144,37 @@ const PCSubjectdetails = () => {
     console.log(pcSubject)
     dept = getUserData().pcDto.dept;
     token = "Bearer " + getUserData().token;
+    const updateres = axios.post(`${baseurl}/PC/savesubjectdetails`, pcSubject, { headers: { "Authorization": token } });
+    toast.promise(
+      updateres,
+      {
+        pending: {
+          render() {
+            return "Please Wait!!"
+          },
+          icon: "✋",
+        },
+        success: {
+          render() {
+            return `Subject Details stored Successfully!!`
+          },
+          icon: "🚀",
+        },
+        error: {
+          render({ data }) {
+            console.log(data);
+            if (data.response.status === 400 || data.response.status === 404 || data.response.status === 401)
+              return data.response.data.status;
+            return 'Internal server error!!';
+          },
+          icon: "💥",
+        }
+      },
+      {
+        className: 'dark-toast',
+        position: toast.POSITION.BOTTOM_RIGHT,
+      }
+    );
   }
 
 
@@ -261,31 +297,14 @@ const PCSubjectdetails = () => {
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, totalCredit: e.target.value }) }} value={pcSubject.totalCredit || ''} />
               </div>
             </div>
-            {/* <div className='inline'> */}
-            {/* <div className='block2'>
-                <h3 className="label margint">parentDept:</h3>
-                <Select options={deptOptions} placeholder='select parent dept' styles={customStyles}
-                  value={defaultdept()}
-                  onChange={(e) => { setPCSubject({ ...pcSubject, parentDept: e.value.label }) }}
-                  theme={(theme) => ({
-                    ...theme,
-                    colors: {
-                      ...theme.colors,
-                      primary: 'grey',
-                    },
-                  })}
-                />
-              </div> */}
             <div>
-
               <h3 className="label margint">extraInfo:</h3>
               <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, extraInfo: e.target.value }) }} value={pcSubject.extraInfo || ''} />
             </div>
-
-            {/* </div> */}
             <div>
-              <h3 className="label margint">Faculties:</h3>
-              <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
+              <h3 className="label margint">Faculty:</h3>
+              <Select options={facultyOptions} placeholder='Select faculty' styles={customStyles}
+                value={defaultfaculty()}
                 onChange={handleFacultyChange}
                 theme={(theme) => ({
                   ...theme,
@@ -298,14 +317,6 @@ const PCSubjectdetails = () => {
             </div>
             <button type="submit" className="SubmitButton coolBeans margint">Update</button>
           </form>
-
-          <h4>View PDF</h4>
-          <div className='pdf-container'>
-            {viewPdf && <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
-              <Viewer fileUrl={viewPdf} plugins={[defaultLayoutPluginInstance]} />
-            </Worker>}
-            {!viewPdf && <>No pdf file uploaded</>}
-          </div>
         </OnHoverScrollContainer>
       </div>
     </div >

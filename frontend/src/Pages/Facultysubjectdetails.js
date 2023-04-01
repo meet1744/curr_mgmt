@@ -57,7 +57,6 @@ const FacultySubjectdetails = () => {
     const [pdfFile, setPdfFile] = useState(null);
     const [pdfFileError, setPdfFileError] = useState('');
     const [viewPdf, setViewPdf] = useState(null);
-    const [pdfRequest, setPdfRequest] = useState({ pdfFile: null, dduCode: null });
     const [selectedPDFFile, setSelectedPDFFile] = useState(null);
 
 
@@ -85,7 +84,7 @@ const FacultySubjectdetails = () => {
                     console.log(err);
                 })
 
-            axios.get(`${baseurl}/Faculty/getPdf/${facultySubject.dduCode}`, { headers: { "Authorization": token } }, facultySubject.dduCode)
+            axios.get(`${baseurl}/Faculty/getPdf/${facultySubject.dduCode}`, { headers: { "Authorization": token },responseType:"arraybuffer" }, facultySubject.dduCode)
                 .then((res) => {
                     setSelectedPDFFile(res.data);
                 })
@@ -122,7 +121,6 @@ const FacultySubjectdetails = () => {
 
     const handlePdfFileChange = (e) => {
         setPdfFile(e.target.files[0]);
-        setSelectedPDFFile(e.target.result);
         if (e.target.files[0]) {
             if (e.target.files[0] && fileType.includes(e.target.files[0].type)) {
                 let reader = new FileReader();
@@ -143,8 +141,15 @@ const FacultySubjectdetails = () => {
     }
 
     const handlePdfFileView = () => {
-        if (selectedPDFFile !== null) {
-            setViewPdf(selectedPDFFile);
+        if (selectedPDFFile) {
+            const blob = new Blob([selectedPDFFile], { type: 'application/pdf' });
+            let reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = (e) => {
+                console.log(e.target.result)
+                setViewPdf(e.target.result);
+                setPdfFileError('');
+            }
         }
         else {
             setViewPdf(null);

@@ -14,8 +14,7 @@ import com.springboot.CurriculumManagement.Services.SubjectFileServiceImpl;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -72,6 +71,7 @@ public class FacultyController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @PostMapping("/savesubjectdetails")
     public ResponseEntity<HttpStatus> saveSubjectDetails(@RequestBody Subjects subjectDetails) {
         try {
@@ -80,9 +80,10 @@ public class FacultyController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @PostMapping("uploadsubjectfile")
     public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file,@RequestParam("dduCode") String dduCode){
         try {
@@ -94,11 +95,15 @@ public class FacultyController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @GetMapping("getPdf/{subjectDduCode}")
     public ResponseEntity<byte[]> getPdf(@PathVariable String subjectDduCode){
-        System.out.println(subjectDduCode);
-        SubjectFile subjectFile = subjectFileDao.getById(subjectDduCode);
-        return new ResponseEntity<>(subjectFile.getSubjectFileData(),HttpStatus.OK);
+        byte[] subjectFile = subjectFileDao.getById("\""+subjectDduCode+"\"").getSubjectFileData();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("inline").build());
+        headers.setContentLength(subjectFile.length);
+        return new ResponseEntity<>(subjectFile, headers, HttpStatus.OK);
     }
 
 }
