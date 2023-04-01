@@ -76,7 +76,7 @@ const Deletesubject = () => {
     setSubject(option);
   }
   const deletefacultyform = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     dept = getUserData().pcDto.dept;
     token = "Bearer " + getUserData().token;
     const dduCode = subject.split("-")[0].trim();

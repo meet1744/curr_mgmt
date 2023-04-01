@@ -51,6 +51,7 @@ public class HODController {
     @PostMapping("/addnewfaculty")
     public ResponseEntity<HttpStatus> addNewFaculty(@RequestBody Faculty newFaculty) {
         try {
+            System.out.println(newFaculty.getPassword());
             newFaculty.setPassword(this.passwordEncoder.encode(newFaculty.getPassword()));
             this.hodService.addNewFaculty(newFaculty);
             return new ResponseEntity<>(HttpStatus.OK);

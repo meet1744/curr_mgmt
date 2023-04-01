@@ -52,7 +52,15 @@ public class PCServiceImpl implements PCService{
         catch (ResourceNotFoundException e){
 
             System.out.println("ddu code "+newSubject.getdduCode());
+//            List<Subjects> subjectsList=new ArrayList<>();
+//            subjectsList.add(newSubject);
+//            Faculty facultyToBeAdded=new Faculty(newSubject.getFaculty().getFacultyId(),newSubject.getFaculty().getFacultyName(),newSubject.getFaculty().getPassword(),newSubject.getFaculty().getEmailId(),newSubject.getFaculty().getDept(),subjectsList);
+////            Faculty faculty=new Faculty()
+//            Subjects subjectToBeAdded=new Subjects();
+//            newSubject.setFaculty(facultyToBeAdded);
+//            subjectToBeAdded.setFaculty(facultyToBeAdded);
             subjectsDao.save(newSubject);
+
         }
 
 

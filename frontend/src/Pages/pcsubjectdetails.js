@@ -137,7 +137,7 @@ const PCSubjectdetails = () => {
   const updatesubjectform = (e) => {
     e.preventDefault();
     console.log(pcSubject)
-    dept = getUserData().hodDto.dept;
+    dept = getUserData().pcDto.dept;
     token = "Bearer " + getUserData().token;
   }
 
@@ -261,8 +261,8 @@ const PCSubjectdetails = () => {
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, totalCredit: e.target.value }) }} value={pcSubject.totalCredit || ''} />
               </div>
             </div>
-            <div className='inline'>
-              <div className='block2'>
+            {/* <div className='inline'> */}
+            {/* <div className='block2'>
                 <h3 className="label margint">parentDept:</h3>
                 <Select options={deptOptions} placeholder='select parent dept' styles={customStyles}
                   value={defaultdept()}
@@ -275,12 +275,14 @@ const PCSubjectdetails = () => {
                     },
                   })}
                 />
-              </div>
-              <div className='block2'>
-                <h3 className="label margint">extraInfo:</h3>
-                <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, extraInfo: e.target.value }) }} value={pcSubject.extraInfo || ''} />
-              </div>
+              </div> */}
+            <div>
+
+              <h3 className="label margint">extraInfo:</h3>
+              <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, extraInfo: e.target.value }) }} value={pcSubject.extraInfo || ''} />
             </div>
+
+            {/* </div> */}
             <div>
               <h3 className="label margint">Faculties:</h3>
               <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}

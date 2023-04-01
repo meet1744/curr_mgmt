@@ -20,7 +20,6 @@ public class Faculty implements UserDetails {
     @Column(nullable = false)
     private String facultyName;
 
-//    @JsonIgnore
     @Column(nullable = false)
     private String password;
 //    @Column(nullable = false)
@@ -35,19 +34,23 @@ public class Faculty implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "deptId",nullable = false)
     private Department dept;
-@ManyToMany(cascade = {
-        CascadeType.ALL
-    })
-    @JoinTable(
-        name = "teaches",
-        joinColumns = {
-            @JoinColumn(name = "faculty_id")
-        },
-        inverseJoinColumns = {
-            @JoinColumn(name = "subject_id")
-        }
-    )
-    private List<Subjects> subjectsList;
+//@ManyToMany(cascade = {
+//        CascadeType.ALL
+//    })
+//    @JoinTable(
+//        name = "teaches",
+//        joinColumns = {
+//            @JoinColumn(name = "faculty_id")
+//        },
+//        inverseJoinColumns = {
+//            @JoinColumn(name = "subject_id")
+//        }
+//    )
+//    private List<Subjects> subjectsList;
+
+//    @OneToMany(mappedBy = "faculty")
+//    private List<Subjects> subjectsList;
+
 
     public Faculty() {
         super();

@@ -59,15 +59,24 @@ const Addsubject = () => {
         .catch((err) => {
           console.log(err);
         });
+
+      axios.get(`${baseurl}/PC/getalldept`, { headers: { "Authorization": token } })
+        .then((res) => {
+          setAllDept(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     } catch (err) { }
-  }, [])
+  }, []);
 
 
-  const [subject, setSubject] = useState({ dduCode: "", subjectName: "", facultyList: "", subSequence: "" });
+  const [subject, setSubject] = useState({ dduCode: "", subjectName: "", facultyId: "", subSequence: "", parentDept:"" });
   const [selectedFaculty, setSelectedFaculty] = useState({});
   const [selectedsem, setSelectedsem] = useState({});
   const [seq, setSeq] = useState([]);
   const [faculties, setFaculties] = useState([]);
+  const [alldept, setAllDept] = useState([]);
 
 
   const facultyOptions = faculties.map((f) => ({
@@ -88,9 +97,13 @@ const Addsubject = () => {
     label: s,
     value: s
   }));
+  const deptOptions = alldept.map((d) => ({
+    value: d,
+    label: `${d.deptName}`
+  }));
 
   useEffect(() => {
-    setSubject({ ...subject, facultyList: selectedFaculty })
+    setSubject({ ...subject, facultyId: selectedFaculty.facultyId })
   }, [selectedFaculty]);
 
   useEffect(() => {
@@ -105,7 +118,9 @@ const Addsubject = () => {
     setSelectedFaculty(selectedOptions.value);
   };
 
-
+  const defaultdept = () => {
+    return deptOptions[deptOptions.findIndex(option => option.value === subject.dept)];
+  }
   const handlesemchange = (selectedOptions) => {
     dept = getUserData().pcDto.dept;
     token = "Bearer " + getUserData().token;
@@ -124,9 +139,9 @@ const Addsubject = () => {
   }
 
 
-  const searchFacultyById = (facultyId) => {
-    return faculties.find((faculty) => faculty.facultyId === facultyId);
-  };
+  // const searchFacultyById = (facultyId) => {
+  //   return faculties.find((faculty) => faculty.facultyId === facultyId);
+  // };
 
 
   const addsubjectform = (e) => {
@@ -154,7 +169,7 @@ const Addsubject = () => {
           render({ data }) {
             console.log(data);
             if (data.response.status === 400 || data.response.status === 404 || data.response.status === 401)
-              return data.response.data.status;
+              return data.response.data.message;
             return `Subject with same DDU code already exists!!`
           },
           icon: "💥",
@@ -201,7 +216,7 @@ const Addsubject = () => {
               <h3 className="label">Sem:</h3>
               <Select options={semOptions} placeholder='Select sem' styles={customStyles}
                 onChange={handlesemchange}
-                menuPlacement='top'
+                // menuPlacement='top'
                 theme={(theme) => ({
                   ...theme,
                   colors: {
@@ -215,7 +230,7 @@ const Addsubject = () => {
               <h3 className="label">Sequence:</h3>
               <Select options={seqOptions} noOptionsMessage={customNoOptionsMessage} placeholder='Select sequence' styles={customStyles}
                 onChange={(e) => { setSubject({ ...subject, subSequence: e.value }) }}
-                menuPlacement='top'
+                // menuPlacement='top'
                 theme={(theme) => ({
                   ...theme,
                   colors: {
@@ -225,6 +240,21 @@ const Addsubject = () => {
                 })}
               />
             </div>
+            {/* <div className='block'> */}
+              <h3 className="label">Parent Department:</h3>
+              <Select options={deptOptions} noOptionsMessage={customNoOptionsMessage} placeholder='Select Parent dept' styles={customStyles}
+                value={defaultdept()}
+                onChange={(e) => { setSubject({ ...subject, parentDept: e.value }) }}
+            
+                theme={(theme) => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    primary: 'grey',
+                  },
+                })}
+              />
+            {/* </div> */}
             <input type="submit" className="SubmitButton coolBeans" value="Add Subject" />
           </form>
         </OnHoverScrollContainer>

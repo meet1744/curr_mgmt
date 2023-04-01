@@ -29,6 +29,7 @@ public class PCController {
     @PostMapping("/addnewsubject")
     public ResponseEntity<HttpStatus> addNewSubject(@RequestBody Subjects newSubject){
         try{
+//            System.out.println("fac"+newSubject.getFaculty());
             this.pcService.addNewSubject(newSubject);
             return new ResponseEntity<>(HttpStatus.OK);
         }
