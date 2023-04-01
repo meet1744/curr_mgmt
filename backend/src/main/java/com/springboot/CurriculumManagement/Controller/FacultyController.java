@@ -3,6 +3,7 @@ package com.springboot.CurriculumManagement.Controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.CurriculumManagement.Entities.Department;
+import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Entities.SubjectFile;
 import com.springboot.CurriculumManagement.Entities.Subjects;
 import com.springboot.CurriculumManagement.Payloads.Response;
@@ -45,17 +46,18 @@ public class FacultyController {
 
     @GetMapping("/isFaculty")
     public ResponseEntity<String> checkFaculty() {
+
         return new ResponseEntity<String>("Faculty", HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_FACULTY')")
+//    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @PostMapping("/getallsubjects")
     public List<Subjects> getAllSubjects(@RequestBody Department dept){
 
         return this.facultyService.getAllSubjects(dept);
     }
 
-    @PreAuthorize("hasRole('ROLE_FACULTY')")
+//    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @GetMapping("/getremainingsubsequence/{semesterSelected}")
     public List<Integer> getremainingsubsequence(@PathVariable String semesterSelected){
 
@@ -63,7 +65,7 @@ public class FacultyController {
         return this.facultyService.getRemainingSubSequence(semesterSelected);
     }
 
-    @PreAuthorize("hasRole('ROLE_FACULTY')")
+//    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @GetMapping("/getalldept")
     public List<Department> getAllDepartments(){
 
@@ -84,9 +86,10 @@ public class FacultyController {
     }
 
     @PreAuthorize("hasRole('ROLE_FACULTY')")
-    @PostMapping("uploadsubjectfile")
+    @PostMapping("/uploadsubjectfile")
     public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file,@RequestParam("dduCode") String dduCode){
         try {
+            System.out.println(dduCode);
             SubjectFile subjectFile = new SubjectFile(file.getBytes(),dduCode);
             subjectFileDao.save(subjectFile);
             return new ResponseEntity<>("PDF uploaded successfully", HttpStatus.OK);
@@ -104,6 +107,13 @@ public class FacultyController {
         headers.setContentDisposition(ContentDisposition.builder("inline").build());
         headers.setContentLength(subjectFile.length);
         return new ResponseEntity<>(subjectFile, headers, HttpStatus.OK);
+    }
+
+//    @PreAuthorize("hasRole('ROLE_FACULTY')")
+    @PostMapping("/getallmysubjects")
+    public List<Subjects> getAllMySubjects(@RequestBody Faculty faculty){
+        System.out.println("in controller");
+        return this.facultyService.getAllMySubjects(faculty);
     }
 
 }

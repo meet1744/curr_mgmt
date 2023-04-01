@@ -96,7 +96,7 @@ export const SubjectColumns = [
         accessor: row => row.dept.deptName
     },
     {
-        Header:'Faculty List',
-        accessor:'facultyList'
+        Header:'Faculty Id',
+        accessor:'facultyId'
     }
 ]

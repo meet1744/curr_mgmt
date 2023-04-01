@@ -13,7 +13,6 @@ public class FacultyDto {
     private String emailId;
     private Department dept;
 
-    private List<Subjects> subjectsList;
 
     public String getFacultyId() {
         return facultyId;
@@ -56,11 +55,5 @@ public class FacultyDto {
         this.dept = dept;
     }
 
-    public List<Subjects> getSubjectsList() {
-        return subjectsList;
-    }
 
-    public void setSubjectsList(List<Subjects> subjectsList) {
-        this.subjectsList = subjectsList;
-    }
 }

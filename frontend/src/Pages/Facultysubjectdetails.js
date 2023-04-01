@@ -178,7 +178,7 @@ const FacultySubjectdetails = () => {
         const formData = new FormData();
         if (pdfFile !== null) {
             formData.append("file", pdfFile);
-            formData.append('dduCode', JSON.stringify(facultySubject.dduCode));
+            formData.append("dduCode",facultySubject.dduCode);
             const uploadres = axios.post(`${baseurl}/Faculty/uploadsubjectfile`, formData, { headers: { "Content-Type": "multipart/form-data", "Authorization": token } });
             toast.promise(
                 uploadres,

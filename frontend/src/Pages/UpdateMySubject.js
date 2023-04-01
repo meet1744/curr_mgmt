@@ -42,8 +42,9 @@ const UpdateMySubject = () => {
 
     const navigate = useNavigate();
 
-    let dept;
+    let dept=getUserData().facultyDto.dept;
     let token;
+    let faculty=getUserData().facultyDto;
 
     const [subjects, setSubjects] = useState([]);
     const [facultySubject, setFacultySubject] = useState({});
@@ -57,7 +58,9 @@ const UpdateMySubject = () => {
             fetchFacultyAuth(navigate)
             dept = getUserData().facultyDto.dept;
             token = "Bearer " + getUserData().token;
-            axios.post(`${baseurl}/Faculty/getallsubjects`, dept, { headers: { "Authorization": token } })
+            console.log(faculty)
+            
+            axios.post(`${baseurl}/Faculty/getallmysubjects`, faculty, { headers: { "Authorization": token } })
                 .then((res) => {
                     setSubjects(res.data);
                 })
