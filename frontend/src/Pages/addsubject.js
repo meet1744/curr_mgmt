@@ -195,7 +195,6 @@ const Addsubject = () => {
               <h3 className="label">Faculties:</h3>
               <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
                 onChange={handleFacultyChange}
-                isMulti
                 maxMenuHeight={150}
                 theme={(theme) => ({
                   ...theme,

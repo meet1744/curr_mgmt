@@ -5,6 +5,7 @@ package com.springboot.CurriculumManagement.Entities;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -14,9 +15,9 @@ public class Subjects {
     @Id
     private String dduCode;
     @Column
-    private String effectiveDate;
+    private Date effectiveDate;
     @Column
-    private String removedDate;
+    private Date removedDate;
     @Column(nullable = false)
     private int semester;
 
@@ -68,20 +69,19 @@ public class Subjects {
     @Column
     private int totalCredit;
 
-    @ManyToOne
-    @JoinColumn(name = "deptId",nullable = false)
-    private Department dept;
+    @Column
+    private String dept;
 
    @ManyToMany(mappedBy = "subjectsList", cascade = { CascadeType.ALL })
     private List<Faculty> facultyList;
 
 
 
-    public Department getDept() {
+    public String getDept() {
         return dept;
     }
 
-    public void setDept(Department dept) {
+    public void setDept(String dept) {
         this.dept = dept;
     }
 
@@ -89,19 +89,19 @@ public class Subjects {
         super();
     }
 
-    public String getEffectiveDate() {
+    public Date getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(String effectiveDate) {
+    public void setEffectiveDate(Date effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
 
-    public String getRemovedDate() {
+    public Date getRemovedDate() {
         return removedDate;
     }
 
-    public void setRemovedDate(String removedDate) {
+    public void setRemovedDate(Date removedDate) {
         this.removedDate = removedDate;
     }
 

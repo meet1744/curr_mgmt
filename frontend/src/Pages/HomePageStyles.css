@@ -23,7 +23,8 @@
 
 input[type="text"],
 input[type="number"],
-input[type="password"] {
+input[type="password"],
+input[type="date"] {
   width: 80%;
   border-color: black;
   border-radius: 2px;

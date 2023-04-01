@@ -13,11 +13,6 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import OnHoverScrollContainer from "./../Components/CustomeScroll";
 import { fetchFacultyAuth } from './../Components/Verify';
 import { useNavigate } from 'react-router-dom';
-// import {pdfjsLib} from 'pdfjs-dist';
-// import { pdfjs } from 'pdfjs-dist';
-// pdfjs.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js';
-
-
 
 const customStyles = {
     valueContainer: (base) => ({
@@ -89,11 +84,19 @@ const FacultySubjectdetails = () => {
                 .catch((err) => {
                     console.log(err);
                 })
+
+            axios.get(`${baseurl}/Faculty/getPdf/${facultySubject.dduCode}`, { headers: { "Authorization": token } }, facultySubject.dduCode)
+                .then((res) => {
+                    setSelectedPDFFile(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
         } catch (err) { }
     }, []);
     useEffect(() => {
         handlePdfFileView();
-    }, [pdfFile]);
+    }, [selectedPDFFile]);
 
 
     const semOptions = [
@@ -112,17 +115,36 @@ const FacultySubjectdetails = () => {
     }));
     const deptOptions = alldept.map((d) => ({
         value: d,
-        label: `${d.deptId} - ${d.deptName}`
+        label: `${d.deptName}`
     }));
 
+    const fileType = ['application/pdf'];
 
     const handlePdfFileChange = (e) => {
         setPdfFile(e.target.files[0]);
+        setSelectedPDFFile(e.target.result);
+        if (e.target.files[0]) {
+            if (e.target.files[0] && fileType.includes(e.target.files[0].type)) {
+                let reader = new FileReader();
+                reader.readAsDataURL(e.target.files[0]);
+                reader.onloadend = (e) => {
+                    setSelectedPDFFile(e.target.result);
+                    setPdfFileError('');
+                }
+            }
+            else {
+                setSelectedPDFFile(null);
+                setPdfFileError('Please select valid pdf file');
+            }
+        }
+        else {
+            console.log('select your file');
+        }
     }
 
     const handlePdfFileView = () => {
-        if (pdfFile !== null) {
-            setViewPdf(pdfFile);
+        if (selectedPDFFile !== null) {
+            setViewPdf(selectedPDFFile);
         }
         else {
             setViewPdf(null);
@@ -143,19 +165,53 @@ const FacultySubjectdetails = () => {
 
     const updatesubjectform = async (e) => {
         e.preventDefault();
-        console.log(pdfFile)
-
-        const formData = new FormData();
-        formData.append("file", pdfFile);
-        formData.append('dduCode', JSON.stringify(facultySubject.dduCode));
+        console.log(pdfFile);
 
         dept = getUserData().facultyDto.dept;
         token = "Bearer " + getUserData().token;
 
-        const uploadres = axios.post(`${baseurl}/Faculty/uploadsubjectfile`, formData, { headers: { "Content-Type": "multipart/form-data", "Authorization": token } });
+        const formData = new FormData();
+        if (pdfFile !== null) {
+            formData.append("file", pdfFile);
+            formData.append('dduCode', JSON.stringify(facultySubject.dduCode));
+            const uploadres = axios.post(`${baseurl}/Faculty/uploadsubjectfile`, formData, { headers: { "Content-Type": "multipart/form-data", "Authorization": token } });
+            toast.promise(
+                uploadres,
+                {
+                    pending: {
+                        render() {
+                            return "Please Wait!!"
+                        },
+                        icon: "✋",
+                    },
+                    success: {
+                        render() {
+                            return `Subject PDF stored Successfully!!`
+                        },
+                        icon: "🚀",
+                    },
+                    error: {
+                        render({ data }) {
+                            console.log(data);
+                            if (data.response.status === 400 || data.response.status === 404 || data.response.status === 401)
+                                return data.response.data.status;
+                            return 'Internal server error!!';
+                        },
+                        icon: "💥",
+                    }
+                },
+                {
+                    className: 'dark-toast',
+                    position: toast.POSITION.BOTTOM_RIGHT,
+                }
+            );
+        }
 
+
+
+        const updateres = axios.post(`${baseurl}/Faculty/savesubjectdetails`, facultySubject, { headers: { "Authorization": token } });
         toast.promise(
-            uploadres,
+            updateres,
             {
                 pending: {
                     render() {
@@ -297,7 +353,7 @@ const FacultySubjectdetails = () => {
                                 <h3 className="label margint">parentDept:</h3>
                                 <Select options={deptOptions} placeholder='select parent dept' styles={customStyles}
                                     value={defaultdept()}
-                                    onChange={(e) => { setFacultySubject({ ...facultySubject, parentDept: e.value }) }}
+                                    onChange={(e) => { setFacultySubject({ ...facultySubject, parentDept: e.value.label }) }}
                                     theme={(theme) => ({
                                         ...theme,
                                         colors: {
@@ -320,13 +376,13 @@ const FacultySubjectdetails = () => {
                     </form>
 
 
-                    {/* <h4>View PDF</h4>
+                    <h4>View PDF</h4>
                     <div className='pdf-container'>
-                        {viewPdf && <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
+                        {viewPdf && <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
                             <Viewer fileUrl={viewPdf} plugins={[defaultLayoutPluginInstance]} />
                         </Worker>}
                         {!viewPdf && <>No pdf file selected</>}
-                    </div> */}
+                    </div>
                 </OnHoverScrollContainer>
             </div>
         </div >

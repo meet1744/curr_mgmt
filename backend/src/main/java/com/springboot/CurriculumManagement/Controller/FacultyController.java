@@ -75,7 +75,6 @@ public class FacultyController {
     @PostMapping("/savesubjectdetails")
     public ResponseEntity<HttpStatus> saveSubjectDetails(@RequestBody Subjects subjectDetails) {
         try {
-
             this.facultyService.saveSubjectDetails(subjectDetails);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
@@ -95,8 +94,11 @@ public class FacultyController {
         }
     }
 
-
-
-
+    @GetMapping("getPdf/{subjectDduCode}")
+    public ResponseEntity<byte[]> getPdf(@PathVariable String subjectDduCode){
+        System.out.println(subjectDduCode);
+        SubjectFile subjectFile = subjectFileDao.getById(subjectDduCode);
+        return new ResponseEntity<>(subjectFile.getSubjectFileData(),HttpStatus.OK);
+    }
 
 }

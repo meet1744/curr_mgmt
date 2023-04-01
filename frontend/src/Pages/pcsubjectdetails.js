@@ -110,7 +110,7 @@ const PCSubjectdetails = () => {
   }));
   const deptOptions = alldept.map((d) => ({
     value: d,
-    label: `${d.deptId} - ${d.deptName}`
+    label: `${d.deptName}`
   }));
   const facultyOptions = faculties.map((f) => ({
     label: `${f.facultyId} - ${f.facultyName}`,
@@ -190,11 +190,11 @@ const PCSubjectdetails = () => {
               </div>
               <div className='block1'>
                 <h3 className="label margint">effectiveDate:</h3>
-                <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, effectiveDate: e.target.value }) }} value={pcSubject.effectiveDate || ''} />
+                <input type="date" onChange={(e) => { setPCSubject({ ...pcSubject, effectiveDate: e.target.value }) }} value={pcSubject.effectiveDate || ''} />
               </div>
               <div className='block1'>
                 <h3 className="label margint">removedDate:</h3>
-                <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, removedDate: e.target.value }) }} value={pcSubject.removedDate || ''} />
+                <input type="date" onChange={(e) => { setPCSubject({ ...pcSubject, removedDate: e.target.value }) }} value={pcSubject.removedDate || ''} />
               </div>
             </div>
             <div className='inline'>
@@ -266,7 +266,7 @@ const PCSubjectdetails = () => {
                 <h3 className="label margint">parentDept:</h3>
                 <Select options={deptOptions} placeholder='select parent dept' styles={customStyles}
                   value={defaultdept()}
-                  onChange={(e) => { setPCSubject({ ...pcSubject, parentDept: e.value }) }}
+                  onChange={(e) => { setPCSubject({ ...pcSubject, parentDept: e.value.label }) }}
                   theme={(theme) => ({
                     ...theme,
                     colors: {
@@ -285,7 +285,6 @@ const PCSubjectdetails = () => {
               <h3 className="label margint">Faculties:</h3>
               <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
                 onChange={handleFacultyChange}
-                isMulti
                 theme={(theme) => ({
                   ...theme,
                   colors: {

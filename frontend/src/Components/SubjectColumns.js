@@ -29,7 +29,7 @@ export const SubjectColumns = [
     },
     {
         Header:'Parent Dept',
-        accessor:'parentDept'
+        accessor: ('parentDept') ? row => row.parentDept.deptName : 'parentDept'
     },
     {
         Header:'Extra Info',

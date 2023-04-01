@@ -7,12 +7,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "subject_files")
 public class SubjectFile {
-
-
-//    private String subjectFileName;
-//
-//    private String subjectFileType;
-
     @Lob
     @Column
     private byte[] subjectFileData;
