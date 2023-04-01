@@ -42,7 +42,7 @@ const customStyles = {
 const Addsubject = () => {
   let token;
 
-  let dept=getUserData().pcDto.dept;
+  let dept = getUserData().pcDto.dept;
 
   const navigate = useNavigate();
 
@@ -52,12 +52,19 @@ const Addsubject = () => {
       dept = getUserData().pcDto.dept;
       token = "Bearer " + getUserData().token;
       setSubject({ ...subject, dept: dept });
+      axios.post(`${baseurl}/PC/getallfaculty`, dept, { headers: { "Authorization": token } })
+        .then((res) => {
+          setFaculties(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (err) { }
   }, [])
 
 
   const [subject, setSubject] = useState({ dduCode: "", subjectName: "", facultyList: "", subSequence: "" });
-  const [selectedFaculties, setSelectedFaculties] = useState([]);
+  const [selectedFaculty, setSelectedFaculty] = useState({});
   const [selectedsem, setSelectedsem] = useState({});
   const [seq, setSeq] = useState([]);
   const [faculties, setFaculties] = useState([]);
@@ -65,7 +72,7 @@ const Addsubject = () => {
 
   const facultyOptions = faculties.map((f) => ({
     label: `${f.facultyId} - ${f.facultyName}`,
-    value: `${f.facultyId} - ${f.facultyName}`
+    value: f
   }));
   const semOptions = [
     { value: "1", label: "1" },
@@ -83,33 +90,19 @@ const Addsubject = () => {
   }));
 
   useEffect(() => {
-    dept = getUserData().pcDto.dept;
-    token = "Bearer " + getUserData().token;
-    axios.post(`${baseurl}/PC/getallfaculty`, dept, { headers: { "Authorization": token } })
-      .then((res) => {
-        setFaculties(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    const numbers = selectedFaculties.map((faculty) => faculty.label.split(" ")[0]);
-    const f = numbers.map((number) => { return searchFacultyById(number) });
-    setSubject({ ...subject, facultyList: f })
-    // setSubject({...subject,dept:dept});
-  }, [selectedFaculties]);
+    setSubject({ ...subject, facultyList: selectedFaculty })
+  }, [selectedFaculty]);
 
   useEffect(() => {
     if (selectedsem.label) {
       setSubject({ ...subject, semester: selectedsem.label });
     }
-    // setSubject({...subject,dept:dept});
   }, [selectedsem]);
 
 
 
   const handleFacultyChange = (selectedOptions) => {
-    setSelectedFaculties(selectedOptions);
+    setSelectedFaculty(selectedOptions.value);
   };
 
 
@@ -119,7 +112,7 @@ const Addsubject = () => {
     setSelectedsem(selectedOptions);
     const semester = selectedOptions ? selectedOptions.label : '';
     setSubject({ ...subject, semester: semester });
-    setSubject({...subject,dept:dept});
+    setSubject({ ...subject, dept: dept });
     console.log(subject);
     axios.get(`${baseurl}/PC/getremainingsubsequence/${semester}`, { headers: { "Authorization": token } }, semester)
       .then((res) => {
@@ -140,7 +133,7 @@ const Addsubject = () => {
     console.log(subject);
     dept = getUserData().pcDto.dept;
     token = "Bearer " + getUserData().token;
-    setSubject({...subject,dept:dept});
+    setSubject({ ...subject, dept: dept });
     const addsubjectresponse = axios.post(`${baseurl}/PC/addnewsubject`, subject, { headers: { "Authorization": token } });
     toast.promise(
       addsubjectresponse,
@@ -185,17 +178,30 @@ const Addsubject = () => {
     <>
       <div className="title">Add Subject</div>
       <ToastContainer />
-        <div className='cont-3'>
-          <OnHoverScrollContainer>
-            <form onSubmit={addsubjectform} >
-              <h3 className="label">DDU ID:</h3>
-              <input type="text" onChange={(e) => { setSubject({ ...subject, dduCode: e.target.value }) }} value={subject.id} />
-              <h3 className="label">Subject Name:</h3>
-              <input type="text" onChange={(e) => { setSubject({ ...subject, subjectName: e.target.value }) }} value={subject.name} />
-              <h3 className="label">Faculties:</h3>
-              <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
-                onChange={handleFacultyChange}
-                maxMenuHeight={150}
+      <div className='cont-3'>
+        <OnHoverScrollContainer>
+          <form onSubmit={addsubjectform} >
+            <h3 className="label">DDU ID:</h3>
+            <input type="text" onChange={(e) => { setSubject({ ...subject, dduCode: e.target.value }) }} value={subject.id} />
+            <h3 className="label">Subject Name:</h3>
+            <input type="text" onChange={(e) => { setSubject({ ...subject, subjectName: e.target.value }) }} value={subject.name} />
+            <h3 className="label">Faculties:</h3>
+            <Select options={facultyOptions} placeholder='Select faculties' styles={customStyles}
+              onChange={handleFacultyChange}
+              maxMenuHeight={150}
+              theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  primary: 'grey',
+                },
+              })}
+            />
+            <div className='block'>
+              <h3 className="label">Sem:</h3>
+              <Select options={semOptions} placeholder='Select sem' styles={customStyles}
+                onChange={handlesemchange}
+                menuPlacement='top'
                 theme={(theme) => ({
                   ...theme,
                   colors: {
@@ -204,40 +210,27 @@ const Addsubject = () => {
                   },
                 })}
               />
-              <div className='block'>
-                <h3 className="label">Sem:</h3>
-                <Select options={semOptions} placeholder='Select sem' styles={customStyles}
-                  onChange={handlesemchange}
-                  menuPlacement='top'
-                  theme={(theme) => ({
-                    ...theme,
-                    colors: {
-                      ...theme.colors,
-                      primary: 'grey',
-                    },
-                  })}
-                />
-              </div>
-              <div className='block'>
-                <h3 className="label">Sequence:</h3>
-                <Select options={seqOptions} noOptionsMessage={customNoOptionsMessage} placeholder='Select sequence' styles={customStyles}
-                  onChange={(e) => { setSubject({ ...subject, subSequence: e.value }) }}
-                  menuPlacement='top'
-                  theme={(theme) => ({
-                    ...theme,
-                    colors: {
-                      ...theme.colors,
-                      primary: 'grey',
-                    },
-                  })}
-                />
-              </div>
-              <input type="submit" className="SubmitButton coolBeans" value="Add Subject" />
-            </form>
-          </OnHoverScrollContainer>
-        </div>
-      </>
-      );
+            </div>
+            <div className='block'>
+              <h3 className="label">Sequence:</h3>
+              <Select options={seqOptions} noOptionsMessage={customNoOptionsMessage} placeholder='Select sequence' styles={customStyles}
+                onChange={(e) => { setSubject({ ...subject, subSequence: e.value }) }}
+                menuPlacement='top'
+                theme={(theme) => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    primary: 'grey',
+                  },
+                })}
+              />
+            </div>
+            <input type="submit" className="SubmitButton coolBeans" value="Add Subject" />
+          </form>
+        </OnHoverScrollContainer>
+      </div>
+    </>
+  );
 }
 
-      export default Addsubject;
+export default Addsubject;
