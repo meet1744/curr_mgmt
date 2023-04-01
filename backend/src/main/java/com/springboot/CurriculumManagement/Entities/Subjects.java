@@ -44,30 +44,30 @@ public class Subjects {
 
     @Column
     private String subjectTypeExplanation;
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int theoryMarks;
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int sessionalMarks;
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int termworkMarks;
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int practicalMarks;
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int totalMarks;
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int LectureHours;
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int tutorial;
 
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int PracticalHours;
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int totalHours;
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int lectureAndTheoryCredit;
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int practicalCredit;
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int totalCredit;
 
     @ManyToOne
