@@ -13,6 +13,7 @@ const Subjects = () => {
   let token = "Bearer " + getUserData().token;
   let role = localStorage.getItem('role');
   let dept;
+  let faculty=getUserData().facultyDto;
   const userData = getUserData();
   if (userData.hodDto !== null) {
     dept = userData.hodDto.dept;
@@ -41,14 +42,26 @@ const Subjects = () => {
   useEffect(() => {
     token = "Bearer " + getUserData().token;
     console.log(token)
-    axios.post(`${baseurl}/${urlrole}/getallsubjects`, dept, { headers: { "Authorization": token } })
-      .then((res) => {
-        console.log("inside axios", res.data)
-        setSubjects(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (urlrole === "Faculty") {
+      axios.post(`${baseurl}/${urlrole}/getallmysubjects`, faculty, { headers: { "Authorization": token } })
+        .then((res) => {
+          console.log("inside axios", res.data)
+          setSubjects(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    else {
+      axios.post(`${baseurl}/${urlrole}/getallsubjects`, dept, { headers: { "Authorization": token } })
+        .then((res) => {
+          console.log("inside axios", res.data)
+          setSubjects(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
 

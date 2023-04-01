@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.Access;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 @CrossOrigin("http://localhost:3000")
@@ -38,6 +39,18 @@ public class PdfController {
         return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(pdf));
 
 
+    }
+
+    @GetMapping("/getmergedpdf")
+    public ResponseEntity<InputStreamResource> mergePdfs() throws IOException {
+
+        ByteArrayInputStream pdf = pdfService.mergePdfs("1");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline;file=filename.pdf");
+        System.out.println("Just before return in merge pdf");
+
+        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(pdf));
     }
 
 

@@ -51,6 +51,7 @@ public class SpringSecurityConfig{
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/v1/auth/**").permitAll()
                 .antMatchers("/Pdf/createpdf").permitAll()
+                .antMatchers("/Pdf/getmergedpdf").permitAll()
                 .anyRequest().authenticated();
 
 

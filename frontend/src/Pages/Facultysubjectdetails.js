@@ -84,7 +84,7 @@ const FacultySubjectdetails = () => {
                     console.log(err);
                 })
 
-            axios.get(`${baseurl}/Faculty/getPdf/${facultySubject.dduCode}`, { headers: { "Authorization": token },responseType:"arraybuffer" }, facultySubject.dduCode)
+            axios.get(`${baseurl}/Faculty/getPdf/${facultySubject.dduCode}`, { headers: { "Authorization": token }, responseType: "arraybuffer" }, facultySubject.dduCode)
                 .then((res) => {
                     setSelectedPDFFile(res.data);
                 })
@@ -178,7 +178,7 @@ const FacultySubjectdetails = () => {
         const formData = new FormData();
         if (pdfFile !== null) {
             formData.append("file", pdfFile);
-            formData.append("dduCode",facultySubject.dduCode);
+            formData.append("dduCode", facultySubject.dduCode);
             const uploadres = axios.post(`${baseurl}/Faculty/uploadsubjectfile`, formData, { headers: { "Content-Type": "multipart/form-data", "Authorization": token } });
             toast.promise(
                 uploadres,
@@ -353,26 +353,12 @@ const FacultySubjectdetails = () => {
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, totalCredit: e.target.value }) }} value={facultySubject.totalCredit || ''} />
                             </div>
                         </div>
-                        <div className='inline'>
-                            <div className='block2'>
-                                <h3 className="label margint">parentDept:</h3>
-                                <Select options={deptOptions} placeholder='select parent dept' styles={customStyles}
-                                    value={defaultdept()}
-                                    onChange={(e) => { setFacultySubject({ ...facultySubject, parentDept: e.value.label }) }}
-                                    theme={(theme) => ({
-                                        ...theme,
-                                        colors: {
-                                            ...theme.colors,
-                                            primary: 'grey',
-                                        },
-                                    })}
-                                />
-                            </div>
-                            <div className='block2'>
-                                <h3 className="label margint">extraInfo:</h3>
-                                <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, extraInfo: e.target.value }) }} value={facultySubject.extraInfo || ''} />
-                            </div>
-                        </div>
+
+
+                        <h3 className="label margint">extraInfo:</h3>
+                        <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, extraInfo: e.target.value }) }} value={facultySubject.extraInfo || ''} />
+
+
                         <input type="file" accept='.pdf' className='form-control margint' onChange={handlePdfFileChange} />
 
                         {pdfFileError && <div className='error-msg'>{pdfFileError}</div>}

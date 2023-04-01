@@ -73,7 +73,6 @@ public class FacultyController {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @PostMapping("/savesubjectdetails")
     public ResponseEntity<HttpStatus> saveSubjectDetails(@RequestBody Subjects subjectDetails) {
         try {
@@ -85,7 +84,6 @@ public class FacultyController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @PostMapping("/uploadsubjectfile")
     public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file,@RequestParam("dduCode") String dduCode){
         try {
@@ -97,11 +95,9 @@ public class FacultyController {
             return new ResponseEntity<>("Error uploading PDF: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @GetMapping("getPdf/{subjectDduCode}")
     public ResponseEntity<byte[]> getPdf(@PathVariable String subjectDduCode){
-        byte[] subjectFile = subjectFileDao.getById("\""+subjectDduCode+"\"").getSubjectFileData();
+        byte[] subjectFile = subjectFileDao.getById(subjectDduCode).getSubjectFileData();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDisposition(ContentDisposition.builder("inline").build());

@@ -1,21 +1,28 @@
 package com.springboot.CurriculumManagement.Services;
 
 import com.lowagie.text.*;
-import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import com.springboot.CurriculumManagement.Repository.SubjectFileRepository;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
 public class PdfServiceImpl implements PdfService {
+
+    @Autowired
+    private SubjectFileRepository subjectFileDao;
 
     private List<String> list=new ArrayList<>();
 
@@ -33,41 +40,6 @@ public class PdfServiceImpl implements PdfService {
         createStartPage(doc);
 
 
-
-
-//        Font font2= FontFactory.getFont(FontFactory.HELVETICA,20);
-//        Paragraph para2=new Paragraph(content,font2);
-//        para2.add(new Chunk("Chunk para"));
-//        doc.add(para2);
-
-
-//        PdfPTable table= new PdfPTable(5);
-//        table.setWidthPercentage(100);
-//
-//        PdfPCell cell=new PdfPCell();
-//        cell.setPhrase(new Phrase("User Id"));
-//        table.addCell(cell);
-//
-//        PdfPCell cell2=new PdfPCell();
-//        cell2.setPhrase(new Phrase("User Id"));
-//        table.addCell(cell2);
-//
-//        PdfPCell cell3=new PdfPCell();
-//        cell3.setPhrase(new Phrase("User Id"));
-//        table.addCell(cell3);
-//
-//        PdfPCell cell4=new PdfPCell();
-//        cell4.setPhrase(new Phrase("User Id"));
-//        table.addCell(cell4);
-//
-//        PdfPCell cell5=new PdfPCell();
-//        cell5.setPhrase(new Phrase("User Id"));
-//        table.addCell(cell5);
-//
-//        addData(table);
-//
-//        doc.add(table);
-
         doc.close();
 //        byte [] pdfBytes=out.toByteArray();
 
@@ -75,10 +47,42 @@ public class PdfServiceImpl implements PdfService {
 //        return pdfBytes;
     }
 
-    private void createStartPage(Document doc) {
+    @Override
+    public ByteArrayInputStream mergePdfs(String subjectDduCode) throws IOException {
 
-//        String title="Dharmsinh Desai University";
-//        String content="Details";
+        byte[] subjectFileFromDB = subjectFileDao.getById(subjectDduCode).getSubjectFileData();
+        byte[] generatedPdf=createPdf().readAllBytes();
+
+        PDDocument document1 = PDDocument.load(subjectFileFromDB);
+        PDDocument document2 = PDDocument.load(generatedPdf);
+
+        PDDocument mergedDoc=new PDDocument();
+
+        for (PDPage page : document1.getPages()) {
+            mergedDoc.addPage(page);
+        }
+
+        // add the pages from the second document
+        for (PDPage page : document2.getPages()) {
+            mergedDoc.addPage(page);
+        }
+//        ByteArrayOutputStream out=new ByteArrayOutputStream();
+//        PdfWriter.getInstance(mergedDoc,out);
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        mergedDoc.save(out);
+//        byte[] mergedPDF = outputStream.toByteArray();
+
+        // close the documents
+        document1.close();
+        document2.close();
+        mergedDoc.close();
+
+//        return mergedPDF;
+        return new ByteArrayInputStream(out.toByteArray());
+    }
+
+    private void createStartPage(Document doc) {
 
         Font font= FontFactory.getFont(FontFactory.HELVETICA_BOLD);
 
