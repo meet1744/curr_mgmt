@@ -71,6 +71,12 @@ public class FacultyServiceImpl implements FacultyService{
 
     }
 
+    @Override
+    public List<Subjects> getAllMySubjects(Faculty faculty) {
+        String facultyId=faculty.getFacultyId();
+        return subjectsDao.findAllByFacultyId(facultyId);
+    }
+
     public FacultyDto FacultyToDto(Faculty faculty) {
         FacultyDto dto=this.modelMapper.map(faculty,FacultyDto.class);
         return dto;

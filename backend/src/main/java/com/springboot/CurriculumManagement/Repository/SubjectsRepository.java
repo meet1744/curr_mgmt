@@ -20,4 +20,7 @@ public interface SubjectsRepository extends JpaRepository<Subjects,String> {
 
     @Query(value = "select s from Subjects s where s.dept=?1")
     List<Subjects> findAllByDeptId(Department deptId);
+
+    @Query(value = "select s from Subjects s where s.facultyId=?1")
+    List<Subjects> findAllByFacultyId(String facultyId);
 }

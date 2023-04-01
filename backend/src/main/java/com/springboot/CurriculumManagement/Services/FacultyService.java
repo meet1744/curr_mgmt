@@ -1,6 +1,7 @@
 package com.springboot.CurriculumManagement.Services;
 
 import com.springboot.CurriculumManagement.Entities.Department;
+import com.springboot.CurriculumManagement.Entities.Faculty;
 import com.springboot.CurriculumManagement.Entities.Subjects;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,4 +16,6 @@ public interface FacultyService {
     List<Department> getAllDept();
 
     ResponseEntity<HttpStatus> saveSubjectDetails(Subjects subjectDetails);
+
+    List<Subjects> getAllMySubjects(Faculty faculty);
 }
