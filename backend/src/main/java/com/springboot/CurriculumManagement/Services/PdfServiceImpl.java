@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -157,6 +158,20 @@ public class PdfServiceImpl implements PdfService {
         return new ByteArrayInputStream(out.toByteArray());
     }
 
+    @Override
+    public List<Integer> getListOfAdmissionYearByDeptname(String deptName) {
+        int startYearOfDepartment=departmentDao.findStartYearByDepartmentName(deptName);
+        List<Integer> yearList=getYearList(startYearOfDepartment);
+        return yearList;
+    }
+
+    @Override
+    public List<Integer> getListOfAllAdmissionYears() {
+        int startYearOfFirstDepartment= departmentDao.findStartYearOfFirstDepartment();
+        List<Integer> yearList=getYearList(startYearOfFirstDepartment);
+        return yearList;
+    }
+
     private void createStartPage(Document doc) {
 
         Font font= FontFactory.getFont(FontFactory.HELVETICA_BOLD);
@@ -179,6 +194,15 @@ public class PdfServiceImpl implements PdfService {
         doc.add(title);
 
 
+    }
+
+    public List<Integer> getYearList(int startYear){
+        List<Integer> yearList = new ArrayList<>();
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (int year = startYear; year <= currentYear; year++) {
+            yearList.add(year);
+        }
+        return yearList;
     }
 
     public static String intToRoman(int num) {

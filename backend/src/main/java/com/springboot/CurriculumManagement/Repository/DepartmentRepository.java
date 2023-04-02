@@ -18,4 +18,7 @@ public interface DepartmentRepository extends JpaRepository<Department,String> {
 
     @Query(value = "select d.startYear from Department d where d.deptName=?1")
     public int findStartYearByDepartmentName(String deptName);
+
+    @Query(value = "select min (d.startYear) from Department d")
+    public int findStartYearOfFirstDepartment();
 }

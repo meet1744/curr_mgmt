@@ -51,14 +51,21 @@ public class PdfController {
         return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(pdf));
     }
 
-    @GetMapping("/getadmissionyear/{deptname}")
-    public int getAdmissionYear(@PathVariable String deptName){
-        return this.departmentDao.findStartYearByDepartmentName(deptName);
+    @GetMapping("/getadmissionyearbydeptname/{deptName}")
+    public List<Integer> getAdmissionYearByDeptName(@PathVariable String deptName){
+        return this.pdfService.getListOfAdmissionYearByDeptname(deptName);
+//         this.departmentDao.findStartYearByDepartmentName(deptName);
     }
 
-    @GetMapping("/getdepartments/{admissionYear}")
-    public List<Department> getDepartmentsList(@PathVariable int admissionYear){
+    @GetMapping("/getdepartmentsbyadmissionyear/{admissionYear}")
+    public List<Department> getDepartmentsListByAdmissionYear(@PathVariable int admissionYear){
         return this.departmentDao.findDepartmentsByAdmissionYear(admissionYear);
+    }
+
+    @GetMapping("/getalladmissionyears")
+    public List<Integer> getAllAdmissionYears(){
+        return this.pdfService.getListOfAllAdmissionYears();
+//         this.departmentDao.findStartYearByDepartmentName(deptName);
     }
 
 
