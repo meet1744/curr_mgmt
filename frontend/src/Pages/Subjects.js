@@ -46,7 +46,9 @@ const Subjects = () => {
       axios.post(`${baseurl}/${urlrole}/getallmysubjects`, faculty, { headers: { "Authorization": token } })
         .then((res) => {
           console.log("inside axios", res.data)
+          
           setSubjects(res.data);
+          console.log("aicte"+subjects.aicteCode)
         })
         .catch((err) => {
           console.log(err);

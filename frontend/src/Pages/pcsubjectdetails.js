@@ -222,7 +222,7 @@ const PCSubjectdetails = () => {
             <div className='inline'>
               <div className='block1'>
                 <h3 className="label margint">AICTEcode:</h3>
-                <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, aictecode: e.target.value }) }} value={pcSubject.aictecode || ''} />
+                <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, aicteCode: e.target.value }) }} value={pcSubject.aicteCode || ''} />
               </div>
               <div className='block1'>
                 <h3 className="label margint">effectiveDate:</h3>

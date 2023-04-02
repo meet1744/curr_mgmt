@@ -27,7 +27,7 @@ public class PdfController {
     @GetMapping("/createpdf")
     public ResponseEntity<InputStreamResource> createPdf() {
         //get entered branch name left for printing in pdf and pass in the createpdf method
-        ByteArrayInputStream pdf = pdfService.createPdf();
+        ByteArrayInputStream pdf = pdfService.createPdf(2020,"IT");
 
         HttpHeaders headers = new HttpHeaders();
 
@@ -44,7 +44,7 @@ public class PdfController {
     @GetMapping("/getmergedpdf")
     public ResponseEntity<InputStreamResource> mergePdfs() throws IOException {
 
-        ByteArrayInputStream pdf = pdfService.mergePdfs("1");
+        ByteArrayInputStream pdf = pdfService.mergePdfs(2020,"IT");
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline;file=filename.pdf");

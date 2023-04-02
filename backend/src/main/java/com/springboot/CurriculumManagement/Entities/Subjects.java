@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -16,8 +17,11 @@ public class Subjects {
     private String dduCode;
     @Column
     private Date effectiveDate;
-    @Column
-    private Date removedDate;
+//    @Column(nullable = false, columnDefinition = "DATE DEFAULT '9999-12-31'")
+//    private Date removedDate;
+
+    @Column(nullable = false, columnDefinition = "DATE DEFAULT '9999-12-31'")
+    private LocalDate removedDate = LocalDate.parse("9999-12-31");
     @Column(nullable = false)
     private int semester;
 
@@ -25,7 +29,7 @@ public class Subjects {
     @Column(nullable = false)
     private int subSequence;
     @Column(unique = true)
-    private String AICTEcode;
+    private String aicteCode;
 
 
     @Column(nullable = false)
@@ -55,12 +59,12 @@ public class Subjects {
     @Column(columnDefinition = "int default 0")
     private int totalMarks;
     @Column(columnDefinition = "int default 0")
-    private int LectureHours;
+    private int lectureHours;
     @Column(columnDefinition = "int default 0")
     private int tutorial;
 
     @Column(columnDefinition = "int default 0")
-    private int PracticalHours;
+    private int practicalHours;
     @Column(columnDefinition = "int default 0")
     private int totalHours;
     @Column(columnDefinition = "int default 0")
@@ -115,6 +119,14 @@ public class Subjects {
 //        this.dept = dept;
 //    }
 
+    public LocalDate getRemovedDate() {
+        return removedDate;
+    }
+
+    public void setRemovedDate(LocalDate removedDate) {
+        this.removedDate = removedDate;
+    }
+
     public Subjects() {
         super();
     }
@@ -127,13 +139,7 @@ public class Subjects {
         this.effectiveDate = effectiveDate;
     }
 
-    public Date getRemovedDate() {
-        return removedDate;
-    }
 
-    public void setRemovedDate(Date removedDate) {
-        this.removedDate = removedDate;
-    }
 
     public int getSemester() {
         return semester;
@@ -151,12 +157,12 @@ public class Subjects {
         this.subSequence = subSequence;
     }
 
-    public String getAICTEcode() {
-        return AICTEcode;
+    public String getAicteCode() {
+        return aicteCode;
     }
 
-    public void setAICTEcode(String AICTEcode) {
-        this.AICTEcode = AICTEcode;
+    public void setAicteCode(String aicteCode) {
+        this.aicteCode = aicteCode;
     }
 
     public String getdduCode() {
@@ -247,13 +253,6 @@ public class Subjects {
         this.totalMarks = totalMarks;
     }
 
-    public int getLectureHours() {
-        return LectureHours;
-    }
-
-    public void setLectureHours(int lectureHours) {
-        LectureHours = lectureHours;
-    }
 
     public int getTutorial() {
         return tutorial;
@@ -263,12 +262,20 @@ public class Subjects {
         this.tutorial = tutorial;
     }
 
+    public int getLectureHours() {
+        return lectureHours;
+    }
+
+    public void setLectureHours(int lectureHours) {
+        this.lectureHours = lectureHours;
+    }
+
     public int getPracticalHours() {
-        return PracticalHours;
+        return practicalHours;
     }
 
     public void setPracticalHours(int practicalHours) {
-        PracticalHours = practicalHours;
+        this.practicalHours = practicalHours;
     }
 
     public int getTotalHours() {

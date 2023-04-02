@@ -24,19 +24,10 @@ public interface SubjectsRepository extends JpaRepository<Subjects,String> {
     @Query(value = "select s from Subjects s where s.facultyId=?1 order by s.semester")
     List<Subjects> findAllByFacultyId(String facultyId);
 
-    @Query(value = "select s from Subjects s where year (s.effectiveDate)<=?1 and year (s.removedDate)>=?2 and  s.dept=?3 and s.semester=?4 order by s.subSequence")
-    List<Subjects> findAllByAdmissionYear(int admissionYear,int graduationYear,Department dept,int semester);
+    @Query(value = "select s from Subjects s where s.dept=?1 and s.semester=?2 and year (s.effectiveDate)<=?3 and year (s.removedDate)>=?4 order by s.subSequence")
+    List<Subjects> findAllByAdmissionYear(Department dept,int semester,int admissionYear,int graduationYear);
 }
 
 
 
-//logic of getting subjects list
-//
-//        Department dept=departmentDao.findByName(deptname);
-//        int graduationYear=admissionYear+4;
-//        List<Subjects> subjectsList=new ArrayList<>();
-//
-//        for (int semester=1;semester<9;semester++) {
-//        List<Subjects> subjectsToAdd = subjectsDao.findAllByAdmissionYear(admissionYear, graduationYear, dept,semester);
-//        subjectsList.addAll(subjectsToAdd);
-//        }
+

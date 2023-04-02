@@ -50,14 +50,12 @@ public class FacultyController {
         return new ResponseEntity<String>("Faculty", HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @PostMapping("/getallsubjects")
     public List<Subjects> getAllSubjects(@RequestBody Department dept){
 
         return this.facultyService.getAllSubjects(dept);
     }
 
-//    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @GetMapping("/getremainingsubsequence/{semesterSelected}")
     public List<Integer> getremainingsubsequence(@PathVariable String semesterSelected){
 
@@ -65,7 +63,6 @@ public class FacultyController {
         return this.facultyService.getRemainingSubSequence(semesterSelected);
     }
 
-//    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @GetMapping("/getalldept")
     public List<Department> getAllDepartments(){
 
@@ -105,10 +102,10 @@ public class FacultyController {
         return new ResponseEntity<>(subjectFile, headers, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('ROLE_FACULTY')")
     @PostMapping("/getallmysubjects")
     public List<Subjects> getAllMySubjects(@RequestBody Faculty faculty){
-        System.out.println("in controller");
+
+
         return this.facultyService.getAllMySubjects(faculty);
     }
 

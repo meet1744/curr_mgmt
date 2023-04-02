@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public interface PdfService {
-    public ByteArrayInputStream createPdf();
+    public ByteArrayInputStream createPdf(int admissionYear,String deptname);
 
-   public ByteArrayInputStream mergePdfs(String dduCode) throws IOException;
+   public ByteArrayInputStream mergePdfs(int admissionYear,String deptname) throws IOException;
 }

@@ -5,7 +5,7 @@ export const SubjectColumns = [
     },
     {
         Header:'AICTEcode',
-        accessor:'AICTEcode'
+        accessor:'aicteCode'
     },
     {
         Header:'Semester',
@@ -65,7 +65,7 @@ export const SubjectColumns = [
     },
     {
         Header:'Lecture Hours',
-        accessor:'LectureHours'
+        accessor:'lectureHours'
     },
     {
         Header:'Tutorial',
@@ -73,7 +73,7 @@ export const SubjectColumns = [
     },
     {
         Header:'Practical Hours',
-        accessor:'PracticalHours'
+        accessor:'practicalHours'
     },
     {
         Header:'Total Hours',
