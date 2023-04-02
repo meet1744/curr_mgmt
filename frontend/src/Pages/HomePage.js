@@ -52,7 +52,7 @@ function HomePage() {
     };
     const handleForm = (e) => {
         console.log(selectedYear, selectedBranch);
-        axios.get(`${baseurl}/Pdf/getmergedpdf`, { responseType: 'arraybuffer' })
+        axios.post(`${baseurl}/Pdf/getmergedpdf`,bodyHere, { responseType: 'arraybuffer' })
             .then((res) => {
 
                 // var data = new Blob([res.data], { type: 'application/pdf' });
