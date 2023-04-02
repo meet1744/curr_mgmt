@@ -41,7 +41,7 @@ public class PdfController {
     @PostMapping("/getmergedpdf")
     public ResponseEntity<InputStreamResource> mergePdfs(@RequestParam("admissionYear")int admissionYear,@RequestParam("deptName")String deptName) throws IOException {
 
-//        ByteArrayInputStream pdf = pdfService.mergePdfs(2020,"IT");
+        System.out.println(admissionYear + "---------" + deptName);
         ByteArrayInputStream pdf = pdfService.mergePdfs(admissionYear,deptName);
 
         HttpHeaders headers = new HttpHeaders();
@@ -68,5 +68,8 @@ public class PdfController {
 //         this.departmentDao.findStartYearByDepartmentName(deptName);
     }
 
-
+    @GetMapping("/getalldept")
+    public List<Department> getAllDepartments(){
+        return this.departmentDao.findAll();
+    }
 }

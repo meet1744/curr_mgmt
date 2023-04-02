@@ -39,87 +39,101 @@ const customStyles = {
 
 function HomePage() {
     const [years, setYears] = useState([]);
-    const [branches, setBranches] = useState([]);
+    const [alldept, setAllDept] = useState([]);
     const [selectedYear, setSelectedYear] = useState('');
-    const [selectedBranch, setSelectedBranch] = useState('');
-    const handleYearChange = (option) => {
-        setSelectedYear(option);
-        getBranchesByYear(option.value);
-    };
-    const handleBranchChange = (option) => {
-        setSelectedBranch(option);
-        getYearsByBranch(option.value);
-    };
-    const handleForm = (e) => {
-        console.log(selectedYear, selectedBranch);
-        axios.post(`${baseurl}/Pdf/getmergedpdf`,bodyHere, { responseType: 'arraybuffer' })
-            .then((res) => {
+    const [selectedDept, setSelectedDept] = useState('');
+    const [isValid, setIsValid] = useState(false);
 
-                // var data = new Blob([res.data], { type: 'application/pdf' });
-
-                // var tempLink = document.createElement('a');
-                // tempLink.href = window.URL.createObjectURL(data);
-
-                // tempLink.setAttribute('download', 'filename.pdf');
-                // tempLink.click();
-                console.log(res.data);
-                const url = window.URL.createObjectURL(new Blob([res.data]), { type: 'application/pdf' });
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'filename.pdf'); //or any other extension
-                document.body.appendChild(link);
-                link.click();
-
-
-
-
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        e.preventDefault();
-    }
-    // useEffect(() => {
-    //     axios.get(`${baseurl}/years`)
-    //         .then((res) => {
-    //             setYears(res.data);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    //     axios.get(`${baseurl}/branches`)
-    //         .then((res) => {
-    //             setBranches(res.data);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // }, []);
     const yearOptions = years.map((year) => ({
         label: year,
         value: year
     }));
 
-    const branchOptions = branches.map((branch) => ({
-        label: branch,
-        value: branch
+    const deptOptions = alldept.map((d) => ({
+        value: d,
+        label: `${d.deptName}`
     }));
+
+
+    useEffect(() => {
+        axios.get(`${baseurl}/Pdf/getalldept`)
+            .then((res) => {
+                setAllDept(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        axios.get(`${baseurl}/Pdf/getalladmissionyears`)
+            .then((res) => {
+                setYears(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
+    useEffect(() => {
+        setIsValid((selectedDept && selectedYear) ? true : false);
+      }, [selectedDept,selectedYear]);
+
     const getBranchesByYear = async (year) => {
         try {
-            const res = await axios.get(`${baseurl}?year=${year}`);
-            setBranches(res.data.branches);
+            axios.get(`${baseurl}/Pdf/getdepartmentsbyadmissionyear/${year}`)
+            .then((res) => {
+                setAllDept(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         } catch (error) {
             console.log(error);
         }
     }
     const getYearsByBranch = async (branch) => {
         try {
-            const res = await axios.get(`${baseurl}?branch=${branch}`);
-            setYears(res.data.years);
+            axios.get(`${baseurl}/Pdf/getadmissionyearbydeptname/${branch}`)
+                .then((res) => {
+                    setYears(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         } catch (error) {
             console.log(error);
         }
     }
+
+    const handleYearChange = (option) => {
+        setSelectedYear(option);
+        getBranchesByYear(option);
+    };
+    const handleBranchChange = (option) => {
+        setSelectedDept(option.deptName);
+        getYearsByBranch(option.deptName);
+    };
+
+    const handleForm = (e) => {
+        console.log(selectedYear, selectedDept);
+        const formData = new FormData();
+        formData.append('admissionYear',selectedYear);
+        formData.append('deptName',selectedDept);
+        axios.post(`${baseurl}/Pdf/getmergedpdf`, formData, { responseType: 'arraybuffer' })
+            .then((res) => {
+                console.log(res.data);
+                const url = window.URL.createObjectURL(new Blob([res.data]), { type: 'application/pdf' });
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `${selectedDept}-${selectedYear}-Curriculum.pdf`); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        e.preventDefault();
+    }
+
 
     return (
         <>
@@ -128,7 +142,7 @@ function HomePage() {
                 <form onSubmit={handleForm} >
                     <h3 className="label">Admission Year:</h3>
                     <Select options={yearOptions} placeholder='Select Year' styles={customStyles}
-                        onChange={(e) => { handleYearChange(e.target.value); }}
+                        onChange={(e) => { handleYearChange(e.value); }}
                         theme={(theme) => ({
                             ...theme,
                             colors: {
@@ -138,9 +152,8 @@ function HomePage() {
                         })}
                     />
                     <h3 className="label">Branch:</h3>
-                    <Select options={branchOptions} placeholder='Select Branch' styles={customStyles}
-                        value={selectedBranch}
-                        onChange={(e) => { handleBranchChange(e.target.value); }}
+                    <Select options={deptOptions} placeholder='Select Branch' styles={customStyles}
+                        onChange={(e) => { handleBranchChange(e.value); }}
                         theme={(theme) => ({
                             ...theme,
                             colors: {
@@ -148,7 +161,7 @@ function HomePage() {
                                 primary: 'grey',
                             },
                         })} />
-                    <input type="submit" className="SubmitButton coolBeans" value="Download" />
+                    <input type="submit" disabled={!isValid} className="SubmitButton coolBeans" value="Download" />
                 </form>
             </div>
         </>

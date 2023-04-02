@@ -114,7 +114,7 @@ public class PdfServiceImpl implements PdfService {
     @Override
     public ByteArrayInputStream mergePdfs(int admissionYear,String deptName) throws IOException {
 
-        byte[] subjectFileFromDB = subjectFileDao.getById("1").getSubjectFileData();
+        byte[] subjectFileFromDB = subjectFileDao.getById("\"101\"").getSubjectFileData();
 //        byte[] subjectFileFromDB = createPdf().readAllBytes();
 //        byte[] generatedPdf=createPdf(admissionYear,deptName).readAllBytes();
 
