@@ -35,10 +35,12 @@ public class PdfServiceImpl implements PdfService {
     @Autowired
     private SubjectsRepository subjectsDao;
 
-    private List<String> list=new ArrayList<>();
+//    private List<String> list=new ArrayList<>();
+
+
 
     private Logger logger= LoggerFactory.getLogger(PdfService.class);
-    public ByteArrayInputStream createPdf(int admissionYear,String deptName){
+    public ByteArrayInputStream createPdf(int admissionYear,String deptName,List<Subjects> subjectsList){
 
         logger.info("Creating pdf!!!!!!!!!!!!!!!!!");
 
@@ -55,14 +57,14 @@ public class PdfServiceImpl implements PdfService {
 
         Department dept=departmentDao.findByName(deptName);
         int graduationYear=admissionYear+4;
-//        List<Subjects> subjectsList=new ArrayList<>();
+
 
         for (int semester=1;semester<9;semester++) {
         List<Subjects> subjectsToAdd = subjectsDao.findAllByAdmissionYear(dept,semester,admissionYear, graduationYear);
-//        subjectsList.addAll(subjectsToAdd);
+        subjectsList.addAll(subjectsToAdd);
         createTable(doc,subjectsToAdd,semester);
         }
-
+        System.out.println("subjects list in create pdf "+subjectsList.size());
 
         doc.close();
 //        byte [] pdfBytes=out.toByteArray();
@@ -112,13 +114,51 @@ public class PdfServiceImpl implements PdfService {
 
 
     @Override
+    public ByteArrayInputStream getMergedPdfsFromDB(List<Subjects> subjectsList) throws IOException {
+        List<String> dduCodesOfSubjectsFileToBeAdded=new ArrayList<>(subjectsList.size());
+        for(int i=0;i<subjectsList.size();i++){
+            dduCodesOfSubjectsFileToBeAdded.add(subjectsList.get(i).getdduCode());
+        }
+        System.out.println("number of list "+subjectsList.size());
+        System.out.println("number of "+dduCodesOfSubjectsFileToBeAdded.size());
+//        Document doc=new Document();
+//        ByteArrayOutputStream out=new ByteArrayOutputStream();
+//        PdfWriter.getInstance(doc,out);
+//
+//        doc.open();
+//
+//        createStartPage(doc);
+
+        List<byte[]>subjectFiles=new ArrayList<>(dduCodesOfSubjectsFileToBeAdded.size());
+//        byte[] subjectFile=subjectFileDao.getById(dduCodesOfSubjectsFileToBeAdded.get(0)).getSubjectFileData();
+
+        for(int i=0;i<dduCodesOfSubjectsFileToBeAdded.size();i++){
+              subjectFiles.add(subjectFileDao.getById(dduCodesOfSubjectsFileToBeAdded.get(i)).getSubjectFileData());
+//            addSubjectFileToDoc(subjectFile,doc,out);
+        }
+
+//        addSubjectFileToDoc(subjectFiles);
+
+//        doc.close();
+//        byte [] pdfBytes=out.toByteArray();
+        System.out.println("before merge pdf db");
+        return addSubjectFileToDoc(subjectFiles);
+
+//        return new ByteArrayInputStream(out.toByteArray());
+    }
+
+
+
+
+    @Override
     public ByteArrayInputStream mergePdfs(int admissionYear,String deptName) throws IOException {
 
-        byte[] subjectFileFromDB = subjectFileDao.getById("\"101\"").getSubjectFileData();
+//        byte[] subjectFileFromDB = subjectFileDao.getById("1").getSubjectFileData();
 //        byte[] subjectFileFromDB = createPdf().readAllBytes();
 //        byte[] generatedPdf=createPdf(admissionYear,deptName).readAllBytes();
+        List<Subjects> subjectsList=new ArrayList<>();
 
-        ByteArrayInputStream bais=createPdf(admissionYear,deptName);
+        ByteArrayInputStream bais=createPdf(admissionYear,deptName,subjectsList);
         byte[] buffer = new byte[1024];
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int bytesRead = 0;
@@ -129,19 +169,35 @@ public class PdfServiceImpl implements PdfService {
 
 
 
+        System.out.println("subjects list "+subjectsList.isEmpty());
+        ByteArrayInputStream baisForDBFile=getMergedPdfsFromDB(subjectsList);
+        byte[] buffer2 = new byte[1024];
+        ByteArrayOutputStream baosForDBFile = new ByteArrayOutputStream();
+        int bytesRead2 = 0;
+        while ((bytesRead2 = baisForDBFile.read(buffer2)) != -1) {
+            baosForDBFile.write(buffer2, 0, bytesRead2);
+        }
+        byte[] subjectFileFromDB = baosForDBFile.toByteArray();
+
+
+        System.out.println("before pdd load");
         PDDocument document1 = PDDocument.load(generatedPdf);
+        System.out.println("after one load");
         PDDocument document2 = PDDocument.load(subjectFileFromDB);
+        System.out.println("after pdd load");
 
         PDDocument mergedDoc=new PDDocument();
 
         for (PDPage page : document1.getPages()) {
             mergedDoc.addPage(page);
         }
+        System.out.println("after merge doc 1");
 
         // add the pages from the second document
         for (PDPage page : document2.getPages()) {
             mergedDoc.addPage(page);
         }
+        System.out.println("after merge doc 2");
 //        ByteArrayOutputStream out=new ByteArrayOutputStream();
 //        PdfWriter.getInstance(mergedDoc,out);
 
@@ -150,6 +206,10 @@ public class PdfServiceImpl implements PdfService {
 //        byte[] mergedPDF = outputStream.toByteArray();
 
         // close the documents
+        baos.close();
+        bais.close();
+        baosForDBFile.close();
+        baisForDBFile.close();
         document1.close();
         document2.close();
         mergedDoc.close();
@@ -219,6 +279,121 @@ public class PdfServiceImpl implements PdfService {
             }
         }
         return romanNumeral.toString();
+    }
+
+    private ByteArrayInputStream addSubjectFileToDoc(List<byte[]> subjectFiles) throws IOException {
+
+//        doc.newPage();
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(subjectFile);
+//
+//        PdfReader reader = new PdfReader(inputStream);
+////        ByteArrayOutputStream out=new ByteArrayOutputStream();
+//        PdfWriter writer=null;
+//       writer= PdfWriter.getInstance(doc,out);
+////        PdfWriter writer = PdfWriter.getInstance(doc, out);
+//
+//
+//        int numPages = reader.getNumberOfPages();
+//        for (int i = 1; i <= numPages; i++) {
+////            doc.newPage();
+//            PdfImportedPage page = writer.getImportedPage(reader, i);
+//            writer.getDirectContent().addTemplate(page, 0, 0);
+//        }
+
+//        document.close();
+
+        // assume you have an existing Document object called "doc" and a byte array called "data"
+
+//        try {
+//            // create a new PdfReader object from the byte array data
+//            PdfReader reader = new PdfReader(subjectFiles);
+//            PdfCopy writer = new PdfCopy(doc, new ByteArrayOutputStream());
+//
+//
+//            // get the number of pages in the PdfReader
+//            int numPages = reader.getNumberOfPages();
+//
+//            // iterate through each page of the PdfReader
+//            for (int i = 1; i <= numPages; i++) {
+//                // get the current page from the PdfReader
+//                PdfImportedPage page = writer.getImportedPage(reader, i);
+//
+//                // add the current page to the existing Document
+//                PdfCopy copy = new PdfCopy(doc, new ByteArrayOutputStream());
+//                copy.addPage(page);
+//
+//                // close the PdfCopy object
+//                copy.close();
+//            }
+//
+//            // close the PdfReader object
+//            reader.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+
+//        ByteArrayInputStream bais=createPdf(admissionYear,deptName);
+//        byte[] buffer = new byte[1024];
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        int bytesRead = 0;
+//        while ((bytesRead = bais.read(buffer)) != -1) {
+//            baos.write(buffer, 0, bytesRead);
+//        }
+//        byte[] generatedPdf = baos.toByteArray();
+
+//
+//        ByteArrayInputStream baisForDBFile=getMergedPdfsFromDB(subjectsList);
+//        byte[] buffer2 = new byte[1024];
+//        ByteArrayOutputStream baosForDBFile = new ByteArrayOutputStream();
+//        int bytesRead2 = 0;
+//        while ((bytesRead2 = baisForDBFile.read(buffer)) != -1) {
+//            baosForDBFile.write(buffer2, 0, bytesRead2);
+//        }
+//        byte[] subjectFileFromDB = baosForDBFile.toByteArray();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        PDDocument document1 = PDDocument.load(subjectFiles.get(0));
+        PDDocument mergedDoc = new PDDocument();
+        PDDocument document2=new PDDocument();
+//        for (PDPage page : document1.getPages()) {
+//            mergedDoc.addPage(page);
+//        }
+        for (int i=0;i<subjectFiles.size();i++) {
+
+            document2 = PDDocument.load(subjectFiles.get(i));
+
+
+
+//            for (PDPage page : document1.getPages()) {
+//                mergedDoc.addPage(page);
+//            }
+
+            // add the pages from the second document
+            for (PDPage page : document2.getPages()) {
+                mergedDoc.addPage(page);
+            }
+//        ByteArrayOutputStream out=new ByteArrayOutputStream();
+//        PdfWriter.getInstance(mergedDoc,out);
+
+
+
+
+//        byte[] mergedPDF = outputStream.toByteArray();
+
+            // close the documents
+
+
+
+        }
+
+        mergedDoc.save(out);
+        document2.close();
+//        document1.close();
+        mergedDoc.close();
+        System.out.println("before addsubject file db");
+//        return mergedPDF;
+        return new ByteArrayInputStream(out.toByteArray());
     }
 
 }
