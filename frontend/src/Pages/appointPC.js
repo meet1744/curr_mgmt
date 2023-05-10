@@ -130,7 +130,6 @@ const AppointPC = () => {
 
     return (
         <>
-            <div className="title">Appoint Program Coordinator</div>
             <ToastContainer />
             <div className='container'>
                 <form onSubmit={appointPCform} >

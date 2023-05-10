@@ -68,7 +68,6 @@ const Deletefaculty = () => {
         setFaculty(option);
     }
     const deletefacultyform = (e) => {
-        e.preventDefault();
         dept = getUserData().hodDto.dept;
         token = "Bearer " + getUserData().token;
         const facultyid = faculty.split("-")[0].trim();
@@ -108,7 +107,6 @@ const Deletefaculty = () => {
     }
     return (
         <>
-            <div className="title">Delete Faculty</div>
             <ToastContainer />
             <div className="container">
                 <form onSubmit={deletefacultyform} >

@@ -59,6 +59,22 @@ const FacultySubjectdetails = () => {
     const [viewPdf, setViewPdf] = useState(null);
     const [selectedPDFFile, setSelectedPDFFile] = useState(null);
 
+    const handlePdfFileView = () => {
+        if (selectedPDFFile) {
+            const blob = new Blob([selectedPDFFile], { type: 'application/pdf' });
+            let reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = (e) => {
+                console.log(e.target.result)
+                setViewPdf(e.target.result);
+                setPdfFileError('');
+            }
+        }
+        else {
+            setViewPdf(null);
+        }
+    }
+
 
     useEffect(() => {
         try {
@@ -137,22 +153,6 @@ const FacultySubjectdetails = () => {
         }
         else {
             console.log('select your file');
-        }
-    }
-
-    const handlePdfFileView = () => {
-        if (selectedPDFFile) {
-            const blob = new Blob([selectedPDFFile], { type: 'application/pdf' });
-            let reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = (e) => {
-                console.log(e.target.result)
-                setViewPdf(e.target.result);
-                setPdfFileError('');
-            }
-        }
-        else {
-            setViewPdf(null);
         }
     }
 
@@ -250,7 +250,6 @@ const FacultySubjectdetails = () => {
 
     return (
         <div>
-            <div className="title">Subject Details</div>
             <ToastContainer />
             <div className="subjectdetailcontainer">
                 <OnHoverScrollContainer>
@@ -275,7 +274,7 @@ const FacultySubjectdetails = () => {
                                 />
                             </div>
                             <div className='block1'>
-                                <h3 className="label margint gap3">subSequence:</h3>
+                                <h3 className="label margint gap3">Sub Sequence:</h3>
                                 <Select options={subSequenceOptions} placeholder='Select sequence' styles={customStyles}
                                     value={defaultseq()}
                                     onChange={(e) => { setFacultySubject({ ...facultySubject, subSequence: e.value }) }}
@@ -291,71 +290,71 @@ const FacultySubjectdetails = () => {
                         </div>
                         <div className='inline'>
                             <div className='block2'>
-                                <h3 className="label margint">subjectType:</h3>
+                                <h3 className="label margint">Subject Type:</h3>
                                 <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, subjectType: e.target.value }) }} value={facultySubject.subjectType || ''} />
                             </div>
                             <div className='block2'>
-                                <h3 className="label margint">subjectTypeExplanation:</h3>
+                                <h3 className="label margint">Subject Type Explanation:</h3>
                                 <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, subjectTypeExplanation: e.target.value }) }} value={facultySubject.subjectTypeExplanation || ''} />
                             </div>
                         </div>
                         <div className='inline'>
                             <div className='block3'>
-                                <h3 className="label margint">theoryMarks:</h3>
+                                <h3 className="label margint">Theory Marks:</h3>
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, theoryMarks: e.target.value }) }} value={facultySubject.theoryMarks || ''} />
                             </div>
                             <div className='block3'>
-                                <h3 className="label margint">sessionalMarks:</h3>
+                                <h3 className="label margint">Sessional Marks:</h3>
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, sessionalMarks: e.target.value }) }} value={facultySubject.sessionalMarks || ''} />
                             </div>
                             <div className='block3'>
-                                <h3 className="label margint">termworkMarks:</h3>
+                                <h3 className="label margint">Termwork Marks:</h3>
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, termworkMarks: e.target.value }) }} value={facultySubject.termworkMarks || ''} />
                             </div>
                             <div className='block3'>
-                                <h3 className="label margint">practicalMarks:</h3>
+                                <h3 className="label margint">Practical Marks:</h3>
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, practicalMarks: e.target.value }) }} value={facultySubject.practicalMarks || ''} />
                             </div>
                             <div className='block3'>
-                                <h3 className="label margint">totalMarks:</h3>
+                                <h3 className="label margint">Total Marks:</h3>
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, totalMarks: e.target.value }) }} value={facultySubject.totalMarks || ''} />
                             </div>
                         </div>
                         <div className='inline'>
                             <div className='block4'>
-                                <h3 className="label margint">LectureHours:</h3>
+                                <h3 className="label margint">Lecture Hours:</h3>
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, lectureHours: e.target.value }) }} value={facultySubject.lectureHours || ''} />
                             </div>
                             <div className='block4'>
-                                <h3 className="label margint">tutorial:</h3>
+                                <h3 className="label margint">Tutorial:</h3>
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, tutorial: e.target.value }) }} value={facultySubject.tutorial || ''} />
                             </div>
                             <div className='block4'>
-                                <h3 className="label margint">PracticalHours:</h3>
+                                <h3 className="label margint">Practical Hours:</h3>
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, practicalHours: e.target.value }) }} value={facultySubject.practicalHours || ''} />
                             </div>
                             <div className='block4'>
-                                <h3 className="label margint">totalHours:</h3>
+                                <h3 className="label margint">Total Hours:</h3>
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, totalHours: e.target.value }) }} value={facultySubject.totalHours || ''} />
                             </div>
                         </div>
                         <div className='inline'>
                             <div className='block1'>
-                                <h3 className="label margint">lectureAndTheoryCredit:</h3>
+                                <h3 className="label margint">Lecture And Theory Credit:</h3>
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, lectureAndTheoryCredit: e.target.value }) }} value={facultySubject.lectureAndTheoryCredit || ''} />
                             </div>
                             <div className='block1'>
-                                <h3 className="label margint">practicalCredit:</h3>
+                                <h3 className="label margint">Practical Credit:</h3>
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, practicalCredit: e.target.value }) }} value={facultySubject.practicalCredit || ''} />
                             </div>
                             <div className='block1'>
-                                <h3 className="label margint">totalCredit:</h3>
+                                <h3 className="label margint">Total Credit:</h3>
                                 <input type="number" onChange={(e) => { setFacultySubject({ ...facultySubject, totalCredit: e.target.value }) }} value={facultySubject.totalCredit || ''} />
                             </div>
                         </div>
 
 
-                        <h3 className="label margint">extraInfo:</h3>
+                        <h3 className="label margint">Extra Info:</h3>
                         <input type="text" onChange={(e) => { setFacultySubject({ ...facultySubject, extraInfo: e.target.value }) }} value={facultySubject.extraInfo || ''} />
 
 
@@ -367,13 +366,13 @@ const FacultySubjectdetails = () => {
                     </form>
 
 
-                    <h4>View PDF</h4>
+                    {/* <h4>View PDF</h4>
                     <div className='pdf-container'>
                         {viewPdf && <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
                             <Viewer fileUrl={viewPdf} plugins={[defaultLayoutPluginInstance]} />
                         </Worker>}
                         {!viewPdf && <>No pdf file selected</>}
-                    </div>
+                    </div> */}
                 </OnHoverScrollContainer>
             </div>
         </div >

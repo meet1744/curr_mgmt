@@ -71,7 +71,6 @@ const Subjects = () => {
 
   return (
     <>
-      <div className="title">View Subjects</div>
 
       <div className='subjectscont'>
         <OnHoverScrollContainer>

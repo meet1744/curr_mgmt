@@ -25,7 +25,6 @@ export default function Addfaculty() {
     const [faculty, setFaculty] = useState({ facultyId: "", facultyName: "", emailId: "", password: "" });
 
     const addfacultyform = (e) => {
-        e.preventDefault();
         dept = getUserData().hodDto.dept;
         token = "Bearer " + getUserData().token;
         console.log(faculty)
@@ -67,7 +66,6 @@ export default function Addfaculty() {
 
     return (
         <>
-            <div className="title">Add Faculty</div>
             <ToastContainer />
             <div className="cont-1">
                 <form onSubmit={addfacultyform} id="addFacultyForm">

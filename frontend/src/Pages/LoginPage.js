@@ -77,7 +77,6 @@ function LoginPage() {
 
     return (
         <>
-            <div className="title">Login</div>
             <ToastContainer />
             <div className="container">
                 <form onSubmit={loginForm} >

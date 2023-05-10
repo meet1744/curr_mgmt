@@ -180,7 +180,6 @@ const Addsubject = () => {
         position: toast.POSITION.BOTTOM_RIGHT,
       }
     );
-    e.preventDefault();
   }
 
 
@@ -191,7 +190,6 @@ const Addsubject = () => {
 
   return (
     <>
-      <div className="title">Add Subject</div>
       <ToastContainer />
       <div className='cont-3'>
         <OnHoverScrollContainer>

@@ -118,7 +118,6 @@ const Deletesubject = () => {
   }
   return (
     <div>
-      <div className="title">Delete Subject</div>
       <ToastContainer />
 
       <div className="container">

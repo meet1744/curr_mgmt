@@ -180,7 +180,6 @@ const PCSubjectdetails = () => {
 
   return (
     <div>
-      <div className="title">Subject Details</div>
       <ToastContainer />
       <div className="subjectdetailcontainer">
         <OnHoverScrollContainer>
@@ -205,7 +204,7 @@ const PCSubjectdetails = () => {
                 />
               </div>
               <div className='block1'>
-                <h3 className="label margint gap3">subSequence:</h3>
+                <h3 className="label margint gap3">Sub Sequence:</h3>
                 <Select options={subSequenceOptions} placeholder='Select sequence' styles={customStyles}
                   value={defaultseq()}
                   onChange={(e) => { setPCSubject({ ...pcSubject, subSequence: e.value }) }}
@@ -221,84 +220,84 @@ const PCSubjectdetails = () => {
             </div>
             <div className='inline'>
               <div className='block1'>
-                <h3 className="label margint">AICTEcode:</h3>
+                <h3 className="label margint">AICTE Code:</h3>
                 <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, aicteCode: e.target.value }) }} value={pcSubject.aicteCode || ''} />
               </div>
               <div className='block1'>
-                <h3 className="label margint">effectiveDate:</h3>
+                <h3 className="label margint">Effective Date:</h3>
                 <input type="date" onChange={(e) => { setPCSubject({ ...pcSubject, effectiveDate: e.target.value }) }} value={pcSubject.effectiveDate || ''} />
               </div>
               <div className='block1'>
-                <h3 className="label margint">removedDate:</h3>
+                <h3 className="label margint">Removed Date:</h3>
                 <input type="date" onChange={(e) => { setPCSubject({ ...pcSubject, removedDate: e.target.value }) }} value={pcSubject.removedDate || ''} />
               </div>
             </div>
             <div className='inline'>
               <div className='block2'>
-                <h3 className="label margint">subjectType:</h3>
+                <h3 className="label margint">Subject Type:</h3>
                 <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, subjectType: e.target.value }) }} value={pcSubject.subjectType || ''} />
               </div>
               <div className='block2'>
-                <h3 className="label margint">subjectTypeExplanation:</h3>
+                <h3 className="label margint">Subject Type Explanation:</h3>
                 <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, subjectTypeExplanation: e.target.value }) }} value={pcSubject.subjectTypeExplanation || ''} />
               </div>
             </div>
             <div className='inline'>
               <div className='block3'>
-                <h3 className="label margint">theoryMarks:</h3>
+                <h3 className="label margint">Theory Marks:</h3>
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, theoryMarks: e.target.value }) }} value={pcSubject.theoryMarks || ''} />
               </div>
               <div className='block3'>
-                <h3 className="label margint">sessionalMarks:</h3>
+                <h3 className="label margint">Sessional Marks:</h3>
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, sessionalMarks: e.target.value }) }} value={pcSubject.sessionalMarks || ''} />
               </div>
               <div className='block3'>
-                <h3 className="label margint">termworkMarks:</h3>
+                <h3 className="label margint">Termwork Marks:</h3>
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, termworkMarks: e.target.value }) }} value={pcSubject.termworkMarks || ''} />
               </div>
               <div className='block3'>
-                <h3 className="label margint">practicalMarks:</h3>
+                <h3 className="label margint">Practical Marks:</h3>
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, practicalMarks: e.target.value }) }} value={pcSubject.practicalMarks || ''} />
               </div>
               <div className='block3'>
-                <h3 className="label margint">totalMarks:</h3>
+                <h3 className="label margint">Total Marks:</h3>
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, totalMarks: e.target.value }) }} value={pcSubject.totalMarks || ''} />
               </div>
             </div>
             <div className='inline'>
               <div className='block4'>
-                <h3 className="label margint">LectureHours:</h3>
+                <h3 className="label margint">Lecture Hours:</h3>
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, lectureHours: e.target.value }) }} value={pcSubject.lectureHours || ''} />
               </div>
               <div className='block4'>
-                <h3 className="label margint">tutorial:</h3>
+                <h3 className="label margint">Tutorial:</h3>
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, tutorial: e.target.value }) }} value={pcSubject.tutorial || ''} />
               </div>
               <div className='block4'>
-                <h3 className="label margint">PracticalHours:</h3>
+                <h3 className="label margint">Practical Hours:</h3>
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, practicalHours: e.target.value }) }} value={pcSubject.practicalHours || ''} />
               </div>
               <div className='block4'>
-                <h3 className="label margint">totalHours:</h3>
+                <h3 className="label margint">Total Hours:</h3>
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, totalHours: e.target.value }) }} value={pcSubject.totalHours || ''} />
               </div>
             </div>
             <div className='inline'>
               <div className='block1'>
-                <h3 className="label margint">lectureAndTheoryCredit:</h3>
+                <h3 className="label margint">Lecture And Theory Credit:</h3>
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, lectureAndTheoryCredit: e.target.value }) }} value={pcSubject.lectureAndTheoryCredit || ''} />
               </div>
               <div className='block1'>
-                <h3 className="label margint">practicalCredit:</h3>
+                <h3 className="label margint">Practical Credit:</h3>
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, practicalCredit: e.target.value }) }} value={pcSubject.practicalCredit || ''} />
               </div>
               <div className='block1'>
-                <h3 className="label margint">totalCredit:</h3>
+                <h3 className="label margint">Total Credit:</h3>
                 <input type="number" onChange={(e) => { setPCSubject({ ...pcSubject, totalCredit: e.target.value }) }} value={pcSubject.totalCredit || ''} />
               </div>
             </div>
             <div>
-              <h3 className="label margint">extraInfo:</h3>
+              <h3 className="label margint">Extra Info:</h3>
               <input type="text" onChange={(e) => { setPCSubject({ ...pcSubject, extraInfo: e.target.value }) }} value={pcSubject.extraInfo || ''} />
             </div>
             <div>

@@ -81,13 +81,11 @@ const UpdateMySubject = () => {
     }
 
     const updatesubjectform = (e) => {
-        e.preventDefault();
         navigate("/Faculty/FacultySubjectDetails");
     }
 
     return (
         <div>
-            <div className="title">Update Subject</div>
             <ToastContainer />
             <div className="container">
                 <form onSubmit={updatesubjectform} >

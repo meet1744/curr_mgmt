@@ -77,14 +77,11 @@ const Updatesubject = () => {
     }
 
     const updatesubjectform = (e) => {
-
-        e.preventDefault();
         navigate(`/PC/PCSubjectDetails`);
     }
 
     return (
         <div>
-            <div className="title">Update Subject</div>
             <ToastContainer />
             <div className="container">
                 <form onSubmit={updatesubjectform} >
