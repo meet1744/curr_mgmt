@@ -76,7 +76,6 @@ public class AuthController {
                 if (!encoder.matches(request.getPassword(), hod.getPassword())) {
                     throw new BadCredentialsException("Incorrect Password");
                 }
-//            System.out.println("This is hod dept of auth controller:"+hod.getDept());
                 token = this.jwtTokenHelper.generateToken(hod);
                 response = new JWTAuthResponse();
                 response.setToken(token);

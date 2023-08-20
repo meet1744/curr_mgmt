@@ -23,8 +23,6 @@ public class ProgramCoordinator implements UserDetails {
     @JsonIgnore
     @Column(nullable = false)
     private String password;
-//    @Column(nullable = false)
-//    private String departmentId;
     @Column(unique = true, nullable = false)
     private String emailId;
 

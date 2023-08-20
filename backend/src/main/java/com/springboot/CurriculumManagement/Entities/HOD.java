@@ -19,8 +19,6 @@ public class HOD implements UserDetails {
     private String HODName;
     @Column(nullable = false)
     private String password;
-//    @Column(nullable = false)
-//    private String departmentName;
     @Column(unique = true, nullable = false)
     private String emailId;
 

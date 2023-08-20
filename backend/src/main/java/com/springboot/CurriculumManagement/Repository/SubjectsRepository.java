@@ -14,7 +14,6 @@ import java.util.Optional;
 @Repository
 public interface SubjectsRepository extends JpaRepository<Subjects,String> {
 
-//    Optional<Subjects> findBySubjectsId(String id);
     @Query(value = "select subSequence from Subjects where semester=?1")
     List<Integer> findExistingSubSequence(int semesterSelected);
 

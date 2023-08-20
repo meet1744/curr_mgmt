@@ -23,18 +23,8 @@ public class SubjectFileServiceImpl implements SubjectFileService{
     private SubjectFileRepository subjectFileDao;
 
     public SubjectFile storeFile(MultipartFile file, String dduCode) {
-        // Normalize file name
-//        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
         try {
-            // Check if the file's name contains invalid characters
-//            if (fileName.contains("..")) {
-//                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
-//            }
             byte[] fileBytes= IOUtils.toByteArray(file.getInputStream());
-
-//            SubjectFile dbFile = new SubjectFile(file.getBytes(),dduCode);
-
             return subjectFileDao.save(new SubjectFile(fileBytes,dduCode));
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file. Please try again!", ex);

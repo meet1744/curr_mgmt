@@ -25,19 +25,6 @@ public class PdfController {
     @Autowired
     private DepartmentRepository departmentDao;
 
-//    @GetMapping("/createpdf")
-//    public ResponseEntity<InputStreamResource> createPdf() {
-//        //get entered branch name left for printing in pdf and pass in the createpdf method
-//        ByteArrayInputStream pdf = pdfService.createPdf(2020,"IT");
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline;file=filename.pdf");
-//        System.out.println("Just before return");
-//        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(pdf));
-//
-//
-//    }
-
     @PostMapping("/getmergedpdf")
     public ResponseEntity<InputStreamResource> mergePdfs(@RequestParam("admissionYear")int admissionYear,@RequestParam("deptName")String deptName) throws IOException {
 
@@ -54,7 +41,6 @@ public class PdfController {
     @GetMapping("/getadmissionyearbydeptname/{deptName}")
     public List<Integer> getAdmissionYearByDeptName(@PathVariable String deptName){
         return this.pdfService.getListOfAdmissionYearByDeptname(deptName);
-//         this.departmentDao.findStartYearByDepartmentName(deptName);
     }
 
     @GetMapping("/getdepartmentsbyadmissionyear/{admissionYear}")
@@ -65,7 +51,6 @@ public class PdfController {
     @GetMapping("/getalladmissionyears")
     public List<Integer> getAllAdmissionYears(){
         return this.pdfService.getListOfAllAdmissionYears();
-//         this.departmentDao.findStartYearByDepartmentName(deptName);
     }
 
     @GetMapping("/getalldept")

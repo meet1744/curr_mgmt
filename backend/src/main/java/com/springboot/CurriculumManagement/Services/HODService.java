@@ -22,8 +22,7 @@ public interface HODService {
 
     void deleteFaculty(String facultyId);
 
-//    void appointProgramCoordinator();
-void appointProgramCoordinator(Faculty newPc);
+    void appointProgramCoordinator(Faculty newPc);
 
     Optional<Faculty> getFacultyById(String id);
 

@@ -18,11 +18,6 @@ public class PdfTable extends Document {
 
     public void addCell(String cellValue) {
         PdfPCell cell = new PdfPCell(new Phrase(cellValue));
-//        cell.setBorder(Rectangle.NO_BORDER);
-//        cell.setBorder(Rectangle.TOP);
-//        cell.setBorder(Rectangle.BOTTOM);
-//        cell.setBorder(Rectangle.RIGHT);
-//        cell.setBorder(Rectangle.LEFT);// set border for the cell
         cell.setPadding(5f); // set padding for the cell
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);

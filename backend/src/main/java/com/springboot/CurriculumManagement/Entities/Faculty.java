@@ -22,34 +22,13 @@ public class Faculty implements UserDetails {
 
     @Column(nullable = false)
     private String password;
-//    @Column(nullable = false)
-//    private String departmentName;
     @Column(unique = true, nullable = false)
     private String emailId;
 
-//    @OneToOne
-//    @JoinColumn(name = "deptId", nullable = false)
-//    private Department dept;
 
     @ManyToOne
     @JoinColumn(name = "deptId",nullable = false)
     private Department dept;
-//@ManyToMany(cascade = {
-//        CascadeType.ALL
-//    })
-//    @JoinTable(
-//        name = "teaches",
-//        joinColumns = {
-//            @JoinColumn(name = "faculty_id")
-//        },
-//        inverseJoinColumns = {
-//            @JoinColumn(name = "subject_id")
-//        }
-//    )
-//    private List<Subjects> subjectsList;
-
-//    @OneToMany(mappedBy = "faculty")
-//    private List<Subjects> subjectsList;
 
 
     public Faculty() {

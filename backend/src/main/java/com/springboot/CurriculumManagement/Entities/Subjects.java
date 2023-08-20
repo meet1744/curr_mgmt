@@ -17,15 +17,12 @@ public class Subjects {
     private String dduCode;
     @Column
     private Date effectiveDate;
-//    @Column(nullable = false, columnDefinition = "DATE DEFAULT '9999-12-31'")
-//    private Date removedDate;
 
     @Column(nullable = false, columnDefinition = "DATE DEFAULT '9999-12-31'")
     private LocalDate removedDate = LocalDate.parse("9999-12-31");
     @Column(nullable = false)
     private int semester;
 
-    //What is sub seq?
     @Column(nullable = false)
     private int subSequence;
     @Column(unique = true)
@@ -78,8 +75,6 @@ public class Subjects {
     @JoinColumn(name = "dept")
     private Department dept;
 
-//   @ManyToMany(mappedBy = "subjectsList", cascade = { CascadeType.ALL })
-//    private List<Faculty> facultyList;
 
     public Department getDept() {
         return dept;
@@ -88,18 +83,6 @@ public class Subjects {
     public void setDept(Department dept) {
         this.dept = dept;
     }
-
-//    @ManyToOne
-//    @JoinColumn(name = "faculty",nullable = false)
-//    private Faculty faculty;
-
-//    public Faculty getFaculty() {
-//        return faculty;
-//    }
-//
-//    public void setFaculty(Faculty faculty) {
-//        this.faculty = faculty;
-//    }
 
     @Column(nullable = false)
     private String facultyId;
@@ -111,13 +94,6 @@ public class Subjects {
     public void setFacultyId(String facultyId) {
         this.facultyId = facultyId;
     }
-    //    public String getDept() {
-//        return dept;
-//    }
-//
-//    public void setDept(String dept) {
-//        this.dept = dept;
-//    }
 
     public LocalDate getRemovedDate() {
         return removedDate;

@@ -83,8 +83,6 @@ public class HODController {
     @PreAuthorize("hasRole('ROLE_HOD')")
     @GetMapping("/getfacultybyid/{facultyid}")
     public Faculty getFacultyById(@PathVariable(value = "facultyid") String id) {
-        // Optional<Faculty> faculty = hodService.getFacultyById(id);
-        // return faculty;
         Faculty faculty = this.facultyDao.findByFacultyId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Faculty", "id", id));
         return faculty;
